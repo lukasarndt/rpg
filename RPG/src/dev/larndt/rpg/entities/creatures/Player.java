@@ -8,16 +8,14 @@ import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
 import dev.larndt.rpg.gfx.Animation;
 import dev.larndt.rpg.gfx.Assets;
+import dev.larndt.rpg.inventory.Inventory;
 import dev.larndt.rpg.tiles.Tile;
 
 public class Player extends Creature{
 	public static final int PLAYER_UP = 0, PLAYER_RIGHT = 1, PLAYER_DOWN = 2, PLAYER_LEFT = 3;
 	
 	private Animation animDown, animUp, animLeft, animRight;
-	
-	private boolean lastKeyState = false;
-	private boolean currentKeyState = false;
-	
+
 	private int direction = PLAYER_DOWN;
 	
 	private int counter = 0;
@@ -25,8 +23,15 @@ public class Player extends Creature{
 	private boolean draw = false;
 	private boolean canAttack = true;
 	
-	//Attack timer
+	private Inventory inventory;
+	private boolean inventoryActive;
+	private boolean lastInventoryKeyState = false;
+	private boolean currentInventoryKeyState = false;
+	
+	// Attack timer
 	private long lastAttackTimer, attackCooldown = 1000, attackTimer = attackCooldown;
+	private boolean lastAttackKeyState = false;
+	private boolean currentAttackKeyState = false;
 	
 	public Player(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_WIDTH);
@@ -39,13 +44,21 @@ public class Player extends Creature{
 		animUp = new Animation(500, Assets.player_up);
 		animLeft = new Animation(500, Assets.player_left);
 		animRight = new Animation(500, Assets.player_right);
+		
+		inventory = new Inventory(handler, 10, 10);
 	}
 
 	@Override
 	public void tick() {
 		tickAnimation();
 		getInput();
-		move();
+		
+		if(!inventoryActive) {
+			move();
+		}else{
+			inventory.tick();
+		}
+		
 		handler.getGameCamera().centerOnEntity(this);
 		
 		//Attack
@@ -80,14 +93,18 @@ public class Player extends Creature{
 				draw = false;
 			}
 		}
+		
+		if(inventoryActive) {
+			inventory.render(g);
+		}
 	}
 	
 	private void checkAttacks() {
 		attackTimer += System.currentTimeMillis() - lastAttackTimer;
 		lastAttackTimer = System.currentTimeMillis();
 		
-		lastKeyState = currentKeyState;
-		currentKeyState = handler.getKeyManager().space;
+		lastAttackKeyState = currentAttackKeyState;
+		currentAttackKeyState = handler.getKeyManager().space;
 		
 		if(attackTimer > attackCooldown) {
 			canAttack = true;
@@ -99,7 +116,7 @@ public class Player extends Creature{
 		ar.width = Tile.TILE_WIDTH;
 		ar.height = Tile.TILE_HEIGHT;
 		
-		if(currentKeyState && !lastKeyState && canAttack) {
+		if(currentAttackKeyState && !lastAttackKeyState && canAttack) {
 			if(!draw) {
 				draw = true;
 			}
@@ -142,21 +159,29 @@ public class Player extends Creature{
 		xMove = 0;
 		yMove = 0;
 		
-		if(handler.getKeyManager().up) {
-			yMove = -speed;
-			direction = PLAYER_UP;
+		if(!inventoryActive) {
+			if(handler.getKeyManager().up) {
+				yMove = -speed;
+				direction = PLAYER_UP;
+			}
+			if(handler.getKeyManager().down) {
+				yMove = speed;
+				direction = PLAYER_DOWN;
+			}
+			if(handler.getKeyManager().left) {
+				xMove = -speed;
+				direction = PLAYER_LEFT;
+			}
+			if(handler.getKeyManager().right) {
+				xMove = speed;
+				direction = PLAYER_RIGHT;
+			}
 		}
-		if(handler.getKeyManager().down) {
-			yMove = speed;
-			direction = PLAYER_DOWN;
-		}
-		if(handler.getKeyManager().left) {
-			xMove = -speed;
-			direction = PLAYER_LEFT;
-		}
-		if(handler.getKeyManager().right) {
-			xMove = speed;
-			direction = PLAYER_RIGHT;
+		
+		lastInventoryKeyState = currentInventoryKeyState;
+		currentInventoryKeyState = handler.getKeyManager().i;
+		if(currentInventoryKeyState && !lastInventoryKeyState) {
+			inventoryActive = !inventoryActive;
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package dev.larndt.rpg.items;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -9,7 +10,7 @@ import dev.larndt.rpg.gfx.Assets;
 public class Item {
 	// Handler
 	public static Item[] items = new Item[256];
-	public static Item woodItem = new Item(Assets.wood, "Wood", 0);
+	public static Item woodItem = new Item(Assets.wood, "Wood", 0 , new Dimension(2,1));
 	
 	// Class
 	public static final int ITEM_WIDTH = 64, ITEM_HEIGHT = 64, PICKEDUP = -1;
@@ -20,12 +21,14 @@ public class Item {
 	protected final int id;
 	
 	protected int x, y, count;
+	protected Dimension size;
 	
-	public Item(BufferedImage texture, String name, int id) {
+	public Item(BufferedImage texture, String name, int id, Dimension size) {
 		this.texture = texture;
 		this.name = name;
 		this.id = id;
 		count = 1;
+		this.size = size;
 		
 		items[id] = this;
 	}
@@ -46,7 +49,7 @@ public class Item {
 	}
 	
 	public Item createNew(int x, int y) {
-		Item i = new Item(texture, name, id);
+		Item i = new Item(texture, name, id, size);
 		i.setPosition(x, y);
 		return i;
 	}
@@ -108,6 +111,5 @@ public class Item {
 	public int getId() {
 		return id;
 	}
-	
 	
 }
