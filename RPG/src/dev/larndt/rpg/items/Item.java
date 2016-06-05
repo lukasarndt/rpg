@@ -1,36 +1,32 @@
 package dev.larndt.rpg.items;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import dev.larndt.rpg.Handler;
-import dev.larndt.rpg.gfx.Assets;
 
-public class Item {
-	// Handler
-	public static Item[] items = new Item[256];
-	public static Item woodItem = new Item(Assets.wood, "Wood", 0 , new Dimension(2,1));
+public abstract class Item {
 	
 	// Class
 	public static final int ITEM_WIDTH = 64, ITEM_HEIGHT = 64, PICKEDUP = -1;
 	
 	protected Handler handler;
 	protected BufferedImage texture;
-	protected String name;
-	protected final int id;
 	
-	protected int x, y, count;
-	protected Dimension size;
+	protected int x, y, sizeX, sizeY;
 	
-	public Item(BufferedImage texture, String name, int id, Dimension size) {
+	public Item(BufferedImage texture, int sizeX, int sizeY) {
 		this.texture = texture;
-		this.name = name;
-		this.id = id;
-		count = 1;
-		this.size = size;
-		
-		items[id] = this;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+	}
+	
+	public Item(BufferedImage texture, int x, int y, int sizeX, int sizeY) {
+		this.texture = texture;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void tick() {
@@ -41,17 +37,11 @@ public class Item {
 		if(handler == null) {
 			return;
 		}
-		render(g, (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()));
+		render(g, (int)(x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), ITEM_WIDTH, ITEM_HEIGHT);
 	}
 	
-	public void render(Graphics g, int x, int y) {
-		g.drawImage(texture, x, y, ITEM_HEIGHT, ITEM_WIDTH, null);
-	}
-	
-	public Item createNew(int x, int y) {
-		Item i = new Item(texture, name, id, size);
-		i.setPosition(x, y);
-		return i;
+	public void render(Graphics g, int x, int y, int width, int height) {
+		g.drawImage(texture, x, y, width, height, null);
 	}
 	
 	public void setPosition(int x, int y) {
@@ -76,14 +66,6 @@ public class Item {
 		this.texture = texture;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public int getX() {
 		return x;
 	}
@@ -100,16 +82,19 @@ public class Item {
 		this.y = y;
 	}
 
-	public int getCount() {
-		return count;
+	public int getSizeX() {
+		return sizeX;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setSizeX(int sizeX) {
+		this.sizeX = sizeX;
 	}
 
-	public int getId() {
-		return id;
+	public int getSizeY() {
+		return sizeY;
 	}
-	
+
+	public void setSizeY(int sizeY) {
+		this.sizeY = sizeY;
+	}
 }

@@ -1,6 +1,7 @@
 package dev.larndt.rpg.inventory;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import dev.larndt.rpg.Handler;
@@ -8,7 +9,7 @@ import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.items.Item;
 
 public class Inventory {
-	public static final int WIDTH = 32, HEIGHT = 32;
+	public static final int WIDTH = 32, HEIGHT = 32, START_X = 0, START_Y = 0;
 	private int sizeX, sizeY;
 	private ItemSlot[][] itemSlots;
 	private int activeItemSlot;
@@ -40,6 +41,7 @@ public class Inventory {
 		delta += now - lastTick;
 		lastTick = now;
 		
+		// Input
 		if(delta > delay) {
 			delta = 0;
 			if(handler.getKeyManager().right) {
@@ -55,6 +57,8 @@ public class Inventory {
 	}
 	
 	public void render(Graphics g){
+		
+		// Draw the slots and Items.
 		for(int i = 0; i < sizeX; i++) {
 			for(int j = 0; j < sizeY; j++) {
 				if(activeItemSlot == (j * sizeX + i )) {
@@ -64,10 +68,52 @@ public class Inventory {
 				}
 				
 				if(itemSlots[i][j].getItem() != null) {
-					itemSlots[i][j].getItem().render(g, i*WIDTH, j*HEIGHT);
+					Item item = itemSlots[i][j].getItem();
+					item.render(g, i*WIDTH, j*HEIGHT, (int) item.getSizeX() * WIDTH, (int) item.getSizeY() * HEIGHT);
 				}
 			}
 		}
+	}
+	
+	public void addItem(Item item) {
+		Rectangle itemRect = new Rectangle(0, 0, (int) (item.getSizeX() * WIDTH) - 1, (int) (item.getSizeY() * HEIGHT) - 1);
+		Item it;
+		Rectangle r = new Rectangle();
+		for(int j = 0; j < sizeY; j++) {
+			for(int i = 0; i < sizeX; i++) {
+				if(itemSlots[i][j].isOccupied()) {
+					continue;
+				}
+				it = itemSlots[i][j].getItem();
+				if(it == null) {
+					r = new Rectangle(0,0,0,0);
+				} else {
+					r = new Rectangle(i*WIDTH, j*HEIGHT, (int) it.getSizeX() * WIDTH, (int) it.getSizeY() * WIDTH);
+				}
+				
+				if(itemRect.intersects(r)) {
+					if(i < sizeX - 1) {
+						itemRect.setLocation((i+1) * WIDTH, j);
+					}else if(j < sizeY -1){
+						itemRect.setLocation(0, (j+1) * WIDTH);
+					}else{
+						System.out.println("No room in inventory");
+						return;
+					}
+				}else{
+					if(i+item.getSizeX() <= sizeX && j+item.getSizeX() <= sizeY) {
+						itemSlots[i][j].setItem(item);
+						for(int k = 0; k < item.getSizeX(); k++) {
+							for(int l = 0; l < item.getSizeY(); l++) {
+								itemSlots[i+k][j+l].setOccupied(true);
+							}
+						}
+						return;
+					}
+				}
+			}
+		}
+		items.add(item);
 	}
 
 	// GETTERS & SETTERS

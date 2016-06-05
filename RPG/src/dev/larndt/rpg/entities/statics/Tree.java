@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.gfx.Assets;
-import dev.larndt.rpg.items.Item;
+import dev.larndt.rpg.items.WoodItem;
 import dev.larndt.rpg.tiles.Tile;
 
 public class Tree extends StaticEntity{
@@ -32,9 +32,7 @@ public class Tree extends StaticEntity{
 
 	@Override
 	public void die() {
-		int var = 100;
-		int i = (int) (Math.random() * var) - var/2;
-		handler.getWorld().getItemManager().addItem(Item.woodItem.createNew((int)x - i,(int) y - i));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x,(int)y));
 	}
 	
 	

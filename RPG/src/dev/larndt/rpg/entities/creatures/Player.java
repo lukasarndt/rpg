@@ -45,7 +45,8 @@ public class Player extends Creature{
 		animLeft = new Animation(500, Assets.player_left);
 		animRight = new Animation(500, Assets.player_right);
 		
-		inventory = new Inventory(handler, 10, 10);
+		inventory = new Inventory(handler, 5, 5);
+		
 	}
 
 	@Override
@@ -62,7 +63,9 @@ public class Player extends Creature{
 		handler.getGameCamera().centerOnEntity(this);
 		
 		//Attack
-		checkAttacks();
+		if(!inventoryActive) {
+			checkAttacks();
+		}
 	}
 	
 	@Override

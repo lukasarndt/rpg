@@ -21,10 +21,6 @@ public class ItemManager { // Handles items in the world, not the inventory!
 		while(it.hasNext()) {
 			Item i = it.next();
 			i.tick();
-			
-			if(i.getCount() == Item.PICKEDUP) {
-				it.remove();
-			}
 		}
 	}
 	
