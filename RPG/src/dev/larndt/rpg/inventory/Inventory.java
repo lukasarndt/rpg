@@ -17,7 +17,7 @@ public class Inventory {
 	private ArrayList<Item> items;
 	
 	private long lastTick, now;
-	private int delta, delay = 50;
+	private int delta, delay = 80;
 	
 	public Inventory(Handler handler, int sizeX, int sizeY) {
 		this.sizeX = sizeX;
@@ -37,21 +37,13 @@ public class Inventory {
 	}
 	
 	public void tick(){
-		now = System.currentTimeMillis();
-		delta += now - lastTick;
-		lastTick = now;
+		getInput();
 		
-		// Input
-		if(delta > delay) {
-			delta = 0;
-			if(handler.getKeyManager().right) {
-				if(activeItemSlot < sizeX*sizeY - 1) {
-					activeItemSlot++;
-				}		
-			}else if(handler.getKeyManager().left) {
-				if(activeItemSlot > 0) {
-					activeItemSlot--;
-				}	
+		if(handler.getKeyManager().e) {
+			for(int i = 0; i < sizeX; i++) {
+				for(int j = 0; j < sizeY; j++) {
+					
+				}
 			}
 		}
 	}
@@ -70,6 +62,34 @@ public class Inventory {
 				if(itemSlots[i][j].getItem() != null) {
 					Item item = itemSlots[i][j].getItem();
 					item.render(g, i*WIDTH, j*HEIGHT, (int) item.getSizeX() * WIDTH, (int) item.getSizeY() * HEIGHT);
+				}
+			}
+		}
+	}
+	
+	public void getInput() {
+		now = System.currentTimeMillis();
+		delta += now - lastTick;
+		lastTick = now;
+		
+		// Input
+		if(delta > delay) {
+			delta = 0;
+			if(handler.getKeyManager().right) {
+				if(activeItemSlot < sizeX*sizeY - 1) {
+					activeItemSlot++;
+				}		
+			}else if(handler.getKeyManager().left) {
+				if(activeItemSlot > 0) {
+					activeItemSlot--;
+				}	
+			}else if(handler.getKeyManager().down) {
+				if(activeItemSlot < sizeX*sizeY - sizeX) {
+					activeItemSlot += sizeX;
+				}
+			}else if(handler.getKeyManager().up) {
+				if(activeItemSlot > sizeX - 1) {
+					activeItemSlot -= sizeX;
 				}
 			}
 		}

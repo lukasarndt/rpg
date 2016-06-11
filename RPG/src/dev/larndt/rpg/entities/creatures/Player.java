@@ -18,11 +18,13 @@ public class Player extends Creature{
 
 	private int direction = PLAYER_DOWN;
 	
+	// Attack
 	private int counter = 0;
 	private int attackAnimLength = 20;
-	private boolean draw = false;
+	private boolean drawAttacks = false;
 	private boolean canAttack = true;
 	
+	// Inventory
 	private Inventory inventory;
 	private boolean inventoryActive;
 	private boolean lastInventoryKeyState = false;
@@ -33,12 +35,13 @@ public class Player extends Creature{
 	private boolean lastAttackKeyState = false;
 	private boolean currentAttackKeyState = false;
 	
+	
 	public Player(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_WIDTH);
 		
 		this.setBounds(2, 2, width-4, height-4);
 		
-		speed = 5;
+		speed = 3;
 		
 		animDown = new Animation(500, Assets.player_down);
 		animUp = new Animation(500, Assets.player_up);
@@ -76,7 +79,7 @@ public class Player extends Creature{
 		this.drawBounds(g);
 		
 		// Draw Attacks
-		if(draw) {
+		if(drawAttacks) {
 			if(direction == PLAYER_DOWN) {
 				g.drawImage(Assets.swordDown, (int) (x - handler.getGameCamera().getxOffset()), 
 						(int) (y + Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
@@ -93,7 +96,7 @@ public class Player extends Creature{
 			counter++;
 			if(counter >= attackAnimLength) {
 				counter = 0;
-				draw = false;
+				drawAttacks = false;
 			}
 		}
 		
@@ -120,8 +123,8 @@ public class Player extends Creature{
 		ar.height = Tile.TILE_HEIGHT;
 		
 		if(currentAttackKeyState && !lastAttackKeyState && canAttack) {
-			if(!draw) {
-				draw = true;
+			if(!drawAttacks) {
+				drawAttacks = true;
 			}
 			
 			if(direction == PLAYER_DOWN) {
@@ -204,5 +207,13 @@ public class Player extends Creature{
 			return animDown.getCurrentFrame();
 		}
 	}
+
+	
+	// GETTERS & SETTERS
+	public Inventory getInventory() {
+		return inventory;
+	}
+	
+	
 
 }

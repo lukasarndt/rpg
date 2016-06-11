@@ -1,5 +1,6 @@
 package dev.larndt.rpg;
 
+import dev.larndt.rpg.entities.creatures.Player;
 import dev.larndt.rpg.gfx.GameCamera;
 import dev.larndt.rpg.input.KeyManager;
 import dev.larndt.rpg.input.MouseManager;
@@ -19,6 +20,10 @@ public class Handler {
 	
 	public int getHeight() {
 		return game.getHeight();
+	}
+	
+	public Player getPlayer() {
+		return world.getEntityManager().getPlayer();
 	}
 	
 	public KeyManager getKeyManager() {

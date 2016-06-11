@@ -1,6 +1,7 @@
 package dev.larndt.rpg.items;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -21,12 +22,22 @@ public class ItemManager { // Handles items in the world, not the inventory!
 		while(it.hasNext()) {
 			Item i = it.next();
 			i.tick();
+
+			Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+			if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0))) {
+				if(handler.getKeyManager().e) {
+					handler.getPlayer().getInventory().addItem(i);
+					it.remove();
+				}
+			}
 		}
 	}
 	
 	public void render(Graphics g) {
 		for(Item i : items) {
 			i.render(g);
+			//Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+			g.drawRect((int) (i.getX() - handler.getGameCamera().getxOffset()),(int) (i.getY() - handler.getGameCamera().getyOffset()), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
 		}
 	}
 	
