@@ -6,27 +6,36 @@ import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.items.WoodItem;
 import dev.larndt.rpg.tiles.Tile;
+import dev.larndt.rpg.gfx.Animation;
 
 public class Tree extends StaticEntity{
 
+	private Animation anim;
+	
 	public Tree(Handler handler, float x, float y) {
 		super(handler, x, y, 2 * Tile.TILE_WIDTH, 2 * Tile.TILE_HEIGHT);
-
-		this.setBounds(35, 89, 40, 2*19);
+		
+		width = 300;
+		height = 300;
+		
+		this.setBounds(width/2 - width/6 + 20, height - height/3 - 10, width/7, height/5);
+		
+		anim = new Animation(62, Assets.tree1);	
+		
 	}
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
+		anim.tick();
 		
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(Assets.tree, (int) (x - handler.getGameCamera().getxOffset()), 
+		g.drawImage(anim.getCurrentFrame(), (int) (x - handler.getGameCamera().getxOffset()), 
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 		
-		this.drawBounds(g);
+		//this.drawBounds(g);
 		
 	}
 

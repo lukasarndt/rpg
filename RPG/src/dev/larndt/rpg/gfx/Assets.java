@@ -8,11 +8,13 @@ public class Assets {
 	public static BufferedImage player1, player2, dirt, grass, stone, tree, wood, invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown;
 	public static BufferedImage[] player_down, player_up, player_right, player_left;
 	public static BufferedImage[] start_button;
+	public static BufferedImage[] tree1;
 
 	public static void init() {
 		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet.png"));
 		
 		loadPlayerImages();
+		loadTree();
 		
 		start_button = new BufferedImage[2];
 		
@@ -54,5 +56,22 @@ public class Assets {
 		player_left = new BufferedImage[2];	
 		player_left[0] = playerAnimationSheet.crop(2 * WIDTH, 1 * HEIGHT, WIDTH, HEIGHT);
 		player_left[1] = playerAnimationSheet.crop(3 * WIDTH, 1 * HEIGHT, WIDTH, HEIGHT);
+	}
+	
+	public static void loadTree() {
+		tree1 = new BufferedImage[16];
+		
+		tree1[1] = ImageLoader.loadImage("/textures/tree1/0001.png");
+		
+		String s;
+		
+		for(int i = 1; i <= 16; i++) {
+			if(i <10)
+				s = "000" + i;
+			else
+				s = "00" + i;
+			
+			tree1[i-1] = ImageLoader.loadImage("/textures/tree1/" + s + ".png");
+		}
 	}
 }

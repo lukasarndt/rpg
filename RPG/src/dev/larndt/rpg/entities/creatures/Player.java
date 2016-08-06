@@ -76,7 +76,7 @@ public class Player extends Creature{
 		g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), 
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 		
-		this.drawBounds(g);
+		//this.drawBounds(g);
 		
 		// Draw Attacks
 		if(drawAttacks) {
