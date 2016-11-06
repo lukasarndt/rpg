@@ -10,14 +10,18 @@ import dev.larndt.rpg.items.Item;
 
 public class Inventory {
 	public static final int WIDTH = 32, HEIGHT = 32, START_X = 0, START_Y = 0;
-	private int sizeX, sizeY;
-	private ItemSlot[][] itemSlots;
-	private int activeItemSlot;
+	
 	private Handler handler;
+	
+	private int 	sizeX, sizeY; 	//Size of the inventory.
+	private 		ItemSlot[][] itemSlots;
+	private int 	activeItemSlot;
+	
 	private ArrayList<Item> items;
 	
-	private long lastTick, now;
-	private int delta, delay = 80;
+	private long 	lastTick, now;
+	private int 	delta;
+	private int 	delay = 80;
 	
 	public Inventory(Handler handler, int sizeX, int sizeY) {
 		this.sizeX = sizeX;

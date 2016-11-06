@@ -48,7 +48,7 @@ public class Player extends Creature{
 		animLeft = new Animation(500, Assets.player_left);
 		animRight = new Animation(500, Assets.player_right);
 		
-		inventory = new Inventory(handler, 5, 5);
+		inventory = new Inventory(handler);
 		
 	}
 
