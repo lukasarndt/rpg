@@ -213,7 +213,4 @@ public class Player extends Creature{
 	public Inventory getInventory() {
 		return inventory;
 	}
-	
-	
-
 }

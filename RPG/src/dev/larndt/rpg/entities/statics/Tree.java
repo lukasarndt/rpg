@@ -42,10 +42,18 @@ public class Tree extends StaticEntity{
 	@Override
 	public void die() {
 		handler.getWorld().getItemManager().addItem(new WoodItem((int)x,(int)y));
-		
 		handler.getWorld().getItemManager().addItem(new WoodItem((int)x + 40,(int)y + 70));
-		
 		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-20,(int)y+40));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-120,(int)y+40));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-60,(int)y+40));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-40,(int)y+70));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-20,(int)y+40));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-220,(int)y+140));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-260,(int)y+10));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-260,(int)y+140));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-150,(int)y+140));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-20,(int)y+140));
+		handler.getWorld().getItemManager().addItem(new WoodItem((int)x-120,(int)y+140));
 	}
 	
 	

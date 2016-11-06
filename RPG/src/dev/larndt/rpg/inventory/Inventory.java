@@ -13,7 +13,7 @@ public class Inventory {
 	
 	private Handler handler;
 	
-	private int 	sizeX, sizeY; 	//Size of the inventory.
+	private int 	sizeX = 5, sizeY = 5; 	// Size of the inventory.
 	private 		ItemSlot[][] itemSlots;
 	private int 	activeItemSlot;
 	
@@ -23,9 +23,7 @@ public class Inventory {
 	private int 	delta;
 	private int 	delay = 80;
 	
-	public Inventory(Handler handler, int sizeX, int sizeY) {
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
+	public Inventory(Handler handler) {
 		this.handler = handler;
 		
 		itemSlots = new ItemSlot[sizeX][sizeY];
