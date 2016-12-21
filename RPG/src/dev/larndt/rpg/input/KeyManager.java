@@ -1,14 +1,25 @@
 package dev.larndt.rpg.input;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.AbstractAction;
+
+import dev.larndt.rpg.Handler;
+import dev.larndt.rpg.display.Display;
 
 public class KeyManager implements KeyListener{
 	private boolean[] keys;
 	public boolean up, down, left, right, space, i, e;
 	
-	public KeyManager() {
+	private Handler handler;
+	private Display display;
+	
+	public KeyManager(Handler handler) {
 		keys = new boolean[256];
+		this.handler = handler;
+		this.display = handler.getGame().getDisplay();
 	}
 	
 	public void tick() {
@@ -38,4 +49,12 @@ public class KeyManager implements KeyListener{
 		
 	}
 
+	private class KeyPressed extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//keys[e.get]
+		}
+		
+	}
 }

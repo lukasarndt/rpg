@@ -1,7 +1,7 @@
 package dev.larndt.rpg;
 
 import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
+import java.awt.Image;
 
 import dev.larndt.rpg.display.Display;
 import dev.larndt.rpg.gfx.Assets;
@@ -10,7 +10,6 @@ import dev.larndt.rpg.input.KeyManager;
 import dev.larndt.rpg.input.MouseManager;
 import dev.larndt.rpg.states.GameState;
 import dev.larndt.rpg.states.MenuState;
-//import dev.larndt.rpg.states.MenuState;
 import dev.larndt.rpg.states.State;
 import dev.larndt.rpg.states.StateManager;
 
@@ -22,8 +21,8 @@ public class Game implements Runnable{
 	private boolean running = false;
 	private Thread thread;
 	
-	private BufferStrategy bs;
 	private Graphics g;
+	private Image screen;
 
 	private State gameState;
 	private State menuState;
@@ -39,21 +38,20 @@ public class Game implements Runnable{
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		
-		keyManager = new KeyManager();
-		mouseManager = new MouseManager();
 	}
 	
 	private void init() {
-		display = new Display(title, width, height); 
-		display.getFrame().addKeyListener(keyManager);
-		display.getFrame().addMouseListener(mouseManager);
-		display.getFrame().addMouseMotionListener(mouseManager);
-		display.getCanvas().addMouseListener(mouseManager);
-		display.getCanvas().addMouseMotionListener(mouseManager);
-		Assets.init();
 		handler = new Handler(this);
+		
+		display = new Display(title, width, height); 
+		
+		Assets.init();
+		
+		keyManager = new KeyManager(handler);
+		mouseManager = new MouseManager();
+		
 		gameCamera = new GameCamera(handler, 0, 0);
+		
 		gameState = new GameState(handler);
 		menuState = new MenuState(handler);
 		StateManager.setState(menuState);
@@ -79,6 +77,7 @@ public class Game implements Runnable{
 			if(delta >= timePerTick) {
 				tick();
 				render();
+				display.repaint();
 				
 				ticks++;
 				delta -= timePerTick;
@@ -100,24 +99,26 @@ public class Game implements Runnable{
 	}
 	
 	private void render() {
-		// Get Graphics object
-		bs = display.getCanvas().getBufferStrategy();
-		if(bs == null) {
-			display.getCanvas().createBufferStrategy(3);
-			return;
+		if(screen == null) {
+			screen = display.createImage(width, height);
+			if(screen == null) {
+				System.out.println("Screen is null");
+				return;
+			}else {
+				g = screen.getGraphics();
+			}
 		}
 		
-		g = bs.getDrawGraphics();
-
 		// Clear Screen
 		g.clearRect(0, 0, width, height);
+		
 		// Start Drawing
 		if(StateManager.getState() != null) {
 			StateManager.getState().render(g);
 		}
 		// End Drawing
 		
-		bs.show();
+		display.setScreen(screen);
 		g.dispose();
 	}
 	
@@ -146,12 +147,19 @@ public class Game implements Runnable{
 		}
 	}
 	
-	//GETTERS & SETTER
-	
+	//GETTERS & SETTERS
 	public KeyManager getKeyManager() {
 		return keyManager;
 	}
 	
+	public Display getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(Display display) {
+		this.display = display;
+	}
+
 	public MouseManager getMouseManager() {
 		return mouseManager;
 	}
@@ -183,7 +191,4 @@ public class Game implements Runnable{
 	public State getMenuState() {
 		return menuState;
 	}
-	
-	
-	
 }
