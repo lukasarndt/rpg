@@ -20,6 +20,9 @@ public class ItemSlot {
 
 	public void setItem(Item item) {
 		this.item = item;
+		if(item != null) {
+			this.occupied = true;
+		}
 	}
 	
 	

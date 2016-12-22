@@ -10,19 +10,21 @@ import dev.larndt.rpg.items.Item;
 
 public class Inventory {
 	public static final int WIDTH = 32, HEIGHT = 32, START_X = 0, START_Y = 0;
+	private static final int DELAY = 80;
 	
 	private Handler handler;
 	
-	private int 	sizeX = 5, sizeY = 5; 	// Size of the inventory.
+	private int 	sizeX = 3, sizeY = 3; 	// Size of the inventory.
 	private 		ItemSlot[][] itemSlots;
 	private int 	activeItemSlot;
 	
+	private boolean active = false;
+
 	private ArrayList<Item> items;
 	
 	private long 	lastTick, now;
 	private int 	delta;
-	private int 	delay = 80;
-	
+
 	public Inventory(Handler handler) {
 		this.handler = handler;
 		
@@ -40,14 +42,6 @@ public class Inventory {
 	
 	public void tick(){
 		getInput();
-		
-		if(handler.getKeyManager().e) {
-			for(int i = 0; i < sizeX; i++) {
-				for(int j = 0; j < sizeY; j++) {
-					
-				}
-			}
-		}
 	}
 	
 	public void render(Graphics g){
@@ -63,26 +57,30 @@ public class Inventory {
 				
 				if(itemSlots[i][j].getItem() != null) {
 					Item item = itemSlots[i][j].getItem();
-					item.render(g, i*WIDTH, j*HEIGHT, (int) item.getSizeX() * WIDTH, (int) item.getSizeY() * HEIGHT);
+					item.render(g, i*WIDTH, j*HEIGHT, WIDTH, HEIGHT);
 				}
 			}
 		}
 	}
 	
+	private boolean itemGrabbed = false, lastKeyState, currentKeyState;
+	Item itemToGrab = null;
 	public void getInput() {
 		now = System.currentTimeMillis();
 		delta += now - lastTick;
 		lastTick = now;
 		
 		// Input
-		if(delta > delay) {
+		if(delta > DELAY) {
 			delta = 0;
+			
+			// Move around in the inventory.
 			if(handler.getKeyManager().right) {
-				if(activeItemSlot < sizeX*sizeY - 1) {
+				if(activeItemSlot < sizeX*sizeY - 1 && (activeItemSlot%sizeX) != sizeX-1) {
 					activeItemSlot++;
 				}		
 			}else if(handler.getKeyManager().left) {
-				if(activeItemSlot > 0) {
+				if(activeItemSlot > 0 && (activeItemSlot%sizeX) != 0 ) {
 					activeItemSlot--;
 				}	
 			}else if(handler.getKeyManager().down) {
@@ -94,6 +92,25 @@ public class Inventory {
 					activeItemSlot -= sizeX;
 				}
 			}
+		}
+		
+		// Grab items.
+		lastKeyState = currentKeyState;
+		currentKeyState = handler.getKeyManager().space;
+		ItemSlot itemSlot = itemSlots[activeItemSlot%sizeX][(int)activeItemSlot/sizeX];
+		if(currentKeyState && !lastKeyState && itemGrabbed) {
+			if (!itemSlot.isOccupied() && itemToGrab != null) {
+				itemSlot.setItem(itemToGrab);
+				itemSlot.setOccupied(true);
+				itemGrabbed = false;
+				itemToGrab = null;
+				System.out.println("Item dropped.");
+			}
+		} else if(currentKeyState && !lastKeyState && !itemGrabbed && itemSlot.getItem() != null) {
+			itemToGrab = itemSlot.getItem();
+			itemSlot.setItem(null);
+			itemSlot.setOccupied(false);
+			itemGrabbed = true;
 		}
 	}
 	
@@ -137,6 +154,20 @@ public class Inventory {
 		}
 		items.add(item);
 	}
+	
+	public boolean addItem2(Item item) {
+		for(int i = 0; i < sizeX; i++) {
+			for(int j = 0; j < sizeY; j++) {
+				if(!itemSlots[j][i].isOccupied()) {
+					itemSlots[j][i].setItem(item);
+					return true;
+				}
+			}
+		}
+		
+		System.out.println("The inventory is full!");
+		return false;
+	}
 
 	// GETTERS & SETTERS
 	public int getSizeX() {
@@ -157,6 +188,14 @@ public class Inventory {
 
 	public ArrayList<Item> getItems() {
 		return items;
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

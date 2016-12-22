@@ -23,10 +23,10 @@ public class Player extends Creature{
 	private int attackAnimLength = 20;
 	private boolean drawAttacks = false;
 	private boolean canAttack = true;
+	private Rectangle attackRectangle = new Rectangle();
 	
 	// Inventory
 	private Inventory inventory;
-	private boolean inventoryActive;
 	private boolean lastInventoryKeyState = false;
 	private boolean currentInventoryKeyState = false;
 	
@@ -54,10 +54,11 @@ public class Player extends Creature{
 
 	@Override
 	public void tick() {
+	
 		tickAnimation();
 		getInput();
 		
-		if(!inventoryActive) {
+		if(!this.inventory.isActive()) {
 			move();
 		}else{
 			inventory.tick();
@@ -66,7 +67,7 @@ public class Player extends Creature{
 		handler.getGameCamera().centerOnEntity(this);
 		
 		//Attack
-		if(!inventoryActive) {
+		if(!this.inventory.isActive()) {
 			checkAttacks();
 		}
 	}
@@ -100,7 +101,7 @@ public class Player extends Creature{
 			}
 		}
 		
-		if(inventoryActive) {
+		if(this.inventory.isActive()) {
 			inventory.render(g);
 		}
 	}
@@ -109,6 +110,7 @@ public class Player extends Creature{
 		attackTimer += System.currentTimeMillis() - lastAttackTimer;
 		lastAttackTimer = System.currentTimeMillis();
 		
+		// This prevents the player from holding down the attack key to attack.
 		lastAttackKeyState = currentAttackKeyState;
 		currentAttackKeyState = handler.getKeyManager().space;
 		
@@ -117,28 +119,27 @@ public class Player extends Creature{
 			attackTimer = 0;
 		}
 		
-		Rectangle ar = new Rectangle();
-		//Rectangle cb = getCollisionBounds(0,0);
-		ar.width = Tile.TILE_WIDTH;
-		ar.height = Tile.TILE_HEIGHT;
-		
 		if(currentAttackKeyState && !lastAttackKeyState && canAttack) {
+			//Rectangle cb = getCollisionBounds(0,0);
+			attackRectangle.width = Tile.TILE_WIDTH;
+			attackRectangle.height = Tile.TILE_HEIGHT;
+			
 			if(!drawAttacks) {
 				drawAttacks = true;
 			}
 			
 			if(direction == PLAYER_DOWN) {
-				ar.x = (int) (x);
-				ar.y = (int) (y + Tile.TILE_HEIGHT);
+				attackRectangle.x = (int) (x);
+				attackRectangle.y = (int) (y + Tile.TILE_HEIGHT);
 			} else if(direction == PLAYER_UP) {
-				ar.x = (int) (x);
-				ar.y = (int) (y - Tile.TILE_HEIGHT);
+				attackRectangle.x = (int) (x);
+				attackRectangle.y = (int) (y - Tile.TILE_HEIGHT);
 			} else if(direction == PLAYER_LEFT) {
-				ar.x = (int) (x - Tile.TILE_WIDTH);
-				ar.y = (int) (y);
+				attackRectangle.x = (int) (x - Tile.TILE_WIDTH);
+				attackRectangle.y = (int) (y);
 			} else if(direction == PLAYER_RIGHT) {
-				ar.x = (int) (x + Tile.TILE_WIDTH);
-				ar.y = (int) (y);
+				attackRectangle.x = (int) (x + Tile.TILE_WIDTH);
+				attackRectangle.y = (int) (y);
 			}
 			canAttack = false;
 		}
@@ -147,11 +148,15 @@ public class Player extends Creature{
 			if(e.equals(this)) {
 				continue;
 			}
-			if(e.getCollisionBounds(0, 0).intersects(ar)) {
+			if(e.getCollisionBounds(0, 0).intersects(attackRectangle)) {
 				e.hurt(1);
+				attackRectangle.width = 0;
+				attackRectangle.height = 0;
 				return; // Player can only hurt 1 entity at a time!
 			}
 		}
+		
+		
 	}
 	
 	public void tickAnimation() {
@@ -165,7 +170,7 @@ public class Player extends Creature{
 		xMove = 0;
 		yMove = 0;
 		
-		if(!inventoryActive) {
+		if(!this.inventory.isActive()) {
 			if(handler.getKeyManager().up) {
 				yMove = -speed;
 				direction = PLAYER_UP;
@@ -187,7 +192,7 @@ public class Player extends Creature{
 		lastInventoryKeyState = currentInventoryKeyState;
 		currentInventoryKeyState = handler.getKeyManager().i;
 		if(currentInventoryKeyState && !lastInventoryKeyState) {
-			inventoryActive = !inventoryActive;
+			this.inventory.setActive(!this.inventory.isActive());
 		}
 	}
 	

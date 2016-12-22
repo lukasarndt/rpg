@@ -7,7 +7,8 @@ import java.util.Iterator;
 
 import dev.larndt.rpg.Handler;
 
-public class ItemManager { // Handles items in the world, not the inventory!
+public class ItemManager { 	// Handles items in the world, not the inventory!
+							// Items in the inventory are handled by "Inventory".
 	private Handler handler;
 	private ArrayList<Item> items;	
 	
@@ -23,11 +24,14 @@ public class ItemManager { // Handles items in the world, not the inventory!
 			Item i = it.next();
 			i.tick();
 
-			Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
-			if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0))) {
-				if(handler.getKeyManager().e) {
-					handler.getPlayer().getInventory().addItem(i);
-					it.remove();
+			if(handler.getKeyManager().e) {
+				Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+				if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0))) {
+					if(!handler.getPlayer().getInventory().isActive()) {
+						if(handler.getPlayer().getInventory().addItem2(i)) {
+							it.remove();
+						}
+					}
 				}
 			}
 		}
