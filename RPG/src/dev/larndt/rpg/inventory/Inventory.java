@@ -24,6 +24,9 @@ public class Inventory {
 	
 	private long 	lastTick, now;
 	private int 	delta;
+	
+	private boolean itemGrabbed = false, lastKeyState, currentKeyState;
+	private Item itemToGrab = null;
 
 	public Inventory(Handler handler) {
 		this.handler = handler;
@@ -63,18 +66,17 @@ public class Inventory {
 		}
 	}
 	
-	private boolean itemGrabbed = false, lastKeyState, currentKeyState;
-	Item itemToGrab = null;
+	
 	public void getInput() {
 		now = System.currentTimeMillis();
 		delta += now - lastTick;
 		lastTick = now;
 		
 		// Input
+		
+		// Move around in the inventory.
 		if(delta > DELAY) {
 			delta = 0;
-			
-			// Move around in the inventory.
 			if(handler.getKeyManager().right) {
 				if(activeItemSlot < sizeX*sizeY - 1 && (activeItemSlot%sizeX) != sizeX-1) {
 					activeItemSlot++;
@@ -101,7 +103,7 @@ public class Inventory {
 		if(currentKeyState && !lastKeyState && itemGrabbed) {
 			if (!itemSlot.isOccupied() && itemToGrab != null) {
 				itemSlot.setItem(itemToGrab);
-				itemSlot.setOccupied(true);
+				//itemSlot.setOccupied(true);
 				itemGrabbed = false;
 				itemToGrab = null;
 				System.out.println("Item dropped.");
@@ -109,8 +111,18 @@ public class Inventory {
 		} else if(currentKeyState && !lastKeyState && !itemGrabbed && itemSlot.getItem() != null) {
 			itemToGrab = itemSlot.getItem();
 			itemSlot.setItem(null);
-			itemSlot.setOccupied(false);
+			//itemSlot.setOccupied(false);
 			itemGrabbed = true;
+		}
+		
+		// Drop items
+		if(handler.getKeyManager().e) {
+			if(itemSlot.getItem() != null) {
+				itemSlot.getItem().setX((int)handler.getPlayer().getX());
+				itemSlot.getItem().setY((int)handler.getPlayer().getY()+ HEIGHT);
+				handler.getWorld().getItemManager().addItem(itemSlot.getItem());
+			}
+			itemSlot.setItem(null);
 		}
 	}
 	
