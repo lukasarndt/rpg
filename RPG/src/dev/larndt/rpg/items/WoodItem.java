@@ -10,7 +10,6 @@ public class WoodItem extends Item{
 		super(Assets.wood, 2,1);
 	}
 
-
 	public WoodItem(int x, int y) {
 		super(Assets.wood, 2,1);
 		this.x = x;
