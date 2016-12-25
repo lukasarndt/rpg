@@ -26,12 +26,8 @@ public class ItemManager { 	// Handles items in the world, not the inventory!
 
 			if(handler.getKeyManager().e) {
 				Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
-				if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0))) {
-					if(!handler.getPlayer().getInventory().isActive()) {
-						if(handler.getPlayer().getInventory().addItem2(i)) {
-							it.remove();
-						}
-					}
+				if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0)) && !handler.getPlayer().getInventory().isActive() && handler.getPlayer().getInventory().addItem2(i)) {
+					it.remove();
 				}
 			}
 		}
@@ -49,6 +45,8 @@ public class ItemManager { 	// Handles items in the world, not the inventory!
 		i.setHandler(handler);
 		items.add(i);
 	}
+	
+	
 	
 	// GETTERS & SETTERS
 	public Handler getHandler() {

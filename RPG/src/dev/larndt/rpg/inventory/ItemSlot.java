@@ -22,8 +22,8 @@ public class ItemSlot {
 		this.item = item;
 		if(item != null) {
 			this.occupied = true;
+		} else {
+			this.occupied = false;
 		}
 	}
-	
-	
 }
