@@ -14,9 +14,10 @@ import dev.larndt.rpg.states.MenuState;
 import dev.larndt.rpg.states.State;
 import dev.larndt.rpg.states.StateManager;
 
-public class Game implements Runnable{
+public class Game implements Runnable{	
+	public static final int WIDTH = 800, HEIGHT = 600;
+	
 	private Display display;
-	private int width, height;
 	private String title;
 	
 	private boolean running = false;
@@ -36,8 +37,8 @@ public class Game implements Runnable{
 	private Handler handler;
 	
 	public Game(String title, int width, int height) {
-		this.width = width;
-		this.height = height;
+		//this.WIDTH = width;
+		//this.height = height;
 		this.title = title;
 		
 		keyManager = new KeyManager();
@@ -45,7 +46,7 @@ public class Game implements Runnable{
 	}
 	
 	private void init() {
-		display = new Display(title, width, height); 
+		display = new Display(title, WIDTH, HEIGHT); 
 		display.getFrame().addKeyListener(keyManager);
 		display.getFrame().addMouseListener(mouseManager);
 		display.getFrame().addMouseMotionListener(mouseManager);
@@ -110,7 +111,7 @@ public class Game implements Runnable{
 		g = bs.getDrawGraphics();
 
 		// Clear Screen
-		g.clearRect(0, 0, width, height);
+		g.clearRect(0, 0, WIDTH, HEIGHT);
 		// Start Drawing
 		if(StateManager.getState() != null) {
 			StateManager.getState().render(g);
@@ -161,20 +162,20 @@ public class Game implements Runnable{
 	}
 
 	public int getWidth() {
-		return width;
+		return WIDTH;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+	/*public void setWidth(int width) {
+		this.WIDTH = width;
+	}*/
 
 	public int getHeight() {
-		return height;
+		return HEIGHT;
 	}
 
-	public void setHeight(int height) {
+	/*public void setHeight(int height) {
 		this.height = height;
-	}
+	}*/
 
 	public State getGameState() {
 		return gameState;

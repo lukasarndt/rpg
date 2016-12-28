@@ -19,6 +19,7 @@ public abstract class Creature extends Entity{
 		speed = DEFAULT_SPEED;
 		xMove = 0f;
 		yMove = 0f;
+
 	}
 	
 	public void move() {
@@ -32,40 +33,40 @@ public abstract class Creature extends Entity{
 	
 	public void moveX() {
 		if(xMove > 0) { // Moving right
-			int tx = (int) (x + xMove + entity_bounds.x + entity_bounds.width)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
-					if(!collisionWithTile(tx, (int) (y + entity_bounds.y)/Tile.TILE_HEIGHT) && 
-							!collisionWithTile(tx, (int) (y + entity_bounds.y + entity_bounds.height)/Tile.TILE_HEIGHT)) {
+			int tx = (int) (x + xMove + entityBounds.x + entityBounds.width)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
+					if(!collisionWithTile(tx, (int) (y + entityBounds.y)/Tile.TILE_HEIGHT) && 
+							!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
 						x += xMove;
 					}else{
-						x = tx * Tile.TILE_WIDTH - entity_bounds.x - entity_bounds.width - 1;
+						x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
 					}
 		}else if(xMove < 0) { // Moving left
-			int tx = (int) (x + xMove + entity_bounds.x)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
-			if(!collisionWithTile(tx, (int) ((y + entity_bounds.y)/Tile.TILE_HEIGHT)) && 
-					!collisionWithTile(tx, (int) (y + entity_bounds.y + entity_bounds.height)/Tile.TILE_HEIGHT)) {
+			int tx = (int) (x + xMove + entityBounds.x)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
+			if(!collisionWithTile(tx, (int) ((y + entityBounds.y)/Tile.TILE_HEIGHT)) && 
+					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
 				x += xMove;
 			}else{
-				x = tx * Tile.TILE_WIDTH + Tile.TILE_WIDTH - entity_bounds.x;
+				x = tx * Tile.TILE_WIDTH + Tile.TILE_WIDTH - entityBounds.x;
 			}
 		}
 	}
 	
 	public void moveY() {
 		if(yMove < 0) { // Moving up
-			int ty = (int) (y + yMove + entity_bounds.y)/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
-			if(!collisionWithTile((int)((x + entity_bounds.x) / Tile.TILE_WIDTH) , ty) &&
-					!collisionWithTile((int)((x + entity_bounds.x + entity_bounds.width) / Tile.TILE_WIDTH) , ty) ) {
+			int ty = (int) (y + yMove + entityBounds.y)/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
+			if(!collisionWithTile((int)((x + entityBounds.x) / Tile.TILE_WIDTH) , ty) &&
+					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width) / Tile.TILE_WIDTH) , ty) ) {
 				y += yMove;
 			}else{
-				y = ty * Tile.TILE_HEIGHT + Tile.TILE_HEIGHT - entity_bounds.y;
+				y = ty * Tile.TILE_HEIGHT + Tile.TILE_HEIGHT - entityBounds.y;
 			}
 		}else if(yMove > 0) { // Moving down
-			int ty = (int) (y + yMove + entity_bounds.y + entity_bounds.height )/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
-			if(!collisionWithTile((int)((x + entity_bounds.x) / Tile.TILE_WIDTH) , ty) &&
-					!collisionWithTile((int)((x + entity_bounds.x + entity_bounds.width) / Tile.TILE_WIDTH) , ty) ) {
+			int ty = (int) (y + yMove + entityBounds.y + entityBounds.height )/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
+			if(!collisionWithTile((int)((x + entityBounds.x) / Tile.TILE_WIDTH) , ty) &&
+					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width) / Tile.TILE_WIDTH) , ty) ) {
 				y += yMove;
 			}else{
-				y = ty * Tile.TILE_HEIGHT - entity_bounds.y - entity_bounds.height - 1;
+				y = ty * Tile.TILE_HEIGHT - entityBounds.y - entityBounds.height - 1;
 			}
 		}
 	}

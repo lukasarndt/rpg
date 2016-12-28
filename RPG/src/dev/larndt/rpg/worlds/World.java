@@ -1,7 +1,12 @@
 package dev.larndt.rpg.worlds;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 
+import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.EntityManager;
 import dev.larndt.rpg.entities.creatures.Player;
@@ -18,6 +23,11 @@ public class World {
 	private EntityManager entityManager;
 	private ItemManager itemManager;
 	
+	private float playerHealthBarThickness = 2f, playerHealthFraction = 1f, playerHealthBarWidth = 300f, playerHealthBarHeight = 25f;
+	private Color playerHealthBarColor = Color.BLACK;
+	private Stroke oldStroke;
+	private Color oldColor;
+
 	public World(Handler handler, String path) {
 		this.handler = handler;
 		
@@ -52,9 +62,26 @@ public class World {
 			}
 		}
 		
+		
 		//Render the Entites & Items
 		itemManager.render(g);
 		entityManager.render(g);
+		
+		
+		//Render health bar
+		playerHealthFraction = (float)handler.getPlayer().getHealth()/(float)handler.getPlayer().getMaxHealth();
+		Graphics2D g2 = (Graphics2D) g;
+		
+		oldStroke = g2.getStroke();
+		oldColor = g2.getColor();
+		
+		g2.setStroke(new BasicStroke(playerHealthBarThickness));
+		g2.setColor(Color.RED);
+		g2.fillRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), (int) Game.HEIGHT - 50, (int) (playerHealthBarWidth*playerHealthFraction), (int)playerHealthBarHeight);
+		g2.setColor(playerHealthBarColor);
+		g2.drawRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), Game.HEIGHT - 50, (int) playerHealthBarWidth, (int) playerHealthBarHeight);	
+		g2.setColor(oldColor);
+		g2.setStroke(oldStroke);
 	}
 	
 	/**

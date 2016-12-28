@@ -48,6 +48,10 @@ public abstract class Item {
 		this.x = x;
 		this.y = x;
 	}
+	
+	public void use() {
+		
+	}
 
 	// GETTERS & SETTERS
 	public Handler getHandler() {

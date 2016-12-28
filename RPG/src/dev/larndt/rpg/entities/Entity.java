@@ -12,8 +12,8 @@ public abstract class Entity {
 	protected Handler handler;
 	protected int width, height;
 	protected float x, y;
-	protected Rectangle entity_bounds;
-	protected int health;
+	protected Rectangle entityBounds;
+	protected int health, maxHealth = 5;
 	protected Boolean active = true;
 	
 	public Entity(Handler handler, float x, float y, int width, int height) {
@@ -22,8 +22,8 @@ public abstract class Entity {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		health = DEFAULT_HEALTH;
-		entity_bounds = new Rectangle(0,0,width,height);
+		health = maxHealth;
+		entityBounds = new Rectangle(0, 0, width, height);
 	}
 	
 	public abstract void tick();
@@ -44,8 +44,8 @@ public abstract class Entity {
 	protected void drawBounds(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.red);
-		g.drawRect((int) (entity_bounds.x + x - handler.getGameCamera().getxOffset()), (int) (entity_bounds.y  + y - handler.getGameCamera().getyOffset()), 
-				entity_bounds.width, entity_bounds.height);
+		g.drawRect((int) (entityBounds.x + x - handler.getGameCamera().getxOffset()), (int) (entityBounds.y  + y - handler.getGameCamera().getyOffset()), 
+				entityBounds.width, entityBounds.height);
 		g.setColor(c);
 	}
 	
@@ -67,7 +67,7 @@ public abstract class Entity {
 	}
 	
 	public Rectangle getCollisionBounds(float xOffset, float yOffset) {
-		return new Rectangle((int) (x + entity_bounds.x + xOffset), (int) (y + entity_bounds.y + yOffset) , entity_bounds.width, entity_bounds.height);
+		return new Rectangle((int) (x + entityBounds.x + xOffset), (int) (y + entityBounds.y + yOffset) , entityBounds.width, entityBounds.height);
 	}
 	
 	public void setX(float x) {
@@ -99,10 +99,10 @@ public abstract class Entity {
 	}
 	
 	public void setBounds(int x, int y, int width, int height) {
-		entity_bounds.x = x;
-		entity_bounds.y = y;
-		entity_bounds.width = width;
-		entity_bounds.height = height;
+		entityBounds.x = x;
+		entityBounds.y = y;
+		entityBounds.width = width;
+		entityBounds.height = height;
 	}
 
 	public int getHealth() {
@@ -120,6 +120,13 @@ public abstract class Entity {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
 	
 }
