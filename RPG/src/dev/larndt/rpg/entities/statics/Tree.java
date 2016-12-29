@@ -22,6 +22,7 @@ public class Tree extends StaticEntity{
 		
 		anim = new Animation(62, Assets.tree1);	
 		
+		this.attackStrength = 0;
 	}
 
 	@Override
