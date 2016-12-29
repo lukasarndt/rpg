@@ -1,5 +1,11 @@
 package dev.larndt.rpg.entities.creatures;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
 import dev.larndt.rpg.tiles.Tile;
@@ -12,7 +18,11 @@ public abstract class Creature extends Entity{
 	
 	protected static final float DEFAULT_SPEED = 3.0f;
 	
-	protected float speed, xMove, yMove;
+	protected float speed, xMove, yMove, healthFraction;
+	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10;
+	
+	protected Stroke oldStroke;
+	protected Color oldColor, healthBarColor = Color.BLACK;
 	
 	public Creature(Handler handler, float x, float y, int width, int height) {
 		super(handler, x, y, width, height);
@@ -69,6 +79,22 @@ public abstract class Creature extends Entity{
 				y = ty * Tile.TILE_HEIGHT - entityBounds.y - entityBounds.height - 1;
 			}
 		}
+	}
+	
+	public void drawHealthBar(Graphics g) {
+		healthFraction = (float)health/(float)maxHealth;
+		Graphics2D g2 = (Graphics2D) g;
+		
+		oldStroke = g2.getStroke();
+		oldColor = g2.getColor();
+		
+		g2.setStroke(new BasicStroke(healthBarThickness));
+		g2.setColor(Color.RED);
+		g2.fillRect((int) (x - handler.getGameCamera().getxOffset()), (int) (y - 20 - handler.getGameCamera().getyOffset()), (int) (healthBarWidth*healthFraction), (int)healthBarHeight);
+		g2.setColor(healthBarColor);
+		g2.drawRect((int) (x - handler.getGameCamera().getxOffset()), (int) (y - 20 - handler.getGameCamera().getyOffset()), (int) healthBarWidth, (int) healthBarHeight);	
+		g2.setColor(oldColor);
+		g2.setStroke(oldStroke);
 	}
 	
 	protected boolean collisionWithTile(int x, int y) {

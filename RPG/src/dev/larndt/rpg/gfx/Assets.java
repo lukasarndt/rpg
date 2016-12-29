@@ -5,19 +5,21 @@ import java.awt.image.BufferedImage;
 public class Assets {
 	public static final int WIDTH = 32, HEIGHT = 32;
 	
-	public static BufferedImage player1, player2, dirt, grass, stone, tree, wood, invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown;
+	public static BufferedImage player1, player2, dirt, grass, stone, tree, wood, invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown, slime;
 	public static BufferedImage[] player_down, player_up, player_right, player_left;
 	public static BufferedImage[] start_button;
 	public static BufferedImage[] tree1;
 
 	public static void init() {
 		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet.png"));
+		Spritesheet sheet2 = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet2.png"));
 		
 		loadPlayerImages();
 		loadTree();
 		
 		start_button = new BufferedImage[2];
 		
+		// Spritesheet 1
 		player1 = sheet.crop(0 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		player2 = sheet.crop(1 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		dirt 	= sheet.crop(2 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
@@ -36,6 +38,9 @@ public class Assets {
 		swordRight = sheet.crop(1 * WIDTH, 3 * HEIGHT, WIDTH, HEIGHT);
 		swordDown = sheet.crop(2 * WIDTH, 3 * HEIGHT, WIDTH, HEIGHT);
 		swordUp = sheet.crop(3 * WIDTH, 3 * HEIGHT, WIDTH, HEIGHT);
+		
+		//Spritesheet 2
+		slime = sheet2.crop(1 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 	}
 	
 	public static void loadPlayerImages() {

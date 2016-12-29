@@ -15,6 +15,10 @@ public abstract class Entity {
 	protected Rectangle entityBounds;
 	protected int health, maxHealth = 5;
 	protected Boolean active = true;
+	protected int attackStrength = 1;
+	
+	private long lastTime, now;
+	private int counter, delta = 1000;
 	
 	public Entity(Handler handler, float x, float y, int width, int height) {
 		this.handler = handler;
@@ -24,6 +28,8 @@ public abstract class Entity {
 		this.height = height;
 		health = maxHealth;
 		entityBounds = new Rectangle(0, 0, width, height);
+		now = System.currentTimeMillis();
+		lastTime = now;
 	}
 	
 	public abstract void tick();
@@ -31,12 +37,18 @@ public abstract class Entity {
 	public abstract void render(Graphics g);
 
 	public void hurt(int amt) {
-		health -= amt;
-		if(health <= 0) {
-			active = false;
-			die();
+		now = System.currentTimeMillis();
+		counter += now - lastTime;
+		lastTime = now;
+		if(counter > delta) {
+			health -= amt;
+			if(health <= 0) {
+				active = false;
+				die();
+			}
+			counter = 0;
 		}
-		System.out.println(health);
+		
 	}
 	
 	public abstract void die();
@@ -127,6 +139,14 @@ public abstract class Entity {
 
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
+	}
+
+	public int getAttackStrength() {
+		return attackStrength;
+	}
+
+	public void setAttackStrength(int attackStrength) {
+		this.attackStrength = attackStrength;
 	}
 	
 }

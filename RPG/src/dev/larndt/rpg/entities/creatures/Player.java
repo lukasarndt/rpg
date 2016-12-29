@@ -49,7 +49,6 @@ public class Player extends Creature{
 		animRight = new Animation(500, Assets.player_right);
 		
 		inventory = new Inventory(handler);
-		
 	}
 
 	@Override
@@ -148,6 +147,9 @@ public class Player extends Creature{
 			if(e.equals(this)) {
 				continue;
 			}
+			if(e.getCollisionBounds(-2, 0).intersects(this.getCollisionBounds(0, 0)) || e.getCollisionBounds(2, 0).intersects(this.getCollisionBounds(0, 0))) {
+				this.hurt(e.getAttackStrength());
+			}
 			if(e.getCollisionBounds(0, 0).intersects(attackRectangle)) {
 				e.hurt(1);
 				attackRectangle.width = 0;
@@ -155,8 +157,6 @@ public class Player extends Creature{
 				return; // Player can only hurt 1 entity at a time!
 			}
 		}
-		
-		
 	}
 	
 	public void tickAnimation() {

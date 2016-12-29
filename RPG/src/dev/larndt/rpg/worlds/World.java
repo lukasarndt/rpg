@@ -10,6 +10,7 @@ import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.EntityManager;
 import dev.larndt.rpg.entities.creatures.Player;
+import dev.larndt.rpg.entities.creatures.Slime;
 import dev.larndt.rpg.entities.statics.Tree;
 import dev.larndt.rpg.items.ItemManager;
 import dev.larndt.rpg.tiles.Tile;
@@ -36,6 +37,7 @@ public class World {
 		entityManager = new EntityManager(handler, new Player(handler, 50, 50));
 		
 		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
+		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
 		
 		loadWorld(path);
 		
