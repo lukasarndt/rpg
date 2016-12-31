@@ -1,5 +1,6 @@
 package dev.larndt.rpg.tiles;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -32,6 +33,10 @@ public class Tile {
 	
 	public void render(Graphics g, int x, int y) {
 		g.drawImage(texture, x, y, TILE_WIDTH, TILE_HEIGHT, null);
+		Color oldColor = g.getColor();
+		g.setColor(Color.RED);
+		g.drawRect(x, y, TILE_WIDTH, TILE_HEIGHT);
+		g.setColor(oldColor);
 	}
 	
 	// GETTERS & SETTERS

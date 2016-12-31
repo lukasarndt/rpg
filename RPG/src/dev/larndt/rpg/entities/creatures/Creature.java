@@ -20,11 +20,10 @@ public abstract class Creature extends Entity{
 	
 	protected static final float DEFAULT_SPEED = 3.0f;
 	
-	protected float speed, xMove, yMove, healthFraction;
+	protected float speed, xMove, yMove;
 	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10, time;
 	
-	protected Stroke oldStroke;
-	protected Color oldColor, healthBarColor = Color.BLACK;
+	protected Color healthBarColor = Color.BLACK;
 	
 	protected List<Node> path = null;
 	
@@ -86,11 +85,11 @@ public abstract class Creature extends Entity{
 	}
 	
 	public void drawHealthBar(Graphics g) {
-		healthFraction = (float)health/(float)maxHealth;
+		float healthFraction = (float)health/(float)maxHealth;
 		Graphics2D g2 = (Graphics2D) g;
 		
-		oldStroke = g2.getStroke();
-		oldColor = g2.getColor();
+		Stroke oldStroke = g2.getStroke();
+		Color oldColor = g2.getColor();
 		
 		g2.setStroke(new BasicStroke(healthBarThickness));
 		g2.setColor(Color.RED);
@@ -105,7 +104,14 @@ public abstract class Creature extends Entity{
 		return handler.getWorld().getTile(x, y).isSolid();
 	}
 	
-
+	public void printPosition(int i) {
+		if(i == 0) {
+			System.out.println("Postion in pixels: (" + (int)this.x + "," + (int)this.y + ")");
+		} else {
+			System.out.println("Postion in tiles: (" + (int)this.x / Tile.TILE_WIDTH + "," + (int)this.y/ Tile.TILE_HEIGHT + ")");
+		}
+	}
+	
 	// GETTERS & SETTERS
 	public int getHealth() {
 		return health;
@@ -138,7 +144,8 @@ public abstract class Creature extends Entity{
 	public void setyMove(float yMove) {
 		this.yMove = yMove;
 	}
-	
-	
 
+	public List<Node> getPath() {
+		return path;
+	}
 }

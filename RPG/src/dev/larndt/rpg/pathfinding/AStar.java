@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.tiles.Tile;
 import dev.larndt.rpg.worlds.World;
 
 public class AStar {
+	private Handler handler;
 	private World world;
 	
 	private Comparator<Node> nodeSorter = new Comparator<Node>() {
@@ -22,15 +24,16 @@ public class AStar {
 		
 	};
 	
-	public AStar(World world) {
+	public AStar(Handler handler, World world) {
 		this.world = world;
+		this.handler = handler;
 	}
 	
 	public List<Node> findPath(MyVector start, MyVector destination) {
 		List<Node> openList = new ArrayList<Node>();
 		List<Node> closedList = new ArrayList<Node>();
 		
-		Node current = new Node(start, null, 0, 0);
+		Node current = new Node(handler, start, null, 0, 0);
 		openList.add(current);
 		
 		while(openList.size() > 0) {
@@ -71,14 +74,12 @@ public class AStar {
 				int xi = (i%3) - 1; // These will be either -1, 0 or 1, depending 
 				int yi = (i/3) - 1; // on which direction we want to move.
 				Tile tileToCheck = world.getTile(x + xi, y + yi); 
-				
 				if(tileToCheck == null) { continue; }
 				if(tileToCheck.isSolid()) { continue; }
 				MyVector v = new MyVector(x + xi, y + yi);
 				double gCost = current.getgCost() + getDistance(current.getVector(), v) == 1 ? 1 : 0.9;
 				double hCost = getDistance(v, destination);
-				Node node = new Node(v, current, gCost, hCost);
-				
+				Node node = new Node(handler, v, current, gCost, hCost);
 				if(vectorInList(closedList, v)) { continue; }
 				if(!vectorInList(openList, v)) { openList.add(node); } 
 			}

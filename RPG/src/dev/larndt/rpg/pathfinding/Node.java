@@ -1,12 +1,20 @@
 package dev.larndt.rpg.pathfinding;
 
+import java.awt.Font;
+import java.awt.Graphics;
+
+import dev.larndt.rpg.Handler;
+
 public class Node {
 
 	private MyVector vector; // This is a vector pointing to a tile.
 	private Node parent;
 	private double gCost, hCost, fCost;
 	
-	public Node (MyVector v, Node parent, double gCost, double hCost) {
+	private Handler handler;
+	
+	public Node (Handler handler, MyVector v, Node parent, double gCost, double hCost) {
+		this.handler = handler;
 		this.vector = v;
 		this.parent = parent;
 		this.gCost = gCost;
@@ -14,7 +22,16 @@ public class Node {
 		
 		this.fCost = this.gCost + this.hCost;
 	}
-
+	
+	public void render(Graphics g) {
+		Font test = new Font("Arial",Font.BOLD,20);
+		g.setFont(test);
+		g.drawString(""+vector.getX(),(int) (vector.getX() * 64 + 5- handler.getGameCamera().getxOffset()), (int) (vector.getY() * 64 + 20 - handler.getGameCamera().getyOffset()));
+		g.drawString(""+vector.getY(),(int) (vector.getX() * 64 + 35 - handler.getGameCamera().getxOffset()), (int) (vector.getY() * 64 + 20 - handler.getGameCamera().getyOffset()));
+		//g.drawString(""+gCost,(int) (vector.getX() * 64 - handler.getGameCamera().getxOffset()), (int) (vector.getY() * 64 - handler.getGameCamera().getyOffset()));
+	}
+	
+	// GETTERS & SETTERS
 	public MyVector getVector() {
 		return vector;
 	}

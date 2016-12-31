@@ -5,15 +5,16 @@ import java.awt.Graphics;
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.pathfinding.MyVector;
+import dev.larndt.rpg.pathfinding.Node;
 
 public class Slime extends Creature{
 	
 	public Slime(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_WIDTH);
 		
-		this.setBounds(2, 2, width-4, height-4);
+		this.setBounds(1, 1, width-2, height-2);
 		
-		speed = 1;
+		this.speed = 1;
 	}
 
 	@Override
@@ -22,21 +23,18 @@ public class Slime extends Creature{
 		int playerX = (int) handler.getWorld().getPlayer().getX() + Creature.DEFAULT_CREATURE_WIDTH/2; // These are in pixels, not in tiles!
 		int playerY = (int) handler.getWorld().getPlayer().getY() + Creature.DEFAULT_CREATURE_HEIGHT/2; //
 		
-		int test1 = playerX >> this.logX;
-		int test2 = playerY >> this.logY;
-		System.out.println(playerX + " " + playerY);
-		System.out.println( test1 + " " + test2);
+		this.printPosition(1);
 		
-		MyVector currentPosition = new MyVector((int) this.getX() >> this.logX, (int) this.getY() >> this.logY);
+		MyVector currentPosition = new MyVector((int) (this.getX() + Creature.DEFAULT_CREATURE_WIDTH/2) >> this.logX, (int) (this.getY() + Creature.DEFAULT_CREATURE_HEIGHT/2) >> this.logY);
 		MyVector playerPosition = new MyVector(playerX >> this.logX, playerY >> this.logY);
 		
 		path = handler.getWorld().getPathfinder().findPath(currentPosition, playerPosition);
 		if(path != null) {
 			if(path.size() > 0) {
 				MyVector vector = path.get(path.size() - 1).getVector();
-				if(x < vector.getX() << this.logX) this.xMove = speed;
+				if(x <= vector.getX() << this.logX) this.xMove = speed;
 				if(x > vector.getX() << this.logX) this.xMove = -speed;
-				if(y < vector.getY() << this.logY) this.yMove = speed;
+				if(y <= vector.getY() << this.logY) this.yMove = speed;
 				if(y > vector.getY() << this.logY) this.yMove = -speed;
 			}
 			this.move();
@@ -58,6 +56,10 @@ public class Slime extends Creature{
 		
 		//this.drawBounds(g);
 		this.drawHealthBar(g);
+		
+		for(Node node : path) {
+			node.render(g);
+		}
 	}
 
 	@Override

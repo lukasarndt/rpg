@@ -34,7 +34,7 @@ public class World {
 
 	public World(Handler handler, String path) {
 		this.handler = handler;
-		pathfinder = new AStar(this);
+		pathfinder = new AStar(handler, this);
 		itemManager = new ItemManager(handler);
 		player = new Player(handler, 50, 50);
 		entityManager = new EntityManager(handler, player);
@@ -86,7 +86,7 @@ public class World {
 		g2.setColor(playerHealthBarColor);
 		g2.drawRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), Game.HEIGHT - 50, (int) playerHealthBarWidth, (int) playerHealthBarHeight);	
 		g2.setColor(oldColor);
-		g2.setStroke(oldStroke);
+		g2.setStroke(oldStroke);	
 	}
 	
 	/**
