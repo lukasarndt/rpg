@@ -19,4 +19,8 @@ public class WoodItem extends Item{
 	public void render(Graphics g) {
 		super.render(g);
 	}
+	
+	public void use() {
+		this.handler.getPlayer().setHealth(this.handler.getPlayer().getMaxHealth());
+	}
 }

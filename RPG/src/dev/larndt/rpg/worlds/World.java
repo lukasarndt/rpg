@@ -41,7 +41,6 @@ public class World {
 		
 		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
 		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
-		
 		loadWorld(path);
 		
 		entityManager.getPlayer().setX(spawnX);

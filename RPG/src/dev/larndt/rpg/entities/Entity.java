@@ -48,8 +48,8 @@ public abstract class Entity {
 		if(counter > delta) {
 			health -= amt;
 			if(health <= 0) {
-				active = false;
 				die();
+				active = false;			
 			}
 			counter = 0;
 		}

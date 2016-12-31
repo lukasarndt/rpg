@@ -23,8 +23,6 @@ public class Slime extends Creature{
 		int playerX = (int) handler.getWorld().getPlayer().getX() + Creature.DEFAULT_CREATURE_WIDTH/2; // These are in pixels, not in tiles!
 		int playerY = (int) handler.getWorld().getPlayer().getY() + Creature.DEFAULT_CREATURE_HEIGHT/2; //
 		
-		this.printPosition(1);
-		
 		MyVector currentPosition = new MyVector((int) (this.getX() + Creature.DEFAULT_CREATURE_WIDTH/2) >> this.logX, (int) (this.getY() + Creature.DEFAULT_CREATURE_HEIGHT/2) >> this.logY);
 		MyVector playerPosition = new MyVector(playerX >> this.logX, playerY >> this.logY);
 		
@@ -64,7 +62,6 @@ public class Slime extends Creature{
 
 	@Override
 	public void die() {
-		// TODO Auto-generated method stub
 		
 	}
 

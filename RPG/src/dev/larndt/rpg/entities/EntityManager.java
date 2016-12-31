@@ -32,6 +32,7 @@ public class EntityManager {
 		entities.add(player);
 	}
 	
+	
 	public void tick() {
 		Iterator<Entity> it = entities.iterator();
 		while(it.hasNext()){

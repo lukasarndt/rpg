@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyManager implements KeyListener{
 	private boolean[] keys;
-	public boolean up, down, left, right, space, i, e;
+	public boolean up, down, left, right, space, i, e, enter;
 	
 	private long lastTime, now, counter = 0;
 	
@@ -27,6 +27,7 @@ public class KeyManager implements KeyListener{
 		space = keys[KeyEvent.VK_SPACE];
 		i = keys[KeyEvent.VK_I];
 		e = keys[KeyEvent.VK_E];
+		enter = keys[KeyEvent.VK_ENTER];
 	}
 	
 	@Override

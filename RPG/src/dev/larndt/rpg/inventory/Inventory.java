@@ -124,6 +124,14 @@ public class Inventory {
 			}
 			itemSlot.setItem(null);
 		}
+		
+		// Use items
+		if(handler.getKeyManager().enter) {
+			if(itemSlot.getItem() != null) {
+				itemSlot.getItem().use();
+				itemSlot.setItem(null);
+			}
+		}
 	}
 	
 	public void addItem(Item item) {

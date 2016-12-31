@@ -106,9 +106,9 @@ public abstract class Creature extends Entity{
 	
 	public void printPosition(int i) {
 		if(i == 0) {
-			System.out.println("Postion in pixels: (" + (int)this.x + "," + (int)this.y + ")");
+			System.out.println("Position in pixels: (" + (int)this.x + "," + (int)this.y + ")");
 		} else {
-			System.out.println("Postion in tiles: (" + (int)this.x / Tile.TILE_WIDTH + "," + (int)this.y/ Tile.TILE_HEIGHT + ")");
+			System.out.println("Position in tiles: (" + (int)this.x / Tile.TILE_WIDTH + "," + (int)this.y/ Tile.TILE_HEIGHT + ")");
 		}
 	}
 	
