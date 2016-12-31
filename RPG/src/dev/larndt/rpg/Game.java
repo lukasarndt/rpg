@@ -26,8 +26,7 @@ public class Game implements Runnable{
 	private BufferStrategy bs;
 	private Graphics g;
 
-	private State gameState;
-	private State menuState;
+	private State gameState, menuState;
 	
 	private KeyManager keyManager;
 	private MouseManager mouseManager;	
@@ -80,12 +79,13 @@ public class Game implements Runnable{
 			if(delta >= timePerTick) {
 				tick();
 				render();
-				
 				ticks++;
 				delta -= timePerTick;
 			}
 			if(timer >= 1000000000) {
-				System.out.println("fps: " + ticks);
+				//System.out.println("ticks: " + ticks);
+				display.getFrame().setTitle(title + " | fps: " + ticks);
+				
 				ticks = 0;
 				timer = 0;
 			}	

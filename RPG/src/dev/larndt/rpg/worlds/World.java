@@ -13,6 +13,7 @@ import dev.larndt.rpg.entities.creatures.Player;
 import dev.larndt.rpg.entities.creatures.Slime;
 import dev.larndt.rpg.entities.statics.Tree;
 import dev.larndt.rpg.items.ItemManager;
+import dev.larndt.rpg.pathfinding.AStar;
 import dev.larndt.rpg.tiles.Tile;
 import dev.larndt.rpg.utilities.Utilities;
 
@@ -23,18 +24,20 @@ public class World {
 	private int[][] tiles; // Holds the IDs of the tile at every position in the world.
 	private EntityManager entityManager;
 	private ItemManager itemManager;
+	private AStar pathfinder;
+	
+	private Player player;
 	
 	private float playerHealthBarThickness = 2f, playerHealthFraction = 1f, playerHealthBarWidth = 300f, playerHealthBarHeight = 25f;
-	private Color playerHealthBarColor = Color.BLACK;
+	private Color playerHealthBarColor = Color.BLACK, oldColor;
 	private Stroke oldStroke;
-	private Color oldColor;
 
 	public World(Handler handler, String path) {
 		this.handler = handler;
-		
+		pathfinder = new AStar(this);
 		itemManager = new ItemManager(handler);
-		
-		entityManager = new EntityManager(handler, new Player(handler, 50, 50));
+		player = new Player(handler, 50, 50);
+		entityManager = new EntityManager(handler, player);
 		
 		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
 		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
@@ -89,8 +92,8 @@ public class World {
 	/**
 	 * 
 	 * Returns the tile at position x,y in the world.
-	 * @param x
-	 * @param y
+	 * @param x (in tiles, not pixels!)
+	 * @param y (in tiles, not pixels!)
 	 * @return
 	 */
 	public Tile getTile(int x, int y) {
@@ -155,4 +158,11 @@ public class World {
 		return itemManager;
 	}
 
+	public Player getPlayer() {
+		return player;
+	}
+
+	public AStar getPathfinder() {
+		return pathfinder;
+	}
 }

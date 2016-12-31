@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import dev.larndt.rpg.Handler;
+import dev.larndt.rpg.tiles.Tile;
 
 public abstract class Entity {
 	public static final int DEFAULT_HEALTH = 3;
@@ -20,6 +21,8 @@ public abstract class Entity {
 	private long lastTime, now;
 	private int counter, delta = 1000;
 	
+	protected int logX, logY; // These are the base 2 logarithms of the size of a tile.
+	
 	public Entity(Handler handler, float x, float y, int width, int height) {
 		this.handler = handler;
 		this.x = x;
@@ -28,6 +31,8 @@ public abstract class Entity {
 		this.height = height;
 		health = maxHealth;
 		entityBounds = new Rectangle(0, 0, width, height);
+		logX = (int) (Math.log(Tile.TILE_WIDTH)/Math.log(2));
+		logY = (int) (Math.log(Tile.TILE_HEIGHT)/Math.log(2));
 		now = System.currentTimeMillis();
 		lastTime = now;
 	}

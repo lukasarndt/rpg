@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.gfx.Assets;
+import dev.larndt.rpg.pathfinding.MyVector;
 
 public class Slime extends Creature{
 	
@@ -12,18 +13,42 @@ public class Slime extends Creature{
 		
 		this.setBounds(2, 2, width-4, height-4);
 		
-		speed = 2;
+		speed = 1;
 	}
 
 	@Override
 	public void tick() {
-		xMove = 0;
+		time++;
+		int playerX = (int) handler.getWorld().getPlayer().getX() + Creature.DEFAULT_CREATURE_WIDTH/2; // These are in pixels, not in tiles!
+		int playerY = (int) handler.getWorld().getPlayer().getY() + Creature.DEFAULT_CREATURE_HEIGHT/2; //
+		
+		int test1 = playerX >> this.logX;
+		int test2 = playerY >> this.logY;
+		System.out.println(playerX + " " + playerY);
+		System.out.println( test1 + " " + test2);
+		
+		MyVector currentPosition = new MyVector((int) this.getX() >> this.logX, (int) this.getY() >> this.logY);
+		MyVector playerPosition = new MyVector(playerX >> this.logX, playerY >> this.logY);
+		
+		path = handler.getWorld().getPathfinder().findPath(currentPosition, playerPosition);
+		if(path != null) {
+			if(path.size() > 0) {
+				MyVector vector = path.get(path.size() - 1).getVector();
+				if(x < vector.getX() << this.logX) this.xMove = speed;
+				if(x > vector.getX() << this.logX) this.xMove = -speed;
+				if(y < vector.getY() << this.logY) this.yMove = speed;
+				if(y > vector.getY() << this.logY) this.yMove = -speed;
+			}
+			this.move();
+		}
+		
+		/*xMove = 0;
 		if((Math.abs(x - handler.getPlayer().getX()) < 3* Creature.DEFAULT_CREATURE_WIDTH) && handler.getPlayer().getX() < x) {
 			this.xMove = -speed;
 		} else if (Math.abs(x - handler.getPlayer().getX()) < 3* Creature.DEFAULT_CREATURE_WIDTH && handler.getPlayer().getX() > x) {
 			this.xMove = speed;
 		}
-		this.move();
+		this.move();*/
 	}
 
 	@Override

@@ -5,24 +5,28 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.util.List;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
+import dev.larndt.rpg.pathfinding.Node;
 import dev.larndt.rpg.tiles.Tile;
 
 public abstract class Creature extends Entity{
 	
 	 
 	public static final int	DEFAULT_CREATURE_WIDTH = 64,
-							DEFAULT_CREATUE_HEIGHT = 64;
+							DEFAULT_CREATURE_HEIGHT = 64;
 	
 	protected static final float DEFAULT_SPEED = 3.0f;
 	
 	protected float speed, xMove, yMove, healthFraction;
-	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10;
+	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10, time;
 	
 	protected Stroke oldStroke;
 	protected Color oldColor, healthBarColor = Color.BLACK;
+	
+	protected List<Node> path = null;
 	
 	public Creature(Handler handler, float x, float y, int width, int height) {
 		super(handler, x, y, width, height);
