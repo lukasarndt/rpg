@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.pathfinding.MyVector;
-import dev.larndt.rpg.pathfinding.Node;
 
 public class Slime extends Creature{
 	
@@ -55,9 +54,9 @@ public class Slime extends Creature{
 		//this.drawBounds(g);
 		this.drawHealthBar(g);
 		
-		for(Node node : path) {
+		/*for(Node node : path) {
 			node.render(g);
-		}
+		}*/
 	}
 
 	@Override

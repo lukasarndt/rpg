@@ -10,8 +10,6 @@ import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.EntityManager;
 import dev.larndt.rpg.entities.creatures.Player;
-import dev.larndt.rpg.entities.creatures.Slime;
-import dev.larndt.rpg.entities.statics.Tree;
 import dev.larndt.rpg.items.ItemManager;
 import dev.larndt.rpg.pathfinding.AStar;
 import dev.larndt.rpg.tiles.Tile;
@@ -21,7 +19,9 @@ public class World {
 	private Handler handler;
 	private int width, height; // In terms of tiles!
 	private int spawnX, spawnY; 
-	private int[][] tiles; // Holds the IDs of the tile at every position in the world.
+	private int[][] tileLayer1; // Holds the IDs of the tile at every position in the world.
+	private int[][] tileLayer2;
+	private int[][] tileLayer3;
 	private EntityManager entityManager;
 	private ItemManager itemManager;
 	private AStar pathfinder;
@@ -29,19 +29,20 @@ public class World {
 	private Player player;
 	
 	private float playerHealthBarThickness = 2f, playerHealthFraction = 1f, playerHealthBarWidth = 300f, playerHealthBarHeight = 25f;
-	private Color playerHealthBarColor = Color.BLACK, oldColor;
-	private Stroke oldStroke;
+	private Color playerHealthBarColor = Color.BLACK;
 
-	public World(Handler handler, String path) {
+	public World(Handler handler, String path, String path2, String path3) {
 		this.handler = handler;
 		pathfinder = new AStar(handler, this);
 		itemManager = new ItemManager(handler);
-		player = new Player(handler, 50, 50);
+		player = new Player(handler, 4 * Tile.TILE_WIDTH, 4 * Tile.TILE_HEIGHT);
 		entityManager = new EntityManager(handler, player);
 		
-		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
-		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
-		loadWorld(path);
+		//entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
+		//entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
+		loadWorld(path,1);
+		loadWorld(path2,2);
+		loadWorld(path3,3);
 		
 		entityManager.getPlayer().setX(spawnX);
 		entityManager.getPlayer().setY(spawnY);
@@ -61,23 +62,31 @@ public class World {
 		// Renders the Tile at position (x,y) in the world.
 		for(int y = yStart; y < yEnd; y++) {
 			for(int x = xStart; x < xEnd; x++) {
-				getTile(x,y).render(g, (int) (x * Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()) , 
+				getTile(x,y,1).render(g, (int) (x * Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()) , 
+						(int) (y * Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()));
+				getTile(x,y,2).render(g, (int) (x * Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()) , 
 						(int) (y * Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()));
 			}
 		}
-		
-		
+
 		//Render the Entites & Items
 		itemManager.render(g);
 		entityManager.render(g);
 		
+		// Render third tile layer
+		for(int y = yStart; y < yEnd; y++) {
+			for(int x = xStart; x < xEnd; x++) {
+				getTile(x,y,3).render(g, (int) (x * Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()) , 
+						(int) (y * Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()));
+			}
+		}
 		
 		//Render health bar
 		playerHealthFraction = (float)handler.getPlayer().getHealth()/(float)handler.getPlayer().getMaxHealth();
 		Graphics2D g2 = (Graphics2D) g;
 		
-		oldStroke = g2.getStroke();
-		oldColor = g2.getColor();
+		Stroke oldStroke = g2.getStroke();
+		Color oldColor = g2.getColor();
 		
 		g2.setStroke(new BasicStroke(playerHealthBarThickness));
 		g2.setColor(Color.RED);
@@ -95,12 +104,14 @@ public class World {
 	 * @param y (in tiles, not pixels!)
 	 * @return
 	 */
-	public Tile getTile(int x, int y) {
+	public Tile getTile(int x, int y, int Layer) {
 		if(x < 0 || y < 0 || x >= width || y >= height) {
 			return Tile.grassTile;
 		}
 		
-		Tile t = Tile.tiles[tiles[x][y]];
+		Tile t = Tile.tiles[tileLayer1[x][y]];
+		if(Layer==2) t = Tile.tiles[tileLayer2[x][y]];
+		else if(Layer==3) t = Tile.tiles[tileLayer3[x][y]];
 		
 		if(t == null) {
 			return Tile.dirtTile;
@@ -114,20 +125,24 @@ public class World {
 	 * Loads the world from a text file.
 	 * @param path
 	 */
-	private void loadWorld(String path) {
+	private void loadWorld(String path, int Layer) {
 		String file = Utilities.loadFileAsString(path);
-		String[] tokens = file.split("\\s+"); // Splits up the file whenever there is whitespace.
+		String[] tokens = file.split(","); // Splits up the file whenever there is a comma.
 		
 		width = Utilities.parseInt(tokens[0]);
 		height = Utilities.parseInt(tokens[1]);
 		spawnX = Utilities.parseInt(tokens[2]);
 		spawnY = Utilities.parseInt(tokens[3]);
 		
-		tiles = new int[width][height];
+		if(Layer==1) tileLayer1 = new int[width][height];
+		else if(Layer==2) tileLayer2 = new int[width][height];
+		else if(Layer==3) tileLayer3 = new int[width][height];
 		
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 4]);
+				if(Layer==1) tileLayer1[x][y] = Utilities.parseInt(tokens[(x + y * width) + 4]);
+				else if(Layer==2) tileLayer2[x][y] = Utilities.parseInt(tokens[(x + y * width) + 4]);
+				else if(Layer==3) tileLayer3[x][y] = Utilities.parseInt(tokens[(x + y * width) + 4]);
 			}
 		}
 	}

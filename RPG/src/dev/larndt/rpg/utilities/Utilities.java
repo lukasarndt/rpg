@@ -13,7 +13,7 @@ public class Utilities {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			String line;
 				while((line = br.readLine()) != null) {
-					builder.append(line + "\n");
+					builder.append(line + ",");
 				}
 				br.close();
 		} catch (IOException e) {
@@ -30,5 +30,15 @@ public class Utilities {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	public static boolean contains(int[] array, int a) {
+		
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] == a) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

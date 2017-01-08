@@ -73,7 +73,7 @@ public class AStar {
 				int y = current.getVector().getY();
 				int xi = (i%3) - 1; // These will be either -1, 0 or 1, depending 
 				int yi = (i/3) - 1; // on which direction we want to move.
-				Tile tileToCheck = world.getTile(x + xi, y + yi); 
+				Tile tileToCheck = world.getTile(x + xi, y + yi,1); 
 				if(tileToCheck == null) { continue; }
 				if(tileToCheck.isSolid()) { continue; }
 				MyVector v = new MyVector(x + xi, y + yi);

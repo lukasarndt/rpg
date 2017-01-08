@@ -39,14 +39,15 @@ public class Player extends Creature{
 	public Player(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_WIDTH);
 		
-		this.setBounds(2, 2, width-4, height-4);
+		this.setBounds(2, height - 40, width-4, 38);
 		
-		speed = 3;
+		speed = 2;
 		
-		animDown = new Animation(500, Assets.player_down);
-		animUp = new Animation(500, Assets.player_up);
-		animLeft = new Animation(500, Assets.player_left);
-		animRight = new Animation(500, Assets.player_right);
+		int animSpeed = 100;
+		animDown = new Animation(animSpeed, Assets.player_down);
+		animUp = new Animation(animSpeed, Assets.player_up);
+		animLeft = new Animation(animSpeed, Assets.player_left);
+		animRight = new Animation(animSpeed, Assets.player_right);
 		
 		inventory = new Inventory(handler);
 	}

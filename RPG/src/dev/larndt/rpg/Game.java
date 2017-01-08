@@ -13,6 +13,7 @@ import dev.larndt.rpg.states.MenuState;
 //import dev.larndt.rpg.states.MenuState;
 import dev.larndt.rpg.states.State;
 import dev.larndt.rpg.states.StateManager;
+import dev.larndt.rpg.tiles.Tile;
 
 public class Game implements Runnable{	
 	public static final int WIDTH = 800, HEIGHT = 600;
@@ -52,6 +53,7 @@ public class Game implements Runnable{
 		display.getCanvas().addMouseListener(mouseManager);
 		display.getCanvas().addMouseMotionListener(mouseManager);
 		Assets.init();
+		Tile.init();
 		handler = new Handler(this);
 		gameCamera = new GameCamera(handler, 0, 0);
 		gameState = new GameState(handler);
