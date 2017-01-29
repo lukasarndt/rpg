@@ -24,9 +24,18 @@ public class Tile {
 	protected final int id;
 	protected boolean isSolid = false;
 	
+	protected boolean solidness[];	// Defines where a tile is solid and where it is not.
+									// +---+---+
+									// | 0 | 1 |
+									// +---+---+
+									// | 2 | 3 |
+									// +---+---+
+	
 	public Tile(BufferedImage texture, int id) {
 		this.texture = texture;
 		this.id = id;
+		
+		solidness = new boolean[4];
 		
 		tiles[id] = this;
 	}
@@ -45,18 +54,30 @@ public class Tile {
 			for(int i = 0; i < 16; i++) {
 				mountainLandscape[i][j] = new Tile(Assets.mountainLandscapeArray[i][j], j*16+i);
 				if(Utilities.contains(solidTiles, j*16+i)) {
-					mountainLandscape[i][j].setSolid(true);
+					mountainLandscape[i][j].setSolidness(true,true,true,true);
 				}
 			}
 		}
 	}
+	
+	public boolean isSolid2(int x, int y) {
+		x = x%Tile.TILE_WIDTH;
+		y= y%Tile.TILE_HEIGHT;
+		
+		if(x < Tile.TILE_WIDTH/2 && y < Tile.TILE_HEIGHT/2) {
+			return solidness[0];
+		} else if(x >= Tile.TILE_WIDTH/2 && y < Tile.TILE_HEIGHT/2) {
+			return solidness[1];
+		} else if(x < Tile.TILE_WIDTH/2 && y >= Tile.TILE_HEIGHT/2) {
+			return solidness[2];
+		} else if(x >= Tile.TILE_WIDTH/2 && y >= Tile.TILE_HEIGHT/2) {
+			return solidness[3];
+		}
+		return false;
+	}
 
 	public void tick() {
 		
-	}
-	
-	public boolean isSolid() {
-		return isSolid;
 	}
 	
 	public void render(Graphics g, int x, int y) {
@@ -76,5 +97,16 @@ public class Tile {
 	
 	public void setSolid(boolean solid) {
 		this.isSolid = solid;
+	}
+	
+	public boolean isSolid() {
+		return isSolid;
+	}
+	
+	public void setSolidness(boolean UL, boolean UR, boolean BL, boolean BR) {
+		this.solidness[0] = UL;
+		this.solidness[1] = UR;
+		this.solidness[2] = BL;
+		this.solidness[3] = BR;
 	}
 }

@@ -46,17 +46,17 @@ public abstract class Creature extends Entity{
 	
 	public void moveX() {
 		if(xMove > 0) { // Moving right
-			int tx = (int) (x + xMove + entityBounds.x + entityBounds.width)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
-					if(!collisionWithTile(tx, (int) (y + entityBounds.y)/Tile.TILE_HEIGHT) && 
-							!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
+			int tx = (int) (x + xMove + entityBounds.width); // x Coordinate of the tiles we are about to move into.
+					if(!collisionWithTile(tx, (int) (y + entityBounds.y)) && 
+							!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height))) {
 						x += xMove;
 					}else{
 						x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
 					}
 		}else if(xMove < 0) { // Moving left
-			int tx = (int) (x + xMove + entityBounds.x)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
-			if(!collisionWithTile(tx, (int) ((y + entityBounds.y)/Tile.TILE_HEIGHT)) && 
-					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
+			int tx = (int) (x + xMove + entityBounds.x); // x Coordinate of the tiles we are about to move into.
+			if(!collisionWithTile(tx, (int) ((y + entityBounds.y))) && 
+					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height))) {
 				x += xMove;
 			}else{
 				x = tx * Tile.TILE_WIDTH + Tile.TILE_WIDTH - entityBounds.x;
@@ -66,17 +66,17 @@ public abstract class Creature extends Entity{
 	
 	public void moveY() {
 		if(yMove < 0) { // Moving up
-			int ty = (int) (y + yMove + entityBounds.y)/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
-			if(!collisionWithTile((int)((x + entityBounds.x) / Tile.TILE_WIDTH) , ty) &&
-					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width) / Tile.TILE_WIDTH) , ty) ) {
+			int ty = (int) (y + yMove + entityBounds.y); // x Coordinate of the tiles we are about to move into.
+			if(!collisionWithTile((int)((x + entityBounds.x)) , ty) &&
+					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width)) , ty) ) {
 				y += yMove;
 			}else{
 				y = ty * Tile.TILE_HEIGHT + Tile.TILE_HEIGHT - entityBounds.y;
 			}
 		}else if(yMove > 0) { // Moving down
-			int ty = (int) (y + yMove + entityBounds.y + entityBounds.height )/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
-			if(!collisionWithTile((int)((x + entityBounds.x) / Tile.TILE_WIDTH) , ty) &&
-					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width) / Tile.TILE_WIDTH) , ty) ) {
+			int ty = (int) (y + yMove + entityBounds.y + entityBounds.height ); // y Coordinate of the tiles we are about to move into.
+			if(!collisionWithTile((int)((x + entityBounds.x)) , ty) &&
+					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width)) , ty) ) {
 				y += yMove;
 			}else{
 				y = ty * Tile.TILE_HEIGHT - entityBounds.y - entityBounds.height - 1;
@@ -101,7 +101,12 @@ public abstract class Creature extends Entity{
 	}
 	
 	protected boolean collisionWithTile(int x, int y) {
-		return (handler.getWorld().getTile(x, y, 1).isSolid() || handler.getWorld().getTile(x, y, 2).isSolid());
+		System.out.println("x = " + x);
+		System.out.println("y = " + y);
+		System.out.println("x/w = " + x/Tile.TILE_WIDTH);
+		System.out.println("y/h = " + y/Tile.TILE_HEIGHT);
+		return (handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 1).isSolid2(x,y) 
+				|| handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 2).isSolid2(x,y));
 	}
 	
 	public void printPosition(int i) {
