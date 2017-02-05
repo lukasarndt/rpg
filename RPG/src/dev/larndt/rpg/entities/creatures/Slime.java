@@ -19,15 +19,16 @@ public class Slime extends Creature{
 		
 		animation = new Animation(300, Assets.slime);
 	}
-
+	MyVector currentPosition;
+	MyVector playerPosition;
 	@Override
 	public void tick() {
 		time++;
 		int playerX = (int) handler.getWorld().getPlayer().getX() + Creature.DEFAULT_CREATURE_WIDTH/2; // These are in pixels, not in tiles!
 		int playerY = (int) handler.getWorld().getPlayer().getY() + Creature.DEFAULT_CREATURE_HEIGHT/2; //
 		
-		MyVector currentPosition = new MyVector((int) (this.getX() + Creature.DEFAULT_CREATURE_WIDTH/2) >> this.logX, (int) (this.getY() + Creature.DEFAULT_CREATURE_HEIGHT/2) >> this.logY);
-		MyVector playerPosition = new MyVector(playerX >> this.logX, playerY >> this.logY);
+		currentPosition = new MyVector((int) (this.getX() + Creature.DEFAULT_CREATURE_WIDTH/2) >> this.logX, (int) (this.getY() + Creature.DEFAULT_CREATURE_HEIGHT/2) >> this.logY);
+		playerPosition = new MyVector(playerX >> this.logX, playerY >> this.logY);
 		
 		path = handler.getWorld().getPathfinder().findPath(currentPosition, playerPosition);
 		if(path != null) {

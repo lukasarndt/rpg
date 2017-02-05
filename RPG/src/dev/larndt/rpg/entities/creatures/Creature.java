@@ -106,10 +106,6 @@ public abstract class Creature extends Entity{
 	}
 	
 	protected boolean collisionWithTile(int x, int y) {
-		System.out.println("x = " + x);
-		System.out.println("y = " + y);
-		System.out.println("x%w = " + x%Tile.TILE_WIDTH);
-		System.out.println("y%h = " + y%Tile.TILE_HEIGHT);
 		if(isPlayer) {
 			return (handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 1).isSolid2(x,y) || handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 2).isSolid2(x,y));
 		} else {

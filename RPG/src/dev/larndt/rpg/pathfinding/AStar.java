@@ -37,7 +37,7 @@ public class AStar {
 		openList.add(current);
 		
 		while(openList.size() > 0) {
-			//System.out.println(openList.size());
+			System.out.println(openList.size());
 			Collections.sort(openList, nodeSorter);
 			current = openList.get(0);
 			
@@ -75,14 +75,16 @@ public class AStar {
 				int yi = (i/3) - 1; // on which direction we want to move.
 				Tile tileToCheck1 = world.getTile(x + xi, y + yi,1); 
 				Tile tileToCheck2 = world.getTile(x + xi, y + yi,2);
-				if(tileToCheck1 == null ||tileToCheck2 == null) { continue; }
-				if(tileToCheck1.isSolid() || tileToCheck2.isSolid()) {continue;}
+				//if(tileToCheck1 == null) { continue; }
+				//if(tileToCheck1.isSolid()) {continue;}
+				if(tileToCheck2 == null) { continue;}
+				if(tileToCheck2.isSolid()) {continue;}
 				MyVector v = new MyVector(x + xi, y + yi);
 				double gCost = current.getgCost() + getDistance(current.getVector(), v) == 1 ? 1 : 0.9;
 				double hCost = getDistance(v, destination);
 				Node node = new Node(handler, v, current, gCost, hCost);
 				if(vectorInList(closedList, v)) { continue; }
-				if(!vectorInList(openList, v)) { openList.add(node); } 
+				if(!vectorInList(openList, v)) { openList.add(node); }
 			}
 		}
 		

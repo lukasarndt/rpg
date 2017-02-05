@@ -13,6 +13,8 @@ public class Node {
 	
 	private Handler handler;
 	
+	public static long count;
+	
 	public Node (Handler handler, MyVector v, Node parent, double gCost, double hCost) {
 		this.handler = handler;
 		this.vector = v;
@@ -21,6 +23,9 @@ public class Node {
 		this.hCost = hCost;
 		
 		this.fCost = this.gCost + this.hCost;
+		
+		count++;
+		//System.out.println("New Node created: " + count);
 	}
 	
 	public void render(Graphics g) {
