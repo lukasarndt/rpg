@@ -39,7 +39,8 @@ public class Player extends Creature{
 	public Player(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_WIDTH);
 		
-		this.setBounds(2, height - 40, width-4, 38);
+		this.isPlayer = true;
+		this.setBounds(3, height-40, width-4, 38);
 		
 		speed = 2;
 		

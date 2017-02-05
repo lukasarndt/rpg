@@ -3,17 +3,21 @@ package dev.larndt.rpg.entities.creatures;
 import java.awt.Graphics;
 
 import dev.larndt.rpg.Handler;
+import dev.larndt.rpg.gfx.Animation;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.pathfinding.MyVector;
+import dev.larndt.rpg.pathfinding.Node;
 
 public class Slime extends Creature{
 	
 	public Slime(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_WIDTH);
 		
-		this.setBounds(1, 1, width-2, height-2);
+		this.setBounds(20, 40, width-40, height-40);
 		
 		this.speed = 1;
+		
+		animation = new Animation(300, Assets.slime);
 	}
 
 	@Override
@@ -37,6 +41,7 @@ public class Slime extends Creature{
 			this.move();
 		}
 		
+		animation.tick();
 		/*xMove = 0;
 		if((Math.abs(x - handler.getPlayer().getX()) < 3* Creature.DEFAULT_CREATURE_WIDTH) && handler.getPlayer().getX() < x) {
 			this.xMove = -speed;
@@ -48,15 +53,17 @@ public class Slime extends Creature{
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(Assets.slime, (int) (x - handler.getGameCamera().getxOffset()), 
+		g.drawImage(animation.getCurrentFrame(), (int) (x - handler.getGameCamera().getxOffset()), 
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 		
 		//this.drawBounds(g);
 		this.drawHealthBar(g);
 		
-		/*for(Node node : path) {
-			node.render(g);
-		}*/
+		if(path != null) {
+			for(Node node : path) {
+				node.render(g);
+			}
+		}
 	}
 
 	@Override

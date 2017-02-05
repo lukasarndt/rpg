@@ -47,14 +47,51 @@ public class Tile {
 	private static void mountainLandscape() {
 		mountainLandscape = new Tile[16][16];
 		
-		int[] solidTiles = {33,34,35,36,49,50,51,52,65,66,67,68,81,82,83,84,97,98,99,100,23,24,39,40,41,55,56,57,70,71,72,73,86,87,88,89,103,104,113,114,128,129,130,131,
-				144,145,146,147,160,161,162,163,177,178,192,193,194,195,208,209,210,211,225,226,241,242};
+		int[] solidTiles = {225,226};
+		
+		int[] topRightSolid = {96,247};
+		int[] topLeftSolid = {100,104,248};
+		int[] bottomRightSolid = {1,16};
+		int[] bottomLeftSolid = {4,21};
+		
+		int[] bottomLeftNOTsolid = {73,86};
+		int[] topRightNOTsolid = {70};
+		
+		int[] topSolid = {89,97,98,99,103,241,242,245};
+		int[] bottomSolid = {2,3,71,72,};
+		
+		int[] leftSideSolid = {37,53,69,85,163,179,195};
+		int[] rightSideSolid = {32,48,64,80,224};
 		
 		for(int j = 0; j < 16; j++) {
 			for(int i = 0; i < 16; i++) {
-				mountainLandscape[i][j] = new Tile(Assets.mountainLandscapeArray[i][j], j*16+i);
+				int currentTile = j*16+i;
+				mountainLandscape[i][j] = new Tile(Assets.mountainLandscapeArray[i][j], currentTile);
+				mountainLandscape[i][j].setSolid(true);
 				if(Utilities.contains(solidTiles, j*16+i)) {
 					mountainLandscape[i][j].setSolidness(true,true,true,true);
+				} else if(Utilities.contains(topRightSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(false,true,false,false);
+				} else if(Utilities.contains(topLeftSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(true,false,false,false);
+				} else if(Utilities.contains(bottomRightSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(false,false,false,true);
+				} else if(Utilities.contains(bottomLeftSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(false,false,true,false);
+				} else if(Utilities.contains(bottomLeftNOTsolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(true,true,false,true);
+				} else if(Utilities.contains(topRightNOTsolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(true,false,true,true);
+				} else if(Utilities.contains(topSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(true,true,false,false);
+				} else if(Utilities.contains(bottomSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(false,false,true,true);
+				} else if(Utilities.contains(leftSideSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(true,false,true,false);
+				} else if(Utilities.contains(rightSideSolid, currentTile)) {
+					mountainLandscape[i][j].setSolidness(false,true,false,true);
+				} else {
+					mountainLandscape[i][j].setSolid(false);
 				}
 			}
 		}
@@ -75,7 +112,12 @@ public class Tile {
 		}
 		return false;
 	}
+	
 
+	public boolean isSolid() {
+		return isSolid;
+	}
+	
 	public void tick() {
 		
 	}
@@ -97,10 +139,6 @@ public class Tile {
 	
 	public void setSolid(boolean solid) {
 		this.isSolid = solid;
-	}
-	
-	public boolean isSolid() {
-		return isSolid;
 	}
 	
 	public void setSolidness(boolean UL, boolean UR, boolean BL, boolean BR) {

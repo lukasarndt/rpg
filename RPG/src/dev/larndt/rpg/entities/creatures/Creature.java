@@ -9,6 +9,7 @@ import java.util.List;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
+import dev.larndt.rpg.gfx.Animation;
 import dev.larndt.rpg.pathfinding.Node;
 import dev.larndt.rpg.tiles.Tile;
 
@@ -26,6 +27,10 @@ public abstract class Creature extends Entity{
 	protected Color healthBarColor = Color.BLACK;
 	
 	protected List<Node> path = null;
+	
+	protected Animation animation;
+	
+	protected boolean isPlayer = false;
 	
 	public Creature(Handler handler, float x, float y, int width, int height) {
 		super(handler, x, y, width, height);
@@ -51,7 +56,7 @@ public abstract class Creature extends Entity{
 							!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height))) {
 						x += xMove;
 					}else{
-						x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
+						//x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
 					}
 		}else if(xMove < 0) { // Moving left
 			int tx = (int) (x + xMove + entityBounds.x); // x Coordinate of the tiles we are about to move into.
@@ -59,7 +64,7 @@ public abstract class Creature extends Entity{
 					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height))) {
 				x += xMove;
 			}else{
-				x = tx * Tile.TILE_WIDTH + Tile.TILE_WIDTH - entityBounds.x;
+				//x = tx * Tile.TILE_WIDTH + Tile.TILE_WIDTH - entityBounds.x;
 			}
 		}
 	}
@@ -71,7 +76,7 @@ public abstract class Creature extends Entity{
 					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width)) , ty) ) {
 				y += yMove;
 			}else{
-				y = ty * Tile.TILE_HEIGHT + Tile.TILE_HEIGHT - entityBounds.y;
+				//y = ty * Tile.TILE_HEIGHT + Tile.TILE_HEIGHT - entityBounds.y;
 			}
 		}else if(yMove > 0) { // Moving down
 			int ty = (int) (y + yMove + entityBounds.y + entityBounds.height ); // y Coordinate of the tiles we are about to move into.
@@ -79,7 +84,7 @@ public abstract class Creature extends Entity{
 					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width)) , ty) ) {
 				y += yMove;
 			}else{
-				y = ty * Tile.TILE_HEIGHT - entityBounds.y - entityBounds.height - 1;
+				//y = ty * Tile.TILE_HEIGHT - entityBounds.y - entityBounds.height - 1;
 			}
 		}
 	}
@@ -103,10 +108,14 @@ public abstract class Creature extends Entity{
 	protected boolean collisionWithTile(int x, int y) {
 		System.out.println("x = " + x);
 		System.out.println("y = " + y);
-		System.out.println("x/w = " + x/Tile.TILE_WIDTH);
-		System.out.println("y/h = " + y/Tile.TILE_HEIGHT);
-		return (handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 1).isSolid2(x,y) 
-				|| handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 2).isSolid2(x,y));
+		System.out.println("x%w = " + x%Tile.TILE_WIDTH);
+		System.out.println("y%h = " + y%Tile.TILE_HEIGHT);
+		if(isPlayer) {
+			return (handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 1).isSolid2(x,y) || handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 2).isSolid2(x,y));
+		} else {
+			return (handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 1).isSolid() || handler.getWorld().getTile(x/Tile.TILE_WIDTH, y/Tile.TILE_HEIGHT, 2).isSolid());
+		}
+				
 	}
 	
 	public void printPosition(int i) {

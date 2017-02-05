@@ -5,8 +5,9 @@ import java.awt.image.BufferedImage;
 public class Assets {
 	public static final int WIDTH = 32, HEIGHT = 32;
 	
-	public static BufferedImage player1, player2, dirt, grass, stone, tree, wood, invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown, slime, blank;
+	public static BufferedImage player1, player2, dirt, grass, stone, tree, wood, invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown, blank;
 	public static BufferedImage[] player_down, player_up, player_right, player_left;
+	public static BufferedImage[] slime;
 	public static BufferedImage[] start_button;
 	public static BufferedImage[] tree1;
 	public static BufferedImage mountainsLT, mountainsLM, mountainsLB, mountainsRT, mountainsRM, mountainsRB;
@@ -17,7 +18,7 @@ public class Assets {
 		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet.png"));
 		Spritesheet sheet2 = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet2.png"));
 		Spritesheet mountains = new Spritesheet(ImageLoader.loadImage("/textures/mountains.png"));
-		
+		Spritesheet slimeSheet = new Spritesheet(ImageLoader.loadImage("/textures/slime.png"));
 		
 		Spritesheet mountainLandscape = new Spritesheet(ImageLoader.loadImage("/textures/mountain_landscape.png"));
 
@@ -49,13 +50,18 @@ public class Assets {
 		swordUp = sheet.crop(3 * WIDTH, 3 * HEIGHT, WIDTH, HEIGHT);
 		
 		//Spritesheet 2
-		slime = sheet2.crop(1 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		blank = sheet2.crop(2 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		
 		//Mountains
 		mountainsLT = mountains.crop(0 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		mountainsLM = mountains.crop(0 * WIDTH, 1 * HEIGHT, WIDTH, HEIGHT);
 		mountainsLB = mountains.crop(0 * WIDTH, 2 * HEIGHT, WIDTH, HEIGHT);
+		
+		// Slime
+		slime = new BufferedImage[10];
+		for(int i = 0; i < 10; i++) {
+			slime[i] = slimeSheet.crop(0, WIDTH*i, WIDTH, HEIGHT);
+		}
 	}
 	
 	private static void loadMountainLandscape(Spritesheet sheet) {
