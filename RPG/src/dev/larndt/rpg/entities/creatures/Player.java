@@ -18,6 +18,8 @@ public class Player extends Creature{
 
 	private int direction = PLAYER_DOWN;
 	
+	private boolean canMove;
+	
 	// Attack
 	private int counter = 0;
 	private int attackAnimLength = 20;
@@ -42,6 +44,7 @@ public class Player extends Creature{
 		this.setBounds(2, 2, width-4, height-4);
 		
 		speed = 3;
+		canMove = true;
 		
 		animDown = new Animation(500, Assets.player_down);
 		animUp = new Animation(500, Assets.player_up);
@@ -57,7 +60,7 @@ public class Player extends Creature{
 		tickAnimation();
 		getInput();
 		
-		if(!this.inventory.isActive()) {
+		if(!this.inventory.isActive() && canMove) {
 			move();
 		}else{
 			inventory.tick();
@@ -77,9 +80,11 @@ public class Player extends Creature{
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 		
 		//this.drawBounds(g);
-		
 		// Draw Attacks
 		if(drawAttacks) {
+			
+			canMove = false;
+
 			if(direction == PLAYER_DOWN) {
 				g.drawImage(Assets.swordDown, (int) (x - handler.getGameCamera().getxOffset()), 
 						(int) (y + Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
@@ -97,6 +102,7 @@ public class Player extends Creature{
 			if(counter >= attackAnimLength) {
 				counter = 0;
 				drawAttacks = false;
+				canMove = true;
 			}
 		}
 		
@@ -111,7 +117,7 @@ public class Player extends Creature{
 		
 		// This prevents the player from holding down the attack key to attack.
 		lastAttackKeyState = currentAttackKeyState;
-		currentAttackKeyState = handler.getKeyManager().space;
+		currentAttackKeyState = handler.getKeyManager().attackKey;
 		
 		if(attackTimer > attackCooldown) {
 			canAttack = true;
@@ -125,6 +131,7 @@ public class Player extends Creature{
 			
 			if(!drawAttacks) {
 				drawAttacks = true;
+				
 			}
 			
 			if(direction == PLAYER_DOWN) {
@@ -170,7 +177,7 @@ public class Player extends Creature{
 		xMove = 0;
 		yMove = 0;
 		
-		if(!this.inventory.isActive()) {
+		if(!this.inventory.isActive() && canMove) {
 			if(handler.getKeyManager().up) {
 				yMove = -speed;
 				direction = PLAYER_UP;
@@ -190,7 +197,7 @@ public class Player extends Creature{
 		}
 		
 		lastInventoryKeyState = currentInventoryKeyState;
-		currentInventoryKeyState = handler.getKeyManager().i;
+		currentInventoryKeyState = handler.getKeyManager().inventoryKey;
 		if(currentInventoryKeyState && !lastInventoryKeyState) {
 			this.inventory.setActive(!this.inventory.isActive());
 		}
@@ -201,16 +208,18 @@ public class Player extends Creature{
 		System.out.println("You died.");
 	}
 	
+	BufferedImage lastAnimationFrame = Assets.player_down[0];
 	private BufferedImage getCurrentAnimationFrame() {
 		if(xMove < 0) {
-			return animLeft.getCurrentFrame();
+			lastAnimationFrame = animLeft.getCurrentFrame();
 		}else if(xMove > 0) {
-			return animRight.getCurrentFrame();
+			lastAnimationFrame = animRight.getCurrentFrame();
 		} else if(yMove < 0) {
-			return animUp.getCurrentFrame();
-		} else {
-			return animDown.getCurrentFrame();
+			lastAnimationFrame = animUp.getCurrentFrame();
+		} else if(yMove > 0){
+			lastAnimationFrame = animDown.getCurrentFrame();
 		}
+		return lastAnimationFrame;
 	}
 
 	

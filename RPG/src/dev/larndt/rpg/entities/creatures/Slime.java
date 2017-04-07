@@ -19,7 +19,6 @@ public class Slime extends Creature{
 
 	@Override
 	public void tick() {
-		time++;
 		int playerX = (int) handler.getWorld().getPlayer().getX() + Creature.DEFAULT_CREATURE_WIDTH/2; // These are in pixels, not in tiles!
 		int playerY = (int) handler.getWorld().getPlayer().getY() + Creature.DEFAULT_CREATURE_HEIGHT/2; //
 		

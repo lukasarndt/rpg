@@ -98,7 +98,7 @@ public class Inventory {
 		
 		// Grab items.
 		lastKeyState = currentKeyState;
-		currentKeyState = handler.getKeyManager().space;
+		currentKeyState = handler.getKeyManager().attackKey;
 		ItemSlot itemSlot = itemSlots[activeItemSlot%sizeX][(int)activeItemSlot/sizeX];
 		if(currentKeyState && !lastKeyState && itemGrabbed) {
 			if (!itemSlot.isOccupied() && itemToGrab != null) {
@@ -116,7 +116,7 @@ public class Inventory {
 		}
 		
 		// Drop items
-		if(handler.getKeyManager().e) {
+		if(handler.getKeyManager().actionKey) {
 			if(itemSlot.getItem() != null) {
 				itemSlot.getItem().setX((int)handler.getPlayer().getX());
 				itemSlot.getItem().setY((int)handler.getPlayer().getY()+ HEIGHT);
