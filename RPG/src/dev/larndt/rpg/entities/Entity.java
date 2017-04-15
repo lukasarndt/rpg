@@ -53,7 +53,13 @@ public abstract class Entity {
 			}
 			counter = 0;
 		}
-		
+	}
+	
+	public void heal(int amt) {
+		health += amt;
+		if(health > maxHealth) {
+			health = maxHealth;
+		}
 	}
 	
 	public abstract void die();

@@ -14,7 +14,6 @@ import dev.larndt.rpg.pathfinding.Node;
 import dev.larndt.rpg.tiles.Tile;
 
 public abstract class Creature extends Entity{
-	
 	 
 	public static final int	DEFAULT_CREATURE_WIDTH = 64,
 							DEFAULT_CREATURE_HEIGHT = 64;
@@ -34,7 +33,6 @@ public abstract class Creature extends Entity{
 		speed = DEFAULT_SPEED;
 		xMove = 0f;
 		yMove = 0f;
-
 	}
 	
 	public void render(Graphics g) {

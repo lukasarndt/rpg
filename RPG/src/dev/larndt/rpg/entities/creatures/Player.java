@@ -9,6 +9,7 @@ import dev.larndt.rpg.entities.Entity;
 import dev.larndt.rpg.gfx.Animation;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.inventory.Inventory;
+import dev.larndt.rpg.items.Item;
 import dev.larndt.rpg.tiles.Tile;
 
 public class Player extends Creature{
@@ -17,11 +18,13 @@ public class Player extends Creature{
 	private Animation animDown, animUp, animLeft, animRight;
 
 	private int direction = PLAYER_DOWN;
+	private int frameCounter;
+	private int hunger, maxFood = 10;
 	
 	private boolean canMove;
 	
 	// Attack
-	private int counter = 0;
+	private int attackCounter = 0;
 	private int attackAnimLength = 20;
 	private boolean drawAttacks = false;
 	private boolean canAttack = true;
@@ -44,6 +47,7 @@ public class Player extends Creature{
 		
 		speed = 3;
 		canMove = true;
+		hunger = maxFood;
 		
 		animDown = new Animation(500, Assets.player_down);
 		animUp = new Animation(500, Assets.player_up);
@@ -55,7 +59,8 @@ public class Player extends Creature{
 
 	@Override
 	public void tick() {
-	
+		frameCounter++;
+		
 		tickAnimation();
 		getInput();
 		
@@ -68,8 +73,21 @@ public class Player extends Creature{
 		handler.getGameCamera().centerOnEntity(this);
 		
 		//Attack
-		if(!this.inventory.isActive()) {
+		if(!this.inventory.isActive() && !handler.getWorld().getTextbox().isActive()) {
 			checkAttacks();
+		}
+		
+		if(frameCounter%600 == 0) {
+			changeHunger(-1);
+		}
+		if(frameCounter%180 == 0 && (hunger == maxFood || hunger == maxFood-1)) {
+			heal(1);
+		}
+		
+		if(hunger <= 3) {
+			this.setSpeed(1);
+		} else {
+			this.setSpeed(3);
 		}
 	}
 	
@@ -97,9 +115,9 @@ public class Player extends Creature{
 				g.drawImage(Assets.swordRight, (int) (x + Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()), 
 						(int) (y - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
 			}
-			counter++;
-			if(counter >= attackAnimLength) {
-				counter = 0;
+			attackCounter++;
+			if(attackCounter >= attackAnimLength) {
+				attackCounter = 0;
 				drawAttacks = false;
 				canMove = true;
 			}
@@ -108,6 +126,14 @@ public class Player extends Creature{
 		if(this.inventory.isActive()) {
 			inventory.render(g);
 		}
+		
+		/*
+		 * Health and hunger bar are drawn in the world!
+		 */
+	}
+	
+	public void eat(Item item) {
+		changeHunger(item.getEnergy());
 	}
 	
 	private void checkAttacks() {
@@ -130,7 +156,6 @@ public class Player extends Creature{
 			
 			if(!drawAttacks) {
 				drawAttacks = true;
-				
 			}
 			
 			if(direction == PLAYER_DOWN) {
@@ -221,6 +246,11 @@ public class Player extends Creature{
 		return lastAnimationFrame;
 	}
 
+	public void changeHunger(int delta) {
+		hunger += delta;
+		if(hunger < 0) hunger = 0;
+		if(hunger > maxFood) hunger = maxFood;
+	}
 	
 	// GETTERS & SETTERS
 	public Inventory getInventory() {
@@ -234,6 +264,18 @@ public class Player extends Creature{
 	public void setCanMove(boolean canMove) {
 		this.canMove = canMove;
 	}
+
+	public int getHunger() {
+		return hunger;
+	}
+
+	public void setHunger(int hunger) {
+		if(hunger > maxFood) hunger = maxFood;
+		if(hunger < 0) hunger = 0;
+		this.hunger = hunger;
+	}
 	
-	
+	public int getMaxFood() {
+		return maxFood;
+	}
 }

@@ -14,6 +14,7 @@ public abstract class Item {
 	protected BufferedImage texture;
 	
 	protected int x, y, sizeX, sizeY;
+	protected int Energy;
 	
 	public Item(BufferedImage texture, int sizeX, int sizeY) {
 		this.texture = texture;
@@ -101,4 +102,14 @@ public abstract class Item {
 	public void setSizeY(int sizeY) {
 		this.sizeY = sizeY;
 	}
+
+	public int getEnergy() {
+		return Energy;
+	}
+
+	public void setEnergy(int energy) {
+		Energy = energy;
+	}
+	
+	
 }

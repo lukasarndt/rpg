@@ -8,12 +8,14 @@ public class WoodItem extends Item{
 
 	public WoodItem() {
 		super(Assets.wood, 2,1);
+		setEnergy(3);
 	}
 
 	public WoodItem(int x, int y) {
 		super(Assets.wood, 2,1);
 		this.x = x;
 		this.y = y;
+		setEnergy(3);
 	}
 	
 	public void render(Graphics g) {
@@ -21,6 +23,6 @@ public class WoodItem extends Item{
 	}
 	
 	public void use() {
-		this.handler.getPlayer().setHealth(this.handler.getPlayer().getMaxHealth());
+		this.handler.getPlayer().eat(this);
 	}
 }

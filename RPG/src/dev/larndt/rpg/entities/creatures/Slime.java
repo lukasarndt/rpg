@@ -54,9 +54,9 @@ public class Slime extends Creature{
 		//this.drawBounds(g);
 		this.drawHealthBar(g);
 		
-		for(Node node : path) {
+		/*for(Node node : path) {
 			node.render(g);
-		}
+		}*/
 	}
 
 	@Override

@@ -74,12 +74,12 @@ public class World {
 		}
 		
 		
-		//Render the Entites & Items
+		//Render the Entities & Items
 		itemManager.render(g);
 		entityManager.render(g);
 		
-		
-		//Render health bar
+		// ======================== Health & Hunger =============================================================
+		// Draw health bar
 		playerHealthFraction = (float)handler.getPlayer().getHealth()/(float)handler.getPlayer().getMaxHealth();
 		Graphics2D g2 = (Graphics2D) g;
 		
@@ -88,11 +88,25 @@ public class World {
 		
 		g2.setStroke(new BasicStroke(playerHealthBarThickness));
 		g2.setColor(Color.RED);
-		g2.fillRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), (int) Game.HEIGHT - 50, (int) (playerHealthBarWidth*playerHealthFraction), (int)playerHealthBarHeight);
+		g2.fillRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), 
+				(int) Game.HEIGHT - 50, (int) (playerHealthBarWidth*playerHealthFraction), (int)playerHealthBarHeight);
 		g2.setColor(playerHealthBarColor);
-		g2.drawRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), Game.HEIGHT - 50, (int) playerHealthBarWidth, (int) playerHealthBarHeight);	
+		g2.drawRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), 
+				Game.HEIGHT - 50, (int) playerHealthBarWidth, (int) playerHealthBarHeight);	
 		g2.setColor(oldColor);
 		g2.setStroke(oldStroke);	
+		
+		// Draw Hunger Bar
+		for(int i = 1; i <= handler.getPlayer().getMaxFood(); i++) {
+			if(i <= handler.getPlayer().getHunger()) {
+				g2.drawImage(Assets.foodFull, 
+						(int) (Game.WIDTH/2 - playerHealthBarWidth/2 + (i-1)*30) , (int) (Game.HEIGHT - 90), 25, 25 , null);
+			} else {
+				g2.drawImage(Assets.foodEmpty, 
+						(int) (Game.WIDTH/2 - playerHealthBarWidth/2 + (i-1)*30) , (int) (Game.HEIGHT - 90), 25, 25 , null);
+			}
+		}
+		// =========================================================================================================
 		
 		textbox.render(g2);
 	}
