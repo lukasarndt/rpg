@@ -5,10 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
+import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.pathfinding.Node;
 import dev.larndt.rpg.tiles.Tile;
 
@@ -22,6 +24,7 @@ public abstract class Creature extends Entity{
 	
 	protected float speed, xMove, yMove;
 	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10;
+	protected BufferedImage image;
 	
 	protected Color healthBarColor = Color.BLACK;
 	
@@ -33,6 +36,18 @@ public abstract class Creature extends Entity{
 		xMove = 0f;
 		yMove = 0f;
 
+	}
+	
+	public void render(Graphics g) {
+		if(image != null) {
+			g.drawImage(image, (int) (x - handler.getGameCamera().getxOffset()), 
+				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
+			drawHealthBar(g);
+		}
+	}
+	
+	public void interact() {
+		
 	}
 	
 	public void move() {

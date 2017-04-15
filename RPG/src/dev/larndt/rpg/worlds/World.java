@@ -8,10 +8,13 @@ import java.awt.Stroke;
 
 import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
+import dev.larndt.rpg.display.Textbox;
 import dev.larndt.rpg.entities.EntityManager;
+import dev.larndt.rpg.entities.creatures.NPC;
 import dev.larndt.rpg.entities.creatures.Player;
 import dev.larndt.rpg.entities.creatures.Slime;
 import dev.larndt.rpg.entities.statics.Tree;
+import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.items.ItemManager;
 import dev.larndt.rpg.pathfinding.AStar;
 import dev.larndt.rpg.tiles.Tile;
@@ -27,6 +30,7 @@ public class World {
 	private AStar pathfinder;
 	
 	private Player player;
+	private Textbox textbox;
 	
 	private float playerHealthBarThickness = 2f, playerHealthFraction = 1f, playerHealthBarWidth = 300f, playerHealthBarHeight = 25f;
 	private Color playerHealthBarColor = Color.BLACK, oldColor;
@@ -38,9 +42,11 @@ public class World {
 		itemManager = new ItemManager(handler);
 		player = new Player(handler, 50, 50);
 		entityManager = new EntityManager(handler, player);
+		textbox = new Textbox(handler);
 		
 		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
-		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
+		//entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
+		entityManager.addEntitiy(new NPC(handler, 13*Tile.TILE_WIDTH+30, 6*Tile.TILE_HEIGHT, Assets.player2));
 		loadWorld(path);
 		
 		entityManager.getPlayer().setX(spawnX);
@@ -86,6 +92,8 @@ public class World {
 		g2.drawRect((int) (Game.WIDTH/2 - playerHealthBarWidth/2), Game.HEIGHT - 50, (int) playerHealthBarWidth, (int) playerHealthBarHeight);	
 		g2.setColor(oldColor);
 		g2.setStroke(oldStroke);	
+		
+		textbox.render(g2);
 	}
 	
 	/**
@@ -163,5 +171,9 @@ public class World {
 
 	public AStar getPathfinder() {
 		return pathfinder;
+	}
+	
+	public Textbox getTextbox() {
+		return textbox;
 	}
 }

@@ -227,4 +227,14 @@ public class Player extends Creature{
 	public Inventory getInventory() {
 		return inventory;
 	}
+
+	public boolean isCanMove() {
+		return canMove;
+	}
+
+	public void setCanMove(boolean canMove) {
+		this.canMove = canMove;
+	}
+	
+	
 }
