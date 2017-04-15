@@ -45,7 +45,7 @@ public class World {
 		textbox = new Textbox(handler);
 		
 		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
-		//entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
+		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
 		entityManager.addEntitiy(new NPC(handler, 13*Tile.TILE_WIDTH+30, 6*Tile.TILE_HEIGHT, Assets.player2));
 		loadWorld(path);
 		
@@ -56,6 +56,7 @@ public class World {
 	public void tick() {
 		entityManager.tick();
 		itemManager.tick();
+		textbox.tick();
 	}
 	
 	public void render(Graphics g) {

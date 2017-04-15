@@ -10,7 +10,6 @@ import java.util.List;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
-import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.pathfinding.Node;
 import dev.larndt.rpg.tiles.Tile;
 

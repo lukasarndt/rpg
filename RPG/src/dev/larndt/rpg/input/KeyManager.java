@@ -32,13 +32,13 @@ public class KeyManager implements KeyListener{
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(counter > 100 && e.getKeyCode()==KeyEvent.VK_SPACE) {
+		if(counter > 500 && 
+				(e.getKeyCode()==KeyEvent.VK_SPACE || e.getKeyCode()==KeyEvent.VK_E || e.getKeyCode()==KeyEvent.VK_ENTER)) {
 			keys[e.getKeyCode()] = true;
 			counter = 0;
-		} else if ( e.getKeyCode()!=KeyEvent.VK_SPACE) {
+		} else if ( !(e.getKeyCode()==KeyEvent.VK_SPACE || e.getKeyCode()==KeyEvent.VK_E || e.getKeyCode()==KeyEvent.VK_ENTER) ) {
 			keys[e.getKeyCode()] = true;
 		}
-		
 	}
 
 	@Override

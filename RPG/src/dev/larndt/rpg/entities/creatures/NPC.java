@@ -30,7 +30,7 @@ public class NPC extends Creature{
 		if(!textbox.isActive()) {
 				textbox.setText(text);
 				textbox.setActive(true);
-			}
+		}
 	}
 
 	@Override
