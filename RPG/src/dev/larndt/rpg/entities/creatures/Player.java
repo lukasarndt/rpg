@@ -140,6 +140,9 @@ public class Player extends Creature{
 		attackTimer += System.currentTimeMillis() - lastAttackTimer;
 		lastAttackTimer = System.currentTimeMillis();
 		
+		attackRectangle.width = 0;
+		attackRectangle.height = 0;
+		
 		// This prevents the player from holding down the attack key to attack.
 		lastAttackKeyState = currentAttackKeyState;
 		currentAttackKeyState = handler.getKeyManager().attackKey;
