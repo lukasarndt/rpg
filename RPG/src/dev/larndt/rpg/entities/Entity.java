@@ -10,31 +10,26 @@ import dev.larndt.rpg.tiles.Tile;
 public abstract class Entity {
 	public static final int DEFAULT_HEALTH = 3;
 			
-	protected Handler handler;
-	protected int width, height;
-	protected float x, y;
+	protected Handler 	handler;
+	protected int 		width, height, health, maxHealth = 5, attackStrength = 0, counter, delta = 1000;
+	protected float 	x, y;
 	protected Rectangle entityBounds;
-	protected int health, maxHealth = 5;
-	protected Boolean active = true;
-	protected int attackStrength = 1;
-	
-	private long lastTime, now;
-	private int counter, delta = 1000;
-	
-	protected int logX, logY; // These are the base 2 logarithms of the size of a tile.
+	protected Boolean 	active = true, isSolid = true, colliding;
+	protected long 		lastTime, now;
+	protected int 		logX, logY; // These are the base 2 logarithms of the size of a tile.
 	
 	public Entity(Handler handler, float x, float y, int width, int height) {
-		this.handler = handler;
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		health = maxHealth;
-		entityBounds = new Rectangle(0, 0, width, height);
-		logX = (int) (Math.log(Tile.TILE_WIDTH)/Math.log(2));
-		logY = (int) (Math.log(Tile.TILE_HEIGHT)/Math.log(2));
-		now = System.currentTimeMillis();
-		lastTime = now;
+		this.handler	= handler;
+		this.x 			= x;
+		this.y 			= y;
+		this.width 		= width;
+		this.height 	= height;
+		health 			= maxHealth;
+		entityBounds	= new Rectangle(0, 0, width, height);
+		logX 			= (int) (Math.log(Tile.TILE_WIDTH)/Math.log(2));
+		logY 			= (int) (Math.log(Tile.TILE_HEIGHT)/Math.log(2));
+		now 			= System.currentTimeMillis();
+		lastTime 		= now;
 	}
 	
 	public abstract void tick();
@@ -64,7 +59,7 @@ public abstract class Entity {
 	
 	public abstract void die();
 
-	protected void drawBounds(Graphics g) {
+	public void drawBounds(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.red);
 		g.drawRect((int) (entityBounds.x + x - handler.getGameCamera().getxOffset()), (int) (entityBounds.y  + y - handler.getGameCamera().getyOffset()), 
@@ -74,17 +69,22 @@ public abstract class Entity {
 	
 	public boolean checkEntityCollisions(float xOffset, float yOffset) { // x and y Offset are for telling the collisionBounds where we want to move to.
 		for(Entity e : handler.getWorld().getEntityManager().getEntities()) {
+			e.colliding = false;
 			if(e.equals(this)) {
 				continue;
 			}
 			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) {
+				e.colliding = true;
+				if(!e.isSolid) {
+					return false;
+				}
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	// GETTERS & SETTERS
+
+	// ======================================== GETTERS & SETTERS ===================================================================================
 	public float getX() {
 		return x;
 	}
@@ -159,5 +159,5 @@ public abstract class Entity {
 	public void setAttackStrength(int attackStrength) {
 		this.attackStrength = attackStrength;
 	}
-	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
 }

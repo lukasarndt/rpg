@@ -13,6 +13,7 @@ import dev.larndt.rpg.entities.EntityManager;
 import dev.larndt.rpg.entities.creatures.NPC;
 import dev.larndt.rpg.entities.creatures.Player;
 import dev.larndt.rpg.entities.creatures.Slime;
+import dev.larndt.rpg.entities.statics.LongGrass;
 import dev.larndt.rpg.entities.statics.Tree;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.items.ItemManager;
@@ -22,7 +23,7 @@ import dev.larndt.rpg.utilities.Utilities;
 
 public class World {
 	private Handler handler;
-	private int width, height; // In terms of tiles!
+	private int width, height; // In tiles!
 	private int spawnX, spawnY; 
 	private int[][] tiles; // Holds the IDs of the tile at every position in the world.
 	private EntityManager entityManager;
@@ -37,16 +38,14 @@ public class World {
 	private Stroke oldStroke;
 
 	public World(Handler handler, String path) {
-		this.handler = handler;
-		pathfinder = new AStar(handler, this);
-		itemManager = new ItemManager(handler);
-		player = new Player(handler, 50, 50);
-		entityManager = new EntityManager(handler, player);
-		textbox = new Textbox(handler);
+		this.handler 	= handler;
+		pathfinder 		= new AStar(handler, this);
+		itemManager 	= new ItemManager(handler);
+		player 			= new Player(handler, 50, 50);
+		entityManager 	= new EntityManager(handler, player);
+		textbox 		= new Textbox(handler);
 		
-		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
-		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
-		entityManager.addEntitiy(new NPC(handler, 13*Tile.TILE_WIDTH+30, 6*Tile.TILE_HEIGHT, Assets.player2));
+		fillWorld();
 		loadWorld(path);
 		
 		entityManager.getPlayer().setX(spawnX);
@@ -106,7 +105,7 @@ public class World {
 						(int) (Game.WIDTH/2 - playerHealthBarWidth/2 + (i-1)*30) , (int) (Game.HEIGHT - 90), 25, 25 , null);
 			}
 		}
-		// =========================================================================================================
+		// ------------------------------------------------------------------------------------------------------
 		
 		textbox.render(g2);
 	}
@@ -155,7 +154,24 @@ public class World {
 		}
 	}
 	
-	// GETTERS & SETTERS
+	private void fillWorld() {
+		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
+		
+		entityManager.addEntitiy(new LongGrass(handler, 13*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 14*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 15*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 16*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 13*Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 14*Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 15*Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 16*Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT, 64 ,64));
+		entityManager.addEntitiy(new LongGrass(handler, 17*Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT, 64 ,64));
+		
+		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
+		entityManager.addEntitiy(new NPC(handler, 13*Tile.TILE_WIDTH+30, 6*Tile.TILE_HEIGHT, Assets.player2));
+	}
+	
+	// ======================== GETTERS & SETTERS =============================================================
 	public int getWidth() {
 		return width;
 	}
@@ -191,4 +207,5 @@ public class World {
 	public Textbox getTextbox() {
 		return textbox;
 	}
+	// --------------------------------------------------------------------------------------------------------
 }

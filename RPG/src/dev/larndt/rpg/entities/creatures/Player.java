@@ -140,9 +140,6 @@ public class Player extends Creature{
 		attackTimer += System.currentTimeMillis() - lastAttackTimer;
 		lastAttackTimer = System.currentTimeMillis();
 		
-		attackRectangle.width = 0;
-		attackRectangle.height = 0;
-		
 		// This prevents the player from holding down the attack key to attack.
 		lastAttackKeyState = currentAttackKeyState;
 		currentAttackKeyState = handler.getKeyManager().attackKey;
@@ -186,11 +183,12 @@ public class Player extends Creature{
 			}
 			if(e.getCollisionBounds(0, 0).intersects(attackRectangle)) {
 				e.hurt(1);
-				attackRectangle.width = 0;
-				attackRectangle.height = 0;
-				return; // Player can only hurt 1 entity at a time!
-			}
+				//return; // Player can only hurt 1 entity at a time!
+			}	
 		}
+		
+		attackRectangle.width = 0;
+		attackRectangle.height = 0;
 	}
 	
 	public void tickAnimation() {

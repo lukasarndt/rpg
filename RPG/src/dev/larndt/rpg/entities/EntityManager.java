@@ -21,8 +21,7 @@ public class EntityManager {
 			}else{
 				return 1;
 			}
-		}
-		
+		}	
 	};
 	
 	public EntityManager(Handler handler, Player player) {

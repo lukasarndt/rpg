@@ -6,7 +6,7 @@ public class Assets {
 	public static final int WIDTH = 32, HEIGHT = 32;
 	
 	public static BufferedImage player1, player2, dirt, grass, stone, tree, wood, foodFull, foodEmpty, 
-		invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown, slime;
+		invSlot, invSlotActive, swordLeft, swordRight, swordUp, swordDown, slime, grassLong, grassCut, grassBent;
 	public static BufferedImage[] player_down, player_up, player_right, player_left;
 	public static BufferedImage[] start_button;
 	public static BufferedImage[] tree1;
@@ -44,6 +44,10 @@ public class Assets {
 		slime 		= sheet2.crop(1 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		foodFull 	= sheet2.crop(2 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
 		foodEmpty	= sheet2.crop(3 * WIDTH, 0 * HEIGHT, WIDTH, HEIGHT);
+		
+		grassLong	= sheet2.crop(0 * WIDTH, 1 * HEIGHT, WIDTH, HEIGHT);
+		grassCut	= sheet2.crop(1 * WIDTH, 1 * HEIGHT, WIDTH, HEIGHT);
+		grassBent	= sheet2.crop(2 * WIDTH, 1 * HEIGHT, WIDTH, HEIGHT);
 	}
 	
 	public static void loadPlayerImages() {
