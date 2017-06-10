@@ -1,17 +1,21 @@
 package dev.larndt.rpg.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
+import dev.larndt.rpg.collision.Quadtree;
 import dev.larndt.rpg.entities.creatures.Player;
 
 public class EntityManager {
 	private Handler handler;
 	private Player player;
 	private ArrayList<Entity> entities;
+	private Quadtree quadtree;
 	private Comparator<Entity> renderSorter = new Comparator<Entity>() {
 
 		@Override
@@ -29,6 +33,7 @@ public class EntityManager {
 		this.player = player;
 		entities = new ArrayList<Entity>();
 		entities.add(player);
+		quadtree = new Quadtree(0, new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
 	}
 	
 	
@@ -42,6 +47,11 @@ public class EntityManager {
 			}
 		}
 		entities.sort(renderSorter);
+		
+		quadtree.clear();
+		for(int i = 0; i < entities.size(); i++) {
+			quadtree.insert(entities.get(i));
+		}
 	}
 	
 	public void render(Graphics g) {
@@ -54,7 +64,7 @@ public class EntityManager {
 		entities.add(e);
 	}
 
-	//GETTERS & SETTERS
+	// ====================================== GETTERS & SETTERS =========================================
 	
 	public Player getPlayer() {
 		return player;
@@ -79,8 +89,9 @@ public class EntityManager {
 	public void setHandler(Handler handler) {
 		this.handler = handler;
 	}
-	
-	
-	
-	
+
+	public Quadtree getQuadtree() {
+		return quadtree;
+	}
+	// --------------------------------------------------------------------------------------------------
 }

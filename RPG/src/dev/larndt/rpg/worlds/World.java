@@ -131,7 +131,6 @@ public class World {
 		}
 	}
 	
-	
 	/**
 	 * Loads the world from a text file.
 	 * @param path

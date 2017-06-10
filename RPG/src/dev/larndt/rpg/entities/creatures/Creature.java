@@ -41,6 +41,7 @@ public abstract class Creature extends Entity{
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
 			drawHealthBar(g);
 		}
+		// drawBounds(g);
 	}
 	
 	public void interact() {
