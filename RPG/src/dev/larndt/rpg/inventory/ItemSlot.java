@@ -26,4 +26,5 @@ public class ItemSlot {
 			this.occupied = false;
 		}
 	}
+	
 }
