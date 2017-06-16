@@ -66,7 +66,7 @@ public class Player extends Creature{
 		
 		if(!this.inventory.isActive() && canMove) {
 			move();
-		}else{
+		}else if (this.inventory.isActive()){
 			inventory.tick();
 		}
 		

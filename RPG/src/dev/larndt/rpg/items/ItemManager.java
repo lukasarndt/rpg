@@ -37,7 +37,7 @@ public class ItemManager { 	// Handles items in the world, not the inventory!
 		for(Item i : items) {
 			i.render(g);
 			//Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
-			g.drawRect((int) (i.getX() - handler.getGameCamera().getxOffset()),(int) (i.getY() - handler.getGameCamera().getyOffset()), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+			//g.drawRect((int) (i.getX() - handler.getGameCamera().getxOffset()),(int) (i.getY() - handler.getGameCamera().getyOffset()), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
 		}
 	}
 	

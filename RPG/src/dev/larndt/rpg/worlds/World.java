@@ -155,6 +155,7 @@ public class World {
 	
 	private void fillWorld() {
 		entityManager.addEntitiy(new Tree(handler, 8*Tile.TILE_WIDTH, 6*Tile.TILE_HEIGHT));
+		entityManager.addEntitiy(new Tree(handler, 14*Tile.TILE_WIDTH, 7*Tile.TILE_HEIGHT));
 		
 		entityManager.addEntitiy(new LongGrass(handler, 13*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT, 64 ,64));
 		entityManager.addEntitiy(new LongGrass(handler, 14*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT, 64 ,64));

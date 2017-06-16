@@ -10,7 +10,6 @@ import dev.larndt.rpg.items.Item;
 
 public class Inventory {
 	public static final int WIDTH = 32, HEIGHT = 32, START_X = 0, START_Y = 0;
-	private static final int DELAY = 80;
 	
 	private Handler handler;
 	
@@ -22,8 +21,7 @@ public class Inventory {
 
 	private ArrayList<Item> items;
 	
-	private long 	lastTick, now;
-	private int 	delta;
+	private long 	counter;
 	
 	private boolean itemGrabbed = false, lastKeyState, currentKeyState;
 	private Item itemToGrab = null;
@@ -45,6 +43,7 @@ public class Inventory {
 	
 	public void tick(){
 		getInput();
+		counter++;
 	}
 	
 	public void render(Graphics g){
@@ -68,15 +67,11 @@ public class Inventory {
 	
 	
 	public void getInput() {
-		now = System.currentTimeMillis();
-		delta += now - lastTick;
-		lastTick = now;
-		
-		// Input
-		
 		// Move around in the inventory.
-		if(delta > DELAY) {
-			delta = 0;
+		
+		// It is possible to move around in the inventory every 5 frames.
+		if(counter > 5) {
+			counter = 0;
 			if(handler.getKeyManager().right) {
 				if(activeItemSlot < sizeX*sizeY - 1 && (activeItemSlot%sizeX) != sizeX-1) {
 					activeItemSlot++;

@@ -41,7 +41,10 @@ public class EntityManager {
 		Iterator<Entity> it = entities.iterator();
 		while(it.hasNext()){
 			Entity e = it.next();
-			e.tick();
+			//System.out.println("Distance of " + e.getClass().getSimpleName() + " from Player is: " + e.distanceFromPlayer());
+			if(e.distanceFromPlayer() < e.getDistanceToTick()) {
+				e.tick();
+			}
 			if(!e.isActive()) {
 				it.remove();
 			}

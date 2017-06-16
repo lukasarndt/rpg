@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.tiles.Tile;
 
@@ -19,6 +20,7 @@ public abstract class Entity {
 	protected Boolean 	active = true, isSolid = true, colliding= false;
 	protected long 		lastTime, now;
 	protected int 		logX, logY; // These are the base 2 logarithms of the size of a tile.
+	protected double	distanceToTick;
 	
 	public Entity(Handler handler, float x, float y, int width, int height) {
 		this.handler	= handler;
@@ -32,6 +34,7 @@ public abstract class Entity {
 		logY 			= (int) (Math.log(Tile.TILE_HEIGHT)/Math.log(2));
 		now 			= System.currentTimeMillis();
 		lastTime 		= now;
+		distanceToTick  = Math.max(Game.HEIGHT, Game.WIDTH);
 	}
 	
 	public abstract void tick();
@@ -74,10 +77,10 @@ public abstract class Entity {
 		entities.clear();
 		handler.getWorld().getEntityManager().getQuadtree().retrieve(entities, this);
 		
-		 System.out.println("Entity list size of " + getClass().getSimpleName() + ": " + entities.size());
+		// System.out.println("Entity list size of " + getClass().getSimpleName() + ": " + entities.size());
 		
 		for(Entity e : entities) {
-			 System.out.println("* " + e.getClass().getSimpleName());
+			// System.out.println("* " + e.getClass().getSimpleName());
 			e.colliding = false;
 			if(e.equals(this)) {
 				continue;
@@ -93,6 +96,13 @@ public abstract class Entity {
 		return false;
 	}
 
+	public double distanceFromPlayer() {
+		if(handler.getPlayer() != null) {
+			return Math.sqrt(Math.pow((this.getX() - handler.getPlayer().getX()), 2) + Math.pow((this.getY() - handler.getPlayer().getY()), 2));
+		}
+		
+		return 0;
+	}
 	// ======================================== GETTERS & SETTERS ===================================================================================
 	public float getX() {
 		return x;
@@ -168,5 +178,10 @@ public abstract class Entity {
 	public void setAttackStrength(int attackStrength) {
 		this.attackStrength = attackStrength;
 	}
+	
+	public double getDistanceToTick() {
+		return distanceToTick;
+	}
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
+
 }
