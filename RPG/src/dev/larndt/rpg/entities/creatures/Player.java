@@ -98,8 +98,7 @@ public class Player extends Creature{
 		
 		//this.drawBounds(g);
 		// Draw Attacks
-		if(drawAttacks) {
-			
+		if(drawAttacks) {			
 			canMove = false;
 
 			if(direction == PLAYER_DOWN) {
@@ -253,7 +252,7 @@ public class Player extends Creature{
 		if(hunger > maxFood) hunger = maxFood;
 	}
 	
-	// GETTERS & SETTERS
+	// ======================= GETTERS & SETTERS ==============================
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -278,5 +277,9 @@ public class Player extends Creature{
 	
 	public int getMaxFood() {
 		return maxFood;
+	}
+	
+	public boolean drawAttack() {
+		return drawAttacks;
 	}
 }

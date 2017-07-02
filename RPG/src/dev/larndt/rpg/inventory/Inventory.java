@@ -70,7 +70,7 @@ public class Inventory {
 		// Move around in the inventory.
 		
 		// It is possible to move around in the inventory every 5 frames.
-		if(counter > 5) {
+		if(counter > 5 || counter < 0) {
 			counter = 0;
 			if(handler.getKeyManager().right) {
 				if(activeItemSlot < sizeX*sizeY - 1 && (activeItemSlot%sizeX) != sizeX-1) {
@@ -101,7 +101,7 @@ public class Inventory {
 				//itemSlot.setOccupied(true);
 				itemGrabbed = false;
 				itemToGrab = null;
-				System.out.println("Item dropped.");
+				//System.out.println("Item dropped.");
 			}
 		} else if(currentKeyState && !lastKeyState && !itemGrabbed && itemSlot.getItem() != null) {
 			itemToGrab = itemSlot.getItem();
@@ -129,48 +129,49 @@ public class Inventory {
 		}
 	}
 	
-	public void addItem(Item item) {
-		Rectangle itemRect = new Rectangle(0, 0, (int) (item.getSizeX() * WIDTH) - 1, (int) (item.getSizeY() * HEIGHT) - 1);
-		Item it;
-		Rectangle r = new Rectangle();
-		for(int j = 0; j < sizeY; j++) {
-			for(int i = 0; i < sizeX; i++) {
-				if(itemSlots[i][j].isOccupied()) {
-					continue;
-				}
-				it = itemSlots[i][j].getItem();
-				if(it == null) {
-					r = new Rectangle(0,0,0,0);
-				} else {
-					r = new Rectangle(i*WIDTH, j*HEIGHT, (int) it.getSizeX() * WIDTH, (int) it.getSizeY() * WIDTH);
-				}
-				
-				if(itemRect.intersects(r)) {
-					if(i < sizeX - 1) {
-						itemRect.setLocation((i+1) * WIDTH, j);
-					}else if(j < sizeY -1){
-						itemRect.setLocation(0, (j+1) * WIDTH);
-					}else{
-						System.out.println("No room in inventory");
-						return;
-					}
-				}else{
-					if(i+item.getSizeX() <= sizeX && j+item.getSizeX() <= sizeY) {
-						itemSlots[i][j].setItem(item);
-						for(int k = 0; k < item.getSizeX(); k++) {
-							for(int l = 0; l < item.getSizeY(); l++) {
-								itemSlots[i+k][j+l].setOccupied(true);
-							}
-						}
-						return;
-					}
-				}
-			}
-		}
-		items.add(item);
-	}
 	
-	public boolean addItem2(Item item) {
+//	public void addItem(Item item) {
+//		Rectangle itemRect = new Rectangle(0, 0, (int) (item.getSizeX() * WIDTH) - 1, (int) (item.getSizeY() * HEIGHT) - 1);
+//		Item it;
+//		Rectangle r = new Rectangle();
+//		for(int j = 0; j < sizeY; j++) {
+//			for(int i = 0; i < sizeX; i++) {
+//				if(itemSlots[i][j].isOccupied()) {
+//					continue;
+//				}
+//				it = itemSlots[i][j].getItem();
+//				if(it == null) {
+//					r = new Rectangle(0,0,0,0);
+//				} else {
+//					r = new Rectangle(i*WIDTH, j*HEIGHT, (int) it.getSizeX() * WIDTH, (int) it.getSizeY() * WIDTH);
+//				}
+//				
+//				if(itemRect.intersects(r)) {
+//					if(i < sizeX - 1) {
+//						itemRect.setLocation((i+1) * WIDTH, j);
+//					}else if(j < sizeY -1){
+//						itemRect.setLocation(0, (j+1) * WIDTH);
+//					}else{
+//						System.out.println("No room in inventory");
+//						return;
+//					}
+//				}else{
+//					if(i+item.getSizeX() <= sizeX && j+item.getSizeX() <= sizeY) {
+//						itemSlots[i][j].setItem(item);
+//						for(int k = 0; k < item.getSizeX(); k++) {
+//							for(int l = 0; l < item.getSizeY(); l++) {
+//								itemSlots[i+k][j+l].setOccupied(true);
+//							}
+//						}
+//						return;
+//					}
+//				}
+//			}
+//		}
+//		items.add(item);
+//	}
+	
+	public boolean addItem(Item item) {
 		for(int i = 0; i < sizeX; i++) {
 			for(int j = 0; j < sizeY; j++) {
 				if(!itemSlots[j][i].isOccupied()) {
@@ -180,7 +181,7 @@ public class Inventory {
 			}
 		}
 		
-		System.out.println("The inventory is full!");
+		//System.out.println("The inventory is full!");
 		return false;
 	}
 

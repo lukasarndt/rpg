@@ -26,7 +26,7 @@ public class ItemManager { 	// Handles items in the world, not the inventory!
 
 			if(handler.getKeyManager().actionKey) {
 				Rectangle r = new Rectangle(i.getX(), i.getY(), Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
-				if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0)) && !handler.getPlayer().getInventory().isActive() && handler.getPlayer().getInventory().addItem2(i)) {
+				if(r.intersects(handler.getPlayer().getCollisionBounds(0, 0)) && !handler.getPlayer().getInventory().isActive() && handler.getPlayer().getInventory().addItem(i)) {
 					it.remove();
 				}
 			}
