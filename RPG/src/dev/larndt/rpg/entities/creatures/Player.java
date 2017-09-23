@@ -93,9 +93,10 @@ public class Player extends Creature{
 	
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), 
+		image = getCurrentAnimationFrame();
+		g.drawImage(image, (int) (x - handler.getGameCamera().getxOffset()), 
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
-		
+		this.castShadow(g);
 		//this.drawBounds(g);
 		// Draw Attacks
 		if(drawAttacks) {			
@@ -114,6 +115,7 @@ public class Player extends Creature{
 				g.drawImage(Assets.swordRight, (int) (x + Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()), 
 						(int) (y - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
 			}
+			
 			attackCounter++;
 			if(attackCounter >= attackAnimLength) {
 				attackCounter = 0;

@@ -22,7 +22,6 @@ public abstract class Creature extends Entity{
 	
 	protected float speed, xMove, yMove;
 	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10;
-	protected BufferedImage image;
 	
 	protected Color healthBarColor = Color.BLACK;
 	

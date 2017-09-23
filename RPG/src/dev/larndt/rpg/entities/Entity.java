@@ -3,6 +3,8 @@ package dev.larndt.rpg.entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public abstract class Entity {
 	protected long 		lastTime, now;
 	protected int 		logX, logY; // These are the base 2 logarithms of the size of a tile.
 	protected double	distanceToTick;
+	protected BufferedImage image;
 	
 	public Entity(Handler handler, float x, float y, int width, int height) {
 		this.handler	= handler;
@@ -103,6 +106,38 @@ public abstract class Entity {
 		
 		return 0;
 	}
+	
+	public void castShadow(Graphics g) {		
+		BufferedImage shadow = colorImage(copyImage(image), 0, 0, 0);
+		g.drawImage(shadow, (int)(this.x - handler.getGameCamera().getxOffset()), (int)(this.y - handler.getGameCamera().getyOffset() + this.height), this.width, this.height, null);
+		
+	}
+	
+	public static BufferedImage copyImage(BufferedImage source){
+	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+	    Graphics g = b.getGraphics();
+	    g.drawImage(source, 0, 0, null);
+	    g.dispose();
+	    return b;
+	}
+	
+	private BufferedImage colorImage(BufferedImage image, int r, int g, int b) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        WritableRaster raster = image.getRaster();
+
+        for (int xx = 0; xx < width; xx++) {
+            for (int yy = 0; yy < height; yy++) {
+                int[] pixels = raster.getPixel(xx, yy, (int[]) null);
+                pixels[0] = r;
+                pixels[1] = g;
+                pixels[2] = b;
+                raster.setPixel(xx, yy, pixels);
+            }
+        }
+        return image;
+    }
+	
 	// ======================================== GETTERS & SETTERS ===================================================================================
 	public float getX() {
 		return x;
