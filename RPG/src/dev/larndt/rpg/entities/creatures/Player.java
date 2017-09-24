@@ -77,7 +77,7 @@ public class Player extends Creature{
 			checkAttacks();
 		}
 		
-		if(frameCounter%600 == 0) {
+		if(frameCounter%1200 == 0) {
 			changeHunger(-1);
 		}
 		if(frameCounter%180 == 0 && (hunger == maxFood || hunger == maxFood-1)) {

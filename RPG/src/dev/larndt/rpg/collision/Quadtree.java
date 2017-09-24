@@ -17,7 +17,7 @@ public class Quadtree {
 	private Rectangle bounds;
 	private Quadtree[] nodes;
 	private Handler handler;
-	
+
 	// Nodes look like this:
 	// +---+---+
 	// | 1 | 0 |
@@ -164,24 +164,49 @@ public class Quadtree {
 		return returnObjects;
 	}
 	
+	/**
+	 * Renders nodes and prints their content to stdout. Used for debugging.
+	 * @param g
+	 */
 	public void render(Graphics g) {
 		// vertical
-		g.drawLine((int)(bounds.getX() + bounds.getWidth()/2),(int) bounds.getY(), (int) (bounds.getX() + bounds.getWidth()/2), (int)(bounds.getY() + bounds.getHeight()));
+		g.drawLine((int)(bounds.getX() + bounds.getWidth()/2),
+				(int) bounds.getY(), 
+				(int) (bounds.getX() + bounds.getWidth()/2), 
+				(int)(bounds.getY() + bounds.getHeight()));
 		// horizontal
-		g.drawLine((int)bounds.getX(), (int)(bounds.getY() + bounds.getHeight()/2), (int)(bounds.getX() + bounds.getWidth()), (int) (bounds.getY() + bounds.getHeight()/2));
+		g.drawLine((int)bounds.getX(), 
+				(int)(bounds.getY() + bounds.getHeight()/2), 
+				(int)(bounds.getX() + bounds.getWidth()), 
+				(int) (bounds.getY() + bounds.getHeight()/2));
+		
 		if(level == 0) {
 			System.out.println("------------------------------------");
-			System.out.println("Node with index -1" + " on level " + level + " has " + objects.size() + " entities.");
+			System.out.println("Node with index -1" 
+					+ " on level " 
+					+ level 
+					+ " has " 
+					+ objects.size() 
+					+ " entities.");
+			
 			for(Entity e : objects) {
 				System.out.println("* " + e.getClass().getSimpleName());
 			}
 		}
+		
 		for(int i = 0; i < nodes.length; i++) {
 			if(nodes[i] != null) {
-				System.out.println("Node with index " + i + " on level " + nodes[i].level + " has " + nodes[i].objects.size() + " entities.");
+				System.out.println("Node with index " 
+						+ i 
+						+ " on level " 
+						+ nodes[i].level + " has " 
+						+ nodes[i].objects.size() 
+						+ " entities.");
+				
 				for(Entity e : nodes[i].objects) {
 					System.out.println("* " + e.getClass().getSimpleName());
 				}
+				
 				if(nodes[i].nodes[0] != null) {
 					nodes[i].render(g);
 				}

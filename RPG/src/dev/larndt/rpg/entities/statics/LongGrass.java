@@ -32,7 +32,7 @@ public class LongGrass extends Entity{
 
 	@Override
 	public void render(Graphics g) {
-		//this.drawBounds(g);
+		this.drawBounds(g);
 		g.drawImage(img, (int) (x - handler.getGameCamera().getxOffset()), (int) (y -  handler.getGameCamera().getyOffset()), width, height, null);
 	}
 
