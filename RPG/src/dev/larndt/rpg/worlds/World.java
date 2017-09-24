@@ -168,7 +168,7 @@ public class World {
 		entityManager.addEntitiy(new LongGrass(handler, 17*Tile.TILE_WIDTH, 4*Tile.TILE_HEIGHT, 64 ,64));
 		
 		entityManager.addEntitiy(new Slime(handler, 10*Tile.TILE_WIDTH, 3*Tile.TILE_HEIGHT));
-		entityManager.addEntitiy(new NPC(handler, 6*Tile.TILE_WIDTH+30, 6*Tile.TILE_HEIGHT, Assets.player2));
+		entityManager.addEntitiy(new NPC(handler, 6*Tile.TILE_WIDTH+30, 7*Tile.TILE_HEIGHT, Assets.player2));
 	}
 	
 	// ======================== GETTERS & SETTERS =============================================================

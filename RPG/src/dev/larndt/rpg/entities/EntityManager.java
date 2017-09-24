@@ -33,11 +33,12 @@ public class EntityManager {
 		this.player = player;
 		entities = new ArrayList<Entity>();
 		entities.add(player);
-		quadtree = new Quadtree(0, new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
+		quadtree = new Quadtree(handler, 0, new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
 	}
 	
 	
 	public void tick() {
+		//System.out.println("Number of entities:" + entities.size());
 		Iterator<Entity> it = entities.iterator();
 		while(it.hasNext()){
 			Entity e = it.next();
@@ -53,7 +54,14 @@ public class EntityManager {
 		
 		quadtree.clear();
 		for(int i = 0; i < entities.size(); i++) {
+			///System.out.println(i + ": Inserting " + entities.get(i).getClass().getSimpleName());
 			quadtree.insert(entities.get(i));
+			//System.out.println("Position of " + entities.get(i).getClass().getSimpleName() + ": (" + (int)entities.get(i).getX() + "," + (int)entities.get(i).getY() + ")");
+			//System.out.println("Position of " + entities.get(i).getClass().getSimpleName() 
+			//		+ " on the screen: (" 
+			//		+ (int)(entities.get(i).getX() - handler.getGameCamera().getxOffset()) 
+			//		+ "," + (int)(entities.get(i).getY() - handler.getGameCamera().getyOffset())
+			//		+ ")");
 		}
 	}
 	
@@ -61,6 +69,7 @@ public class EntityManager {
 		for(Entity e:entities){
 			e.render(g);
 		}
+		quadtree.render(g);
 	}
 	
 	public void addEntitiy(Entity e) {

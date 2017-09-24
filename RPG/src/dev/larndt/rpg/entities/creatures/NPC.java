@@ -47,17 +47,17 @@ public class NPC extends Creature{
 	@Override
 	public void render(Graphics g) {
 		super.render(g);
-		super.drawBounds(g);
-		drawBubble(g, bubbleText);
+		this.drawBounds(g);
+		if(drawBubble) {
+			drawBubble(g, bubbleText);
+		}
 	}
 	
-	public void drawBubble(Graphics g, String bubbleText) {
-		if(drawBubble) {
-			g.setColor(Color.WHITE);
-			g.fillRect((int) (x - 50 - handler.getGameCamera().getxOffset()), (int) (y - 100 - handler.getGameCamera().getyOffset()), Creature.DEFAULT_CREATURE_HEIGHT + 100, 70);
-			g.setColor(Color.BLACK);
-			g.drawString(bubbleText, (int) (x- 30 - handler.getGameCamera().getxOffset()), (int) (y - 80 - handler.getGameCamera().getyOffset()));
-		}
+	public void drawBubble(Graphics g, String bubbleText) {	
+		g.setColor(Color.WHITE);
+		g.fillRect((int) (x - 50 - handler.getGameCamera().getxOffset()), (int) (y - 100 - handler.getGameCamera().getyOffset()), Creature.DEFAULT_CREATURE_HEIGHT + 100, 70);
+		g.setColor(Color.BLACK);
+		g.drawString(bubbleText, (int) (x- 30 - handler.getGameCamera().getxOffset()), (int) (y - 80 - handler.getGameCamera().getyOffset()));
 	}
 
 	@Override

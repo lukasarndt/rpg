@@ -15,14 +15,14 @@ import dev.larndt.rpg.tiles.Tile;
 public abstract class Entity {
 	public static final int DEFAULT_HEALTH = 3;
 			
-	protected Handler 	handler;
-	protected int 		width, height, health, maxHealth = 5, attackStrength = 0, counter, delta = 1000;
-	protected float 	x, y;
-	protected Rectangle entityBounds;
-	protected Boolean 	active = true, isSolid = true, colliding= false;
-	protected long 		lastTime, now;
-	protected int 		logX, logY; // These are the base 2 logarithms of the size of a tile.
-	protected double	distanceToTick;
+	protected Handler		handler;
+	protected int 			width, height, health, maxHealth = 5, attackStrength = 0, counter, delta = 1000;
+	protected float 		x, y;
+	protected Rectangle 	entityBounds;
+	protected Boolean 		active = true, isSolid = true, colliding= false;
+	protected long 			lastTime, now;
+	protected int 			logX, logY; // These are the base 2 logarithms of the size of a tile.
+	protected double		distanceToTick;
 	protected BufferedImage image;
 	
 	public Entity(Handler handler, float x, float y, int width, int height) {
@@ -75,19 +75,21 @@ public abstract class Entity {
 		g.setColor(c);
 	}
 	
-	public boolean checkEntityCollisions(float xOffset, float yOffset) { // x and y Offset are for telling the collisionBounds where we want to move to.
+	// x and y Offset are for telling the collisionBounds where we want to move to.
+	public boolean checkEntityCollisions(float xOffset, float yOffset) { 
 		List<Entity> entities = new ArrayList<Entity>();
 		entities.clear();
 		handler.getWorld().getEntityManager().getQuadtree().retrieve(entities, this);
 		
-		// System.out.println("Entity list size of " + getClass().getSimpleName() + ": " + entities.size());
+		//System.out.println("Entity list size of " + getClass().getSimpleName() + ": " + entities.size());
 		
 		for(Entity e : entities) {
-			// System.out.println("* " + e.getClass().getSimpleName());
+			//System.out.println("* " + e.getClass().getSimpleName());
 			e.colliding = false;
 			if(e.equals(this)) {
 				continue;
 			}
+			//System.out.println(this.getClass().getSimpleName() + " is checking collision with " + e.getClass().getSimpleName());
 			if(e.getCollisionBounds(0f, 0f).intersects(this.getCollisionBounds(xOffset, yOffset))) {
 				e.colliding = true;
 				if(!e.isSolid) {

@@ -13,7 +13,7 @@ public class Slime extends Creature{
 		
 		this.setBounds(1, 1, width-2, height-2);
 		
-		this.speed = 1;
+		this.speed = 0;
 		this.attackStrength = 1;
 	}
 

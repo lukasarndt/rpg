@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 import dev.larndt.rpg.Handler;
@@ -59,13 +58,14 @@ public abstract class Creature extends Entity{
 	public void moveX() {
 		if(xMove > 0) { // Moving right
 			int tx = (int) (x + xMove + entityBounds.x + entityBounds.width)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
-					if(!collisionWithTile(tx, (int) (y + entityBounds.y)/Tile.TILE_HEIGHT) && 
-							!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
-						x += xMove;
-					}else{
-						x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
-					}
-		}else if(xMove < 0) { // Moving left
+			if(!collisionWithTile(tx, (int) (y + entityBounds.y)/Tile.TILE_HEIGHT) && 
+					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT) &&
+					!checkEntityCollisions(xMove, 0)) {
+				x += xMove;
+			}else{
+				x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
+			}
+		} else if(xMove < 0) { // Moving left
 			int tx = (int) (x + xMove + entityBounds.x)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
 			if(!collisionWithTile(tx, (int) ((y + entityBounds.y)/Tile.TILE_HEIGHT)) && 
 					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
