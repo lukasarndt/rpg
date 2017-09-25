@@ -12,6 +12,8 @@ public class Quadtree {
 	private static final int MAX_OBJECTS = 10;
 	private static final int MAX_LEVELS = 5;
 	
+	public static boolean debug = false;
+	
 	private int level;
 	private List<Entity> objects;
 	private Rectangle bounds;
@@ -180,7 +182,7 @@ public class Quadtree {
 				(int)(bounds.getX() + bounds.getWidth()), 
 				(int) (bounds.getY() + bounds.getHeight()/2));
 		
-		if(level == 0) {
+		/*if(level == 0) {
 			System.out.println("------------------------------------");
 			System.out.println("Node with index -1" 
 					+ " on level " 
@@ -192,11 +194,11 @@ public class Quadtree {
 			for(Entity e : objects) {
 				System.out.println("* " + e.getClass().getSimpleName());
 			}
-		}
+		}*/
 		
 		for(int i = 0; i < nodes.length; i++) {
 			if(nodes[i] != null) {
-				System.out.println("Node with index " 
+				/*System.out.println("Node with index " 
 						+ i 
 						+ " on level " 
 						+ nodes[i].level + " has " 
@@ -205,7 +207,7 @@ public class Quadtree {
 				
 				for(Entity e : nodes[i].objects) {
 					System.out.println("* " + e.getClass().getSimpleName());
-				}
+				}*/
 				
 				if(nodes[i].nodes[0] != null) {
 					nodes[i].render(g);

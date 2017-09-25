@@ -69,7 +69,7 @@ public class EntityManager {
 		for(Entity e:entities){
 			e.render(g);
 		}
-		quadtree.render(g);
+		if(Quadtree.debug) quadtree.render(g);
 	}
 	
 	public void addEntitiy(Entity e) {

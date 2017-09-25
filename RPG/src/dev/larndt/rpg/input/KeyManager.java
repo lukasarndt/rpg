@@ -3,6 +3,9 @@ package dev.larndt.rpg.input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import dev.larndt.rpg.collision.Quadtree;
+import dev.larndt.rpg.entities.Entity;
+
 public class KeyManager implements KeyListener{
 	private boolean[] keys;
 	public boolean up, down, left, right, attackKey, inventoryKey, actionKey, enter;
@@ -33,10 +36,12 @@ public class KeyManager implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(counter > 500 && 
-				(e.getKeyCode()==KeyEvent.VK_SPACE || e.getKeyCode()==KeyEvent.VK_E || e.getKeyCode()==KeyEvent.VK_ENTER)) {
+				(e.getKeyCode()==KeyEvent.VK_SPACE 
+					|| e.getKeyCode()==KeyEvent.VK_E 
+					|| e.getKeyCode()==KeyEvent.VK_ENTER)) {
 			keys[e.getKeyCode()] = true;
 			counter = 0;
-		} else if ( !(e.getKeyCode()==KeyEvent.VK_SPACE || e.getKeyCode()==KeyEvent.VK_E || e.getKeyCode()==KeyEvent.VK_ENTER) ) {
+		} else {
 			keys[e.getKeyCode()] = true;
 		}
 	}
@@ -44,11 +49,15 @@ public class KeyManager implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
+		if(e.getKeyCode() == KeyEvent.VK_1) {
+			Entity.debug = !Entity.debug;
+		} else if(e.getKeyCode() == KeyEvent.VK_2) {
+			Quadtree.debug = !Quadtree.debug;
+		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
 	}
-
 }

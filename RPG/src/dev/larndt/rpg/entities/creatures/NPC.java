@@ -47,7 +47,6 @@ public class NPC extends Creature{
 	@Override
 	public void render(Graphics g) {
 		super.render(g);
-		this.drawBounds(g);
 		if(drawBubble) {
 			drawBubble(g, bubbleText);
 		}
