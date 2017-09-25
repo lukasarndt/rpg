@@ -1,7 +1,9 @@
 package dev.larndt.rpg.entities;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -15,10 +17,11 @@ import dev.larndt.rpg.tiles.Tile;
 public abstract class Entity {
 	public static final int DEFAULT_HEALTH = 3;
 	
-	public static boolean debug;
+	public static boolean debug = true;
 			
 	protected Handler		handler;
-	protected int 			width, height, health, maxHealth = 5, attackStrength = 0, counter, delta = 1000;
+	protected int 			width, height, health;
+	protected int			maxHealth = 5, attackStrength = 0, counter, delta = 1000;
 	protected float 		x, y;
 	protected Rectangle 	entityBounds;
 	protected Boolean 		active = true, isSolid = true, colliding= false;
@@ -72,7 +75,8 @@ public abstract class Entity {
 	public void drawBounds(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.red);
-		g.drawRect((int) (entityBounds.x + x - handler.getGameCamera().getxOffset()), (int) (entityBounds.y  + y - handler.getGameCamera().getyOffset()), 
+		g.drawRect((int) (entityBounds.x + x - handler.getGameCamera().getxOffset()), 
+				(int) (entityBounds.y  + y - handler.getGameCamera().getyOffset()), 
 				entityBounds.width, entityBounds.height);
 		g.setColor(c);
 	}
@@ -91,8 +95,10 @@ public abstract class Entity {
 			if(e.equals(this)) {
 				continue;
 			}
-			//System.out.println(this.getClass().getSimpleName() + " is checking collision with " + e.getClass().getSimpleName());
-			if(e.getCollisionBounds(0f, 0f).intersects(this.getCollisionBounds(xOffset, yOffset))) {
+			/*System.out.println(this.getClass().getSimpleName() + 
+				" is checking collision with " 
+				+ e.getClass().getSimpleName());*/
+			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) {
 				e.colliding = true;
 				if(!e.isSolid) {
 					return false;
@@ -105,20 +111,31 @@ public abstract class Entity {
 
 	public double distanceFromPlayer() {
 		if(handler.getPlayer() != null) {
-			return Math.sqrt(Math.pow((this.getX() - handler.getPlayer().getX()), 2) + Math.pow((this.getY() - handler.getPlayer().getY()), 2));
+			return Math.sqrt(Math.pow((this.getX() - handler.getPlayer().getX()), 2) 
+					+ Math.pow((this.getY() - handler.getPlayer().getY()), 2));
 		}
 		
 		return 0;
 	}
 	
-	public void castShadow(Graphics g) {		
+	public void castShadow(Graphics g) {	
+		Graphics2D g2d = (Graphics2D) g;
 		BufferedImage shadow = colorImage(copyImage(image), 0, 0, 0);
-		g.drawImage(shadow, (int)(this.x - handler.getGameCamera().getxOffset()), (int)(this.y - handler.getGameCamera().getyOffset() + this.height), this.width, this.height, null);
-		
+		float opacity = 0.2f;
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));	
+		g2d.drawImage(shadow, 
+				(int)(this.x - handler.getGameCamera().getxOffset()), 
+				(int)(this.y - handler.getGameCamera().getyOffset() + this.height), 
+				this.width, 
+				this.height, 
+				null);
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 	}
 	
 	public static BufferedImage copyImage(BufferedImage source){
-	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+	    BufferedImage b = new BufferedImage(source.getWidth(), 
+	    		source.getHeight(), 
+	    		source.getType());
 	    Graphics g = b.getGraphics();
 	    g.drawImage(source, 0, 0, null);
 	    g.dispose();
@@ -142,13 +159,16 @@ public abstract class Entity {
         return image;
     }
 	
-	// ======================================== GETTERS & SETTERS ===================================================================================
+	// ======================================== GETTERS & SETTERS =======================
 	public float getX() {
 		return x;
 	}
 	
 	public Rectangle getCollisionBounds(float xOffset, float yOffset) {
-		return new Rectangle((int) (x + entityBounds.x + xOffset), (int) (y + entityBounds.y + yOffset) , entityBounds.width, entityBounds.height);
+		return new Rectangle((int) (x + entityBounds.x + xOffset), 
+				(int) (y + entityBounds.y + yOffset) , 
+				entityBounds.width, 
+				entityBounds.height);
 	}
 	
 	public void setX(float x) {
@@ -221,6 +241,5 @@ public abstract class Entity {
 	public double getDistanceToTick() {
 		return distanceToTick;
 	}
-	// ----------------------------------------------------------------------------------------------------------------------------------------------
-
+	// --------------------------------------------------------------------
 }

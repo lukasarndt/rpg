@@ -96,7 +96,7 @@ public class Player extends Creature{
 		image = getCurrentAnimationFrame();
 		g.drawImage(image, (int) (x - handler.getGameCamera().getxOffset()), 
 				(int) (y - handler.getGameCamera().getyOffset()), width, height, null);
-		this.castShadow(g);
+		castShadow(g);
 		if(debug) {
 			this.drawBounds(g);
 		}

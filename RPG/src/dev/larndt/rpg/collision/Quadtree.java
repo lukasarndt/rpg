@@ -12,7 +12,7 @@ public class Quadtree {
 	private static final int MAX_OBJECTS = 10;
 	private static final int MAX_LEVELS = 5;
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 	
 	private int level;
 	private List<Entity> objects;
