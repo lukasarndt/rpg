@@ -20,7 +20,8 @@ public class Player extends Creature{
 
 	private int direction = PLAYER_DOWN;
 	private int frameCounter;
-	private int hunger, maxFood = 10;
+	private int hunger;
+	private int maxFood = 10;
 	
 	private boolean canMove;
 	
@@ -135,7 +136,7 @@ public class Player extends Creature{
 		}
 		
 		/*
-		 * Health and hunger bar are drawn in the world!
+		 * Note: Health and hunger bar are drawn in the world!
 		 */
 	}
 	
@@ -186,7 +187,9 @@ public class Player extends Creature{
 			}
 			if(e.getCollisionBounds(0, 0).intersects(attackRectangle)) {
 				e.hurt(1);
-				//return; // Player can only hurt 1 entity at a time!
+				
+				// Player can only hurt 1 entity at a time!
+				//return;
 			}	
 		}
 		

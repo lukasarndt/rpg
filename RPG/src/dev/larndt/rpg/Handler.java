@@ -18,6 +18,10 @@ public class Handler {
 		return game.getWidth();
 	}
 	
+	/**
+	 * Returns the height of the window.
+	 * @return	window height
+	 */
 	public int getHeight() {
 		return game.getHeight();
 	}

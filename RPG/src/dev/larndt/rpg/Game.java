@@ -2,10 +2,12 @@ package dev.larndt.rpg;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 import dev.larndt.rpg.display.Display;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.gfx.GameCamera;
+import dev.larndt.rpg.gfx.MyGraphics;
 import dev.larndt.rpg.input.KeyManager;
 import dev.larndt.rpg.input.MouseManager;
 import dev.larndt.rpg.states.GameState;
@@ -35,13 +37,19 @@ public class Game implements Runnable{
 	
 	private Handler handler;
 	
+	//LIGHTING STUFF
+	private BufferedImage image;
+	private MyGraphics myGraphics;
+	
 	public Game(String title, int width, int height) {
 		//this.WIDTH = width;
 		//this.height = height;
-		this.title = title;
+		this.title 		= title;
 		
-		keyManager = new KeyManager();
-		mouseManager = new MouseManager();
+		keyManager 		= new KeyManager();
+		mouseManager 	= new MouseManager();
+		
+		
 	}
 	
 	private void init() {
@@ -51,12 +59,18 @@ public class Game implements Runnable{
 		display.getFrame().addMouseMotionListener(mouseManager);
 		display.getCanvas().addMouseListener(mouseManager);
 		display.getCanvas().addMouseMotionListener(mouseManager);
+		
 		Assets.init();
-		handler = new Handler(this);
-		gameCamera = new GameCamera(handler, 0, 0);
-		gameState = new GameState(handler);
-		menuState = new MenuState(handler);
-		StateManager.setState(menuState);
+		
+		handler 	= new Handler(this);
+		gameCamera 	= new GameCamera(handler, 0, 0);
+		gameState 	= new GameState(handler);
+		menuState 	= new MenuState(handler);
+		
+		StateManager.setState(gameState);
+		
+		image			= new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		myGraphics		= new MyGraphics(handler);
 	}
 
 	public void run() {
@@ -107,17 +121,20 @@ public class Game implements Runnable{
 			display.getCanvas().createBufferStrategy(3);
 			return;
 		}
-		
 		g = bs.getDrawGraphics();
 
 		// Clear Screen
 		g.clearRect(0, 0, WIDTH, HEIGHT);
+		
 		// Start Drawing
 		if(StateManager.getState() != null) {
 			StateManager.getState().render(g);
 		}
 		// End Drawing
 		
+		g.drawImage(image, 0, 0, null);
+		myGraphics.clear();
+		myGraphics.drawImage(Assets.player1, 10, 10);
 		bs.show();
 		g.dispose();
 	}
@@ -184,7 +201,8 @@ public class Game implements Runnable{
 	public State getMenuState() {
 		return menuState;
 	}
-	
-	
-	
+
+	public BufferedImage getImage() {
+		return image;
+	}
 }
