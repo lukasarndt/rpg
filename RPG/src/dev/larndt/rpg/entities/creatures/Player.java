@@ -11,6 +11,7 @@ import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.inventory.Inventory;
 import dev.larndt.rpg.items.Item;
 import dev.larndt.rpg.tiles.Tile;
+import dev.larndt.rpg.utilities.Timer;
 
 public class Player extends Creature{
 	public static final int PLAYER_UP = 0, PLAYER_RIGHT = 1, PLAYER_DOWN = 2, PLAYER_LEFT = 3;
@@ -36,7 +37,8 @@ public class Player extends Creature{
 	private boolean currentInventoryKeyState = false;
 	
 	// Attack timer
-	private long lastAttackTimer, attackCooldown = 1000, attackTimer = attackCooldown;
+	private Timer attackTimer;
+	private int attackCooldown = 1000;
 	private boolean lastAttackKeyState = false;
 	private boolean currentAttackKeyState = false;
 	
@@ -45,16 +47,18 @@ public class Player extends Creature{
 		
 		this.setBounds(2, 2, width-4, height-4);
 		
-		speed = 3;
-		canMove = true;
-		hunger = maxFood;
+		speed 		= 3;
+		canMove 	= true;
+		hunger 		= maxFood;
 		
-		animDown = new Animation(500, Assets.player_down);
-		animUp = new Animation(500, Assets.player_up);
-		animLeft = new Animation(500, Assets.player_left);
-		animRight = new Animation(500, Assets.player_right);
+		animDown 	= new Animation(500, Assets.player_down);
+		animUp 		= new Animation(500, Assets.player_up);
+		animLeft 	= new Animation(500, Assets.player_left);
+		animRight 	= new Animation(500, Assets.player_right);
 		
-		inventory = new Inventory(handler);
+		inventory 	= new Inventory(handler);
+		
+		attackTimer = new Timer(attackCooldown);
 	}
 
 	@Override
@@ -140,16 +144,12 @@ public class Player extends Creature{
 	}
 	
 	private void checkAttacks() {
-		attackTimer += System.currentTimeMillis() - lastAttackTimer;
-		lastAttackTimer = System.currentTimeMillis();
-		
 		// This prevents the player from holding down the attack key to attack.
 		lastAttackKeyState = currentAttackKeyState;
 		currentAttackKeyState = handler.getKeyManager().attackKey;
 		
-		if(attackTimer > attackCooldown) {
+		if(attackTimer.check()) {
 			canAttack = true;
-			attackTimer = 0;
 		}
 		
 		if(currentAttackKeyState && !lastAttackKeyState && canAttack) {
@@ -236,8 +236,8 @@ public class Player extends Creature{
 		System.out.println("You died.");
 	}
 	
-	BufferedImage lastAnimationFrame = Assets.player_down[0];
 	private BufferedImage getCurrentAnimationFrame() {
+		BufferedImage lastAnimationFrame = Assets.player_down[0];
 		if(xMove < 0) {
 			lastAnimationFrame = animLeft.getCurrentFrame();
 		}else if(xMove > 0) {
