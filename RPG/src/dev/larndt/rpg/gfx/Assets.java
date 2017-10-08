@@ -10,10 +10,14 @@ public class Assets {
 	public static BufferedImage[] player_down, player_up, player_right, player_left;
 	public static BufferedImage[] start_button;
 	public static BufferedImage[] tree1;
+	
+	public static BufferedImage light;
 
 	public static void init() {
 		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet_trans.png"));
 		Spritesheet sheet2 = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet2.png"));
+		
+		light = ImageLoader.loadImage("/textures/light.png");
 		
 		loadPlayerImages();
 		loadTree();

@@ -133,16 +133,27 @@ public class Game implements Runnable{
 		}
 		// End Drawing
 		
-		g.drawImage(image, 0, 0, null);
+		lightingRender();
+		
+		bs.show();
+		g.dispose();
+	}
+	
+	public void lightingRender() {
+		g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 		myGraphics.clear();
+		
+		for(int x = 0; x < image.getWidth(); x++) {
+			for(int y = 0; y < image.getHeight(); y++) {
+				//myGraphics.setLightMap(x, y, image.get);
+			}
+		}
 		
 		MyImage player2 = new MyImage(Assets.slime);
 		MyImage player1 = new MyImage(Assets.player1, true);
 		
 		myGraphics.drawImage(player2, 10, 10);
 		myGraphics.drawImage(player1, mouseManager.getMouseX(), mouseManager.getMouseY());
-		bs.show();
-		g.dispose();
 	}
 	
 	public synchronized void start() {

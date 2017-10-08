@@ -14,11 +14,18 @@ public class MyGraphics {
 	private int[] zAxis;
 	private int zDepth = 0;
 	
+	// Lighting
+	private int[] lightMap;
+	private int[] lightBlock;
+	private int ambientColor = 0xff6b6b6b;
+	
 	public MyGraphics(Handler handler) {
-		screenWidth = Game.WIDTH;
-		screenHeight = Game.HEIGHT;
-		pixels = ((DataBufferInt) handler.getGame().getImage().getRaster().getDataBuffer()).getData();
-		zAxis = new int[pixels.length];
+		screenWidth 	= Game.WIDTH;
+		screenHeight 	= Game.HEIGHT;
+		pixels 			= ((DataBufferInt) handler.getGame().getImage().getRaster().getDataBuffer()).getData();
+		zAxis 			= new int[pixels.length];
+		lightMap		= new int[pixels.length];
+		lightBlock		= new int[pixels.length];
 	}
 	
 	/**
@@ -26,8 +33,10 @@ public class MyGraphics {
 	 */
 	public void clear() {
 		for(int i = 0; i < pixels.length; i++) {
-			pixels[i] = 0;
-			zAxis[i] = 0;
+			pixels[i] 		= 0;
+			zAxis[i] 		= 0;
+			lightMap[i] 	= ambientColor;
+			lightBlock[i] 	= 0;
 		}
 	}
 	
@@ -68,6 +77,15 @@ public class MyGraphics {
 				setPixel(i + x, j + y, image.getPixels()[i + j * image.getWidth()]);
 			}
 		}
+		
+		for(int i = 0; i < pixels.length; i++) {
+			float r = ((lightMap[i] >> 16) & 0xff) / 255f;
+			float g = ((lightMap[i] >> 8) & 0xff) / 255f;
+			float b = (lightMap[i] & 0xff) / 255f;
+			
+			// Merge pixels and lightMap
+			pixels[i] = ((int)(((pixels[i] >> 16) & 0xff) * r) << 16 | (int)(((pixels[i] >> 8) & 0xff) * g) << 8 | (int)((pixels[i] & 0xff) * b));
+		}
 	}
 	
 	/**
@@ -98,6 +116,26 @@ public class MyGraphics {
 			pixels[x + y * screenWidth] = (255 << 24 | red << 16 | green << 8 | blue);
 		}
 		
+	}
+	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param value
+	 */
+	public void setLightMap(int x, int y, int value) {
+		if(x < 0 || x >= screenWidth || y < 0 || y >= screenHeight) {
+			return;
+		}
+		
+		int baseColor 	= lightMap[x + y * screenWidth];
+		
+		int maxRed		= Math.max((baseColor >> 16) & 0xff, (value >> 16) & 0xff);
+		int maxGreen	= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
+		int maxBlue		= Math.max(baseColor & 0xff, value & 0xff);
+		
+		lightMap[x + y * screenWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);
 	}
 	
 	/**
