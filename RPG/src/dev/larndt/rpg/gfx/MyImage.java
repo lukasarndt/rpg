@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 public class MyImage {
 	private int width;
 	private int height;
+	private boolean alpha = false;
 	
 	private int[] pixels;
 	
@@ -26,6 +27,16 @@ public class MyImage {
 		pixels		= image.getRGB(0, 0, width, height, null, 0, width);
 		
 		image.flush();
+	}
+	
+	public MyImage(BufferedImage image, boolean alpha) {
+		this(image);
+		this.alpha = alpha;
+	}
+	
+	public MyImage(String path, boolean alpha) {
+		this(path);
+		this.alpha = alpha;
 	}
 
 	public int getWidth() {
@@ -50,6 +61,14 @@ public class MyImage {
 
 	public void setPixels(int[] pixels) {
 		this.pixels = pixels;
+	}
+
+	public boolean isAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(boolean alpha) {
+		this.alpha = alpha;
 	}
 
 }

@@ -3,6 +3,9 @@ package dev.larndt.rpg.tiles;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import dev.larndt.rpg.gfx.MyGraphics;
+import dev.larndt.rpg.gfx.MyImage;
+
 public class Tile {
 	public static Tile[] tiles 		= new Tile[256];
 	public static Tile grassTile 	= new GrassTile(0);
@@ -38,6 +41,12 @@ public class Tile {
 		g.drawRect(x, y, TILE_WIDTH, TILE_HEIGHT);
 		g.setColor(oldColor);*/
 	}
+	
+	public void render(MyGraphics g, int x, int y) {
+		MyImage image = new MyImage(texture);
+		g.drawImage(image, x, y);
+	}
+	
 	
 	// GETTERS & SETTERS
 	public int getId() {

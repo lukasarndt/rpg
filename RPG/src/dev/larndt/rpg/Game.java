@@ -8,6 +8,7 @@ import dev.larndt.rpg.display.Display;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.gfx.GameCamera;
 import dev.larndt.rpg.gfx.MyGraphics;
+import dev.larndt.rpg.gfx.MyImage;
 import dev.larndt.rpg.input.KeyManager;
 import dev.larndt.rpg.input.MouseManager;
 import dev.larndt.rpg.states.GameState;
@@ -76,7 +77,7 @@ public class Game implements Runnable{
 	public void run() {
 		init();
 		
-		int fps = 60;
+		int fps = 60000;
 		double timePerTick = 1000000000 / fps;
 		double delta = 0;
 		long now;
@@ -134,7 +135,12 @@ public class Game implements Runnable{
 		
 		g.drawImage(image, 0, 0, null);
 		myGraphics.clear();
-		myGraphics.drawImage(Assets.player1, 10, 10);
+		
+		MyImage player2 = new MyImage(Assets.slime);
+		MyImage player1 = new MyImage(Assets.player1, true);
+		
+		myGraphics.drawImage(player2, 10, 10);
+		myGraphics.drawImage(player1, mouseManager.getMouseX(), mouseManager.getMouseY());
 		bs.show();
 		g.dispose();
 	}

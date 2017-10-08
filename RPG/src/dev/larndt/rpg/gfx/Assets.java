@@ -12,7 +12,7 @@ public class Assets {
 	public static BufferedImage[] tree1;
 
 	public static void init() {
-		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet.png"));
+		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet_trans.png"));
 		Spritesheet sheet2 = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet2.png"));
 		
 		loadPlayerImages();
