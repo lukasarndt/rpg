@@ -1,18 +1,18 @@
 package dev.larndt.rpg.inventory;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.items.Item;
+import dev.larndt.rpg.utilities.Timer;
 
 public class Inventory {
 	public static final int WIDTH = 32, HEIGHT = 32, START_X = 0, START_Y = 0;
 	
 	private Handler handler;
-	
+	private Timer timer;
 	private int 	sizeX = 3, sizeY = 3; 	// Size of the inventory.
 	private 		ItemSlot[][] itemSlots;
 	private int 	activeItemSlot;
@@ -29,8 +29,9 @@ public class Inventory {
 	public Inventory(Handler handler) {
 		this.handler = handler;
 		
-		itemSlots = new ItemSlot[sizeX][sizeY];
-		items = new ArrayList<Item>();
+		timer		= new Timer(100);
+		itemSlots 	= new ItemSlot[sizeX][sizeY];
+		items 		= new ArrayList<Item>();
 		
 		for(int i = 0; i < sizeX; i++) {
 			for(int j = 0; j < sizeY; j++) {
@@ -43,7 +44,7 @@ public class Inventory {
 	
 	public void tick(){
 		getInput();
-		counter++;
+		//counter++;
 	}
 	
 	public void render(Graphics g){
@@ -70,8 +71,8 @@ public class Inventory {
 		// Move around in the inventory.
 		
 		// It is possible to move around in the inventory every 5 frames.
-		if(counter > 5 || counter < 0) {
-			counter = 0;
+		if(timer.check()) {
+			//counter = 0;
 			if(handler.getKeyManager().right) {
 				if(activeItemSlot < sizeX*sizeY - 1 && (activeItemSlot%sizeX) != sizeX-1) {
 					activeItemSlot++;
