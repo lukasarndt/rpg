@@ -143,14 +143,14 @@ public class Game implements Runnable{
 		g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 		myGraphics.clear();
 		
-		for(int x = 0; x < image.getWidth(); x++) {
-			for(int y = 0; y < image.getHeight(); y++) {
-				//myGraphics.setLightMap(x, y, image.get);
-			}
-		}
-		
 		MyImage greenSquare = new MyImage(Assets.greenSquare);
 		MyImage orangeSquare = new MyImage(Assets.orangeSquare, true);
+		
+		for(int x = 0; x < greenSquare.getWidth(); x++) {
+			for(int y = 0; y < greenSquare.getHeight(); y++) {
+				myGraphics.setLightMap(x, y, greenSquare.getPixels()[x + y * greenSquare.getWidth()]);
+			}
+		}
 		
 		myGraphics.setzDepth(1);
 		myGraphics.drawImage(orangeSquare, mouseManager.getMouseX(), mouseManager.getMouseY());
