@@ -1,6 +1,9 @@
 package dev.larndt.rpg.gfx;
 
 import java.awt.image.DataBufferInt;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import dev.larndt.rpg.Game;
 import dev.larndt.rpg.Handler;
@@ -10,6 +13,8 @@ public class MyGraphics {
 	private int screenHeight;
 	private int[] pixels;
 	
+	private ArrayList<ImageRequest> imageRequestList = new ArrayList<ImageRequest>();
+	private boolean processing = false;
 	// Used for transparency
 	private int[] zAxis;
 	private int zDepth = 0;
@@ -17,14 +22,14 @@ public class MyGraphics {
 	// Lighting
 	private int[] lightMap;
 	private int[] lightBlock;
-	private int ambientColor = 0xff6b6b6b;
+	private int ambientColor = 0xffffffff;
 	
 	public MyGraphics(Handler handler) {
 		screenWidth 	= Game.WIDTH;
 		screenHeight 	= Game.HEIGHT;
 		pixels 			= ((DataBufferInt) handler.getGame().getImage().getRaster().getDataBuffer()).getData();
 		zAxis 			= new int[pixels.length];
-		lightMap		= new int[pixels.length];
+		lightMap			= new int[pixels.length];
 		lightBlock		= new int[pixels.length];
 	}
 	
@@ -35,9 +40,35 @@ public class MyGraphics {
 		for(int i = 0; i < pixels.length; i++) {
 			pixels[i] 		= 0;
 			zAxis[i] 		= 0;
-			lightMap[i] 	= ambientColor;
+			lightMap[i] 		= ambientColor;
 			lightBlock[i] 	= 0;
 		}
+	}
+	
+	public void process() {
+		processing = true;
+		
+		Collections.sort(imageRequestList, new Comparator<ImageRequest>() {
+
+			@Override
+			public int compare(ImageRequest o1, ImageRequest o2) {
+				if(o1.zDepth < o2.zDepth)
+					return -1;
+				if(o1.zDepth > o2.zDepth)
+					return 1;
+				return 0;
+			}
+			
+		});
+		
+		for(int i = 0; i < imageRequestList.size(); i++) {
+			ImageRequest imageRequest = imageRequestList.get(i);
+			setzDepth(imageRequest.zDepth);
+			drawImage(imageRequest.getImage(), imageRequest.x, imageRequest.y);
+		}
+		
+		imageRequestList.clear();
+		processing = false;
 	}
 	
 	/**
@@ -47,6 +78,11 @@ public class MyGraphics {
 	 * @param y			y-coordinate of top left corner of the image
 	 */
 	public void drawImage(MyImage image, int x, int y) {
+		if(image.isAlpha() && !processing) {
+			imageRequestList.add(new ImageRequest(image, zDepth, x, y));
+			return;
+		}
+		
 		// Do not draw if image is completely off the screen.
 		if(x < -image.getWidth() || y < -image.getHeight() || x >= screenWidth || y >= screenHeight) {
 			return;
@@ -84,7 +120,9 @@ public class MyGraphics {
 			float b = (lightMap[i] & 0xff) / 255f;
 			
 			// Merge pixels and lightMap
-			pixels[i] = ((int)(((pixels[i] >> 16) & 0xff) * r) << 16 | (int)(((pixels[i] >> 8) & 0xff) * g) << 8 | (int)((pixels[i] & 0xff) * b));
+			pixels[i] = ((int)(((pixels[i] >> 16) & 0xff) * r) << 16 |
+					(int)(((pixels[i] >> 8) & 0xff) * g) << 8 |
+					(int)((pixels[i] & 0xff) * b));
 		}
 	}
 	
@@ -101,21 +139,26 @@ public class MyGraphics {
 			return;
 		}
 		
-		if(zAxis[x + y * screenWidth] > zDepth) {
+		int index = x + y * screenWidth;
+		if(zAxis[index] > zDepth) {
 			return;
 		}
 		
-		if(alpha == 255) {
-			pixels[x + y * screenWidth] = value;
-		} else {
-			int pixelColor 	= pixels[x + y * screenWidth];
-			int red 		= ((pixelColor >> 16) & 0xff) - (int) ((((pixelColor >> 16) & 0xff) - ((value >> 16) & 0xff)) * (alpha/255f));
-			int green 		= ((pixelColor >> 8) & 0xff) - (int) ((((pixelColor >> 8) & 0xff) - ((value >> 8) & 0xff)) * (alpha/255f));
-			int blue 		= ((pixelColor) & 0xff) - (int) (((pixelColor & 0xff) - (value & 0xff)) * (alpha/255f));
-			
-			pixels[x + y * screenWidth] = (255 << 24 | red << 16 | green << 8 | blue);
-		}
+		zAxis[index] = zDepth;
 		
+		if(alpha == 255) {
+			pixels[index] = value;
+		} else {
+			int pixelColor 	= pixels[index];
+			int red 	= ((pixelColor >> 16) & 0xff) - 
+					(int) ((((pixelColor >> 16) & 0xff) - ((value >> 16) & 0xff)) * (alpha/255f));
+			int green = ((pixelColor >> 8) & 0xff) - 
+					(int) ((((pixelColor >> 8) & 0xff) - ((value >> 8) & 0xff)) * (alpha/255f));
+			int blue = ((pixelColor) & 0xff) - 
+					(int) (((pixelColor & 0xff) - (value & 0xff)) * (alpha/255f));
+			
+			pixels[index] = (255 << 24 | red << 16 | green << 8 | blue);
+		}	
 	}
 	
 	/**
@@ -132,7 +175,7 @@ public class MyGraphics {
 		int baseColor 	= lightMap[x + y * screenWidth];
 		
 		int maxRed		= Math.max((baseColor >> 16) & 0xff, (value >> 16) & 0xff);
-		int maxGreen	= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
+		int maxGreen		= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
 		int maxBlue		= Math.max(baseColor & 0xff, value & 0xff);
 		
 		lightMap[x + y * screenWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);
@@ -143,7 +186,7 @@ public class MyGraphics {
 	 * @param x			x-coordinate of top left corner
 	 * @param y			y-coordinate of top left corner
 	 * @param width		width if rectangle
-	 * @param height	height of rectangle
+	 * @param height		height of rectangle
 	 * @param color		color of rectangle
 	 */
 	public void drawRect(int x, int y, int width, int height, int color) {
@@ -162,7 +205,7 @@ public class MyGraphics {
 	 * @param x			x-coordinate of top left corner
 	 * @param y			y-coordinate of top left corner
 	 * @param width		width if rectangle
-	 * @param height	height of rectangle
+	 * @param height		height of rectangle
 	 * @param color		color of rectangle
 	 */
 	public void fillRect(int x, int y, int width, int height, int color) {
@@ -172,4 +215,14 @@ public class MyGraphics {
 			}
 		}
 	}
+
+	public int getzDepth() {
+		return zDepth;
+	}
+
+	public void setzDepth(int zDepth) {
+		this.zDepth = zDepth;
+	}
+	
+	
 }

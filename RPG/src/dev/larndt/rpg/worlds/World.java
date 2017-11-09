@@ -33,17 +33,21 @@ public class World {
 	private Player player;
 	private Textbox textbox;
 	
-	private float playerHealthBarThickness = 2f, playerHealthFraction = 1f, playerHealthBarWidth = 300f, playerHealthBarHeight = 25f;
+	private float playerHealthBarThickness = 2f;
+	private float playerHealthFraction = 1f; 
+	private float playerHealthBarWidth = 300f; 
+	private float playerHealthBarHeight = 25f;
+	
 	private Color playerHealthBarColor = Color.BLACK, oldColor;
 	private Stroke oldStroke;
 
 	public World(Handler handler, String path) {
 		this.handler 	= handler;
 		pathfinder 		= new AStar(handler, this);
-		itemManager 	= new ItemManager(handler);
+		itemManager 		= new ItemManager(handler);
 		player 			= new Player(handler, 50, 50);
 		entityManager 	= new EntityManager(handler, player);
-		textbox 		= new Textbox(handler);
+		textbox 			= new Textbox(handler);
 		
 		fillWorld();
 		loadWorld(path);

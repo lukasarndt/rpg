@@ -132,7 +132,7 @@ public class Game implements Runnable{
 			StateManager.getState().render(g);
 		}
 		// End Drawing
-		
+		myGraphics.process();
 		lightingRender();
 		
 		bs.show();
@@ -149,11 +149,13 @@ public class Game implements Runnable{
 			}
 		}
 		
-		MyImage player2 = new MyImage(Assets.slime);
-		MyImage player1 = new MyImage(Assets.player1, true);
+		MyImage greenSquare = new MyImage(Assets.greenSquare);
+		MyImage orangeSquare = new MyImage(Assets.orangeSquare, true);
 		
-		myGraphics.drawImage(player2, 10, 10);
-		myGraphics.drawImage(player1, mouseManager.getMouseX(), mouseManager.getMouseY());
+		myGraphics.setzDepth(1);
+		myGraphics.drawImage(orangeSquare, mouseManager.getMouseX(), mouseManager.getMouseY());
+		myGraphics.setzDepth(0);
+		myGraphics.drawImage(greenSquare, 10, 10);
 	}
 	
 	public synchronized void start() {
