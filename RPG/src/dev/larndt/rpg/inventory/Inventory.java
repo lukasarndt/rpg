@@ -13,7 +13,8 @@ public class Inventory {
 	
 	private Handler handler;
 	private Timer timer;
-	private int 	sizeX = 3, sizeY = 3; 	// Size of the inventory.
+	
+	private int 	sizeX = 3, sizeY = 3;
 	private 		ItemSlot[][] itemSlots;
 	private int 	activeItemSlot;
 	
@@ -21,10 +22,10 @@ public class Inventory {
 
 	private ArrayList<Item> items;
 	
-	private long 	counter;
-	
-	private boolean itemGrabbed = false, lastKeyState, currentKeyState;
-	private Item itemToGrab = null;
+	private boolean itemGrabbed 	= false;
+	private boolean lastKeyState; 
+	private boolean currentKeyState;
+	private Item 	itemToGrab 	= null;
 
 	public Inventory(Handler handler) {
 		this.handler = handler;
@@ -44,7 +45,6 @@ public class Inventory {
 	
 	public void tick(){
 		getInput();
-		//counter++;
 	}
 	
 	public void render(Graphics g){
@@ -72,7 +72,6 @@ public class Inventory {
 		
 		// It is possible to move around in the inventory every 5 frames.
 		if(timer.check()) {
-			//counter = 0;
 			if(handler.getKeyManager().right) {
 				if(activeItemSlot < sizeX*sizeY - 1 && (activeItemSlot%sizeX) != sizeX-1) {
 					activeItemSlot++;

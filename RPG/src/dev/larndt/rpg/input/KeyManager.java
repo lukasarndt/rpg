@@ -5,22 +5,20 @@ import java.awt.event.KeyListener;
 
 import dev.larndt.rpg.collision.Quadtree;
 import dev.larndt.rpg.entities.Entity;
+import dev.larndt.rpg.utilities.Timer;
 
 public class KeyManager implements KeyListener{
 	private boolean[] keys;
 	public boolean up, down, left, right, attackKey, inventoryKey, actionKey, enter;
 	
-	private long lastTime, now, counter = 0;
+	private Timer timer;
 	
 	public KeyManager() {
 		keys = new boolean[256];
-		now = System.currentTimeMillis();
+		timer = new Timer(500);
 	}
 	
 	public void tick() {
-		lastTime = now;
-		now = System.currentTimeMillis();
-		counter += now - lastTime;
 		
 		up = keys[KeyEvent.VK_W];
 		down = keys[KeyEvent.VK_S];
@@ -35,12 +33,11 @@ public class KeyManager implements KeyListener{
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(counter > 500 && 
+		if(timer.check() && 
 				(e.getKeyCode()==KeyEvent.VK_SPACE 
 					|| e.getKeyCode()==KeyEvent.VK_E 
 					|| e.getKeyCode()==KeyEvent.VK_ENTER)) {
 			keys[e.getKeyCode()] = true;
-			counter = 0;
 		} else {
 			keys[e.getKeyCode()] = true;
 		}

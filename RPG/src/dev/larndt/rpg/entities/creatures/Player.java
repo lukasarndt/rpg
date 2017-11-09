@@ -48,7 +48,7 @@ public class Player extends Creature{
 		this.setBounds(2, 2, width-4, height-4);
 		
 		speed 		= 3;
-		canMove 	= true;
+		canMove 		= true;
 		hunger 		= maxFood;
 		
 		animDown 	= new Animation(500, Assets.player_down);
@@ -110,13 +110,15 @@ public class Player extends Creature{
 
 			if(direction == PLAYER_DOWN) {
 				g.drawImage(Assets.swordDown, (int) (x - handler.getGameCamera().getxOffset()), 
-						(int) (y + Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
+						(int) (y + Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()), 
+						Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
 			} else if(direction == PLAYER_LEFT){
 				g.drawImage(Assets.swordLeft, (int)(x - Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()), 
 						(int) (y - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
 			} else if(direction == PLAYER_UP) {
 				g.drawImage(Assets.swordUp, (int) (x - handler.getGameCamera().getxOffset()), 
-						(int) (y - Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
+						(int) (y - Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()), 
+						Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
 			} else if(direction == PLAYER_RIGHT) {
 				g.drawImage(Assets.swordRight, (int) (x + Tile.TILE_WIDTH - handler.getGameCamera().getxOffset()), 
 						(int) (y - handler.getGameCamera().getyOffset()), Tile.TILE_WIDTH, Tile.TILE_HEIGHT, null);
@@ -181,7 +183,8 @@ public class Player extends Creature{
 			if(e.equals(this)) {
 				continue;
 			}
-			if(e.getCollisionBounds(-2, 0).intersects(this.getCollisionBounds(0, 0)) || e.getCollisionBounds(2, 0).intersects(this.getCollisionBounds(0, 0))) {
+			if(e.getCollisionBounds(-2, 0).intersects(this.getCollisionBounds(0, 0)) ||
+					e.getCollisionBounds(2, 0).intersects(this.getCollisionBounds(0, 0))) {
 				this.hurt(e.getAttackStrength());
 			}
 			if(e.getCollisionBounds(0, 0).intersects(attackRectangle)) {
