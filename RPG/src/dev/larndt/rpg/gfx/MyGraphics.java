@@ -15,6 +15,7 @@ public class MyGraphics {
 	
 	private ArrayList<ImageRequest> imageRequestList = new ArrayList<ImageRequest>();
 	private boolean processing = false;
+	
 	// Used for transparency
 	private int[] zAxis;
 	private int zDepth = 0;
@@ -65,6 +66,16 @@ public class MyGraphics {
 			ImageRequest imageRequest = imageRequestList.get(i);
 			setzDepth(imageRequest.zDepth);
 			drawImage(imageRequest.getImage(), imageRequest.x, imageRequest.y);
+		}
+		
+		for(int i = 0; i < pixels.length; i++) {
+			float red = ((lightMap[i] >> 16) & 0xff) / 255f;
+			float green = ((lightMap[i] >> 8) & 0xff) / 255f;
+			float blue = (lightMap[i] & 0xff) / 255f;
+			
+			pixels[i] = ((int) (((pixels[i] >> 16) & 0xff) * red) << 16|
+					(int) (((pixels[i] >> 8) & 0xff) * green) << 8 |
+					(int) ((pixels[i] & 0xff) * blue));
 		}
 		
 		imageRequestList.clear();
@@ -157,7 +168,7 @@ public class MyGraphics {
 			int blue = ((pixelColor) & 0xff) - 
 					(int) (((pixelColor & 0xff) - (value & 0xff)) * (alpha/255f));
 			
-			pixels[index] = (255 << 24 | red << 16 | green << 8 | blue);
+			pixels[index] = (red << 16 | green << 8 | blue);
 		}	
 	}
 	
@@ -175,7 +186,7 @@ public class MyGraphics {
 		int baseColor 	= lightMap[x + y * screenWidth];
 		
 		int maxRed		= Math.max((baseColor >> 16) & 0xff, (value >> 16) & 0xff);
-		int maxGreen		= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
+		int maxGreen	= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
 		int maxBlue		= Math.max(baseColor & 0xff, value & 0xff);
 		
 		lightMap[x + y * screenWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);
@@ -209,8 +220,8 @@ public class MyGraphics {
 	 * @param color		color of rectangle
 	 */
 	public void fillRect(int x, int y, int width, int height, int color) {
-		for(int j = 0; j <= height; j++) {
-			for(int i = 0; i <= width; i++) {
+		for(int j = 0; j < height; j++) {
+			for(int i = 0; i < width; i++) {
 				setPixel(i + x, j + y, color);
 			}
 		}
