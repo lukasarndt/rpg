@@ -23,7 +23,7 @@ public class MyGraphics {
 	// Lighting
 	private int[] lightMap;
 	private int[] lightBlock;
-	private int ambientColor = 0xffffffff;
+	private int ambientColor = 0xff6b6b6b;
 	
 	public MyGraphics(Handler handler) {
 		screenWidth 	= Game.WIDTH;
@@ -68,12 +68,13 @@ public class MyGraphics {
 			drawImage(imageRequest.getImage(), imageRequest.x, imageRequest.y);
 		}
 		
+		// Merging light map and pixel map
 		for(int i = 0; i < pixels.length; i++) {
 			float red = ((lightMap[i] >> 16) & 0xff) / 255f;
 			float green = ((lightMap[i] >> 8) & 0xff) / 255f;
 			float blue = (lightMap[i] & 0xff) / 255f;
 			
-			pixels[i] = ((int) (((pixels[i] >> 16) & 0xff) * red) << 16|
+			pixels[i] = ((int) (((pixels[i] >> 16) & 0xff) * red) << 16 |
 					(int) (((pixels[i] >> 8) & 0xff) * green) << 8 |
 					(int) ((pixels[i] & 0xff) * blue));
 		}
@@ -125,7 +126,7 @@ public class MyGraphics {
 			}
 		}
 		
-		for(int i = 0; i < pixels.length; i++) {
+		/*for(int i = 0; i < pixels.length; i++) {
 			float r = ((lightMap[i] >> 16) & 0xff) / 255f;
 			float g = ((lightMap[i] >> 8) & 0xff) / 255f;
 			float b = (lightMap[i] & 0xff) / 255f;
@@ -134,7 +135,7 @@ public class MyGraphics {
 			pixels[i] = ((int)(((pixels[i] >> 16) & 0xff) * r) << 16 |
 					(int)(((pixels[i] >> 8) & 0xff) * g) << 8 |
 					(int)((pixels[i] & 0xff) * b));
-		}
+		}*/
 	}
 	
 	/**
@@ -186,7 +187,7 @@ public class MyGraphics {
 		int baseColor 	= lightMap[x + y * screenWidth];
 		
 		int maxRed		= Math.max((baseColor >> 16) & 0xff, (value >> 16) & 0xff);
-		int maxGreen	= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
+		int maxGreen		= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
 		int maxBlue		= Math.max(baseColor & 0xff, value & 0xff);
 		
 		lightMap[x + y * screenWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);

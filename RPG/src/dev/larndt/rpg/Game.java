@@ -145,17 +145,18 @@ public class Game implements Runnable{
 		
 		MyImage greenSquare = new MyImage(Assets.greenSquare);
 		MyImage orangeSquare = new MyImage(Assets.orangeSquare, true);
+		MyImage light = new MyImage(Assets.light);
 		
-		for(int x = 0; x < greenSquare.getWidth(); x++) {
-			for(int y = 0; y < greenSquare.getHeight(); y++) {
-				myGraphics.setLightMap(x, y, greenSquare.getPixels()[x + y * greenSquare.getWidth()]);
+		for(int x = 0; x < light.getWidth(); x++) {
+			for(int y = 0; y < light.getHeight(); y++) {
+				myGraphics.setLightMap(x, y, light.getPixels()[x + y * light.getWidth()]);
 			}
 		}
 		
-		myGraphics.setzDepth(1);
-		myGraphics.drawImage(orangeSquare, mouseManager.getMouseX(), mouseManager.getMouseY());
-		myGraphics.setzDepth(0);
-		myGraphics.drawImage(greenSquare, 10, 10);
+		//myGraphics.setzDepth(1);
+		myGraphics.drawImage(greenSquare, mouseManager.getMouseX(), mouseManager.getMouseY());
+		//myGraphics.setzDepth(0);
+		//myGraphics.drawImage(greenSquare, 10, 10);
 	}
 	
 	public synchronized void start() {
