@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import dev.larndt.rpg.display.Display;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.gfx.GameCamera;
+import dev.larndt.rpg.gfx.Light;
 import dev.larndt.rpg.gfx.MyGraphics;
 import dev.larndt.rpg.gfx.MyImage;
 import dev.larndt.rpg.input.KeyManager;
@@ -41,6 +42,7 @@ public class Game implements Runnable{
 	//LIGHTING STUFF
 	private BufferedImage image;
 	private MyGraphics myGraphics;
+	private Light light;
 	
 	public Game(String title, int width, int height) {
 		//this.WIDTH = width;
@@ -72,6 +74,7 @@ public class Game implements Runnable{
 		
 		image			= new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		myGraphics		= new MyGraphics(handler);
+		light			= new Light(1000, 0xff00ffff);
 	}
 
 	public void run() {
@@ -139,24 +142,29 @@ public class Game implements Runnable{
 		g.dispose();
 	}
 	
+	int sunX = 0;
 	public void lightingRender() {
 		g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 		myGraphics.clear();
 		
 		MyImage greenSquare = new MyImage(Assets.greenSquare);
 		MyImage orangeSquare = new MyImage(Assets.orangeSquare, true);
-		MyImage light = new MyImage(Assets.light);
+		MyImage test = new MyImage(Assets.test);
 		
-		for(int x = 0; x < light.getWidth(); x++) {
-			for(int y = 0; y < light.getHeight(); y++) {
-				myGraphics.setLightMap(x, y, light.getPixels()[x + y * light.getWidth()]);
-			}
-		}
 		
 		//myGraphics.setzDepth(1);
-		myGraphics.drawImage(greenSquare, mouseManager.getMouseX(), mouseManager.getMouseY());
+		
 		//myGraphics.setzDepth(0);
-		//myGraphics.drawImage(greenSquare, 10, 10);
+		greenSquare.setLightBlock(Light.FULL);
+		myGraphics.drawImage(test, 0, 0);
+		myGraphics.drawImage(greenSquare, 300, 300);
+		
+		
+		myGraphics.drawLight(light, sunX, 0);
+		sunX+=10;
+		if(sunX > WIDTH + 500) {
+			sunX = -500;
+		}
 	}
 	
 	public synchronized void start() {

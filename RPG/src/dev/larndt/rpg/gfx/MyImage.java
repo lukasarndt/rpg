@@ -6,6 +6,7 @@ public class MyImage {
 	private int width;
 	private int height;
 	private boolean alpha = false;
+	private int lightBlock = Light.NONE;
 	
 	private int[] pixels;
 	
@@ -71,4 +72,13 @@ public class MyImage {
 		this.alpha = alpha;
 	}
 
+	public int getLightBlock() {
+		return lightBlock;
+	}
+
+	public void setLightBlock(int lightBlock) {
+		this.lightBlock = lightBlock;
+	}
+
+	
 }

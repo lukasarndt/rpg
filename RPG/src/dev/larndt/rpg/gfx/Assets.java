@@ -11,7 +11,7 @@ public class Assets {
 	public static BufferedImage[] start_button;
 	public static BufferedImage[] tree1;
 	
-	public static BufferedImage light, greenSquare, orangeSquare;
+	public static BufferedImage light, greenSquare, orangeSquare, test;
 
 	public static void init() {
 		Spritesheet sheet = new Spritesheet(ImageLoader.loadImage("/textures/spritesheet_trans.png"));
@@ -20,6 +20,7 @@ public class Assets {
 		light = ImageLoader.loadImage("/textures/light.png");
 		greenSquare = ImageLoader.loadImage("/textures/greenSquare.png");
 		orangeSquare = ImageLoader.loadImage("/textures/orangeSquare.png");
+		test = ImageLoader.loadImage("/textures/test2.png");
 		
 		loadPlayerImages();
 		loadTree();

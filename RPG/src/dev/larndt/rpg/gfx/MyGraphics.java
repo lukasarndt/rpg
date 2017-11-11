@@ -23,14 +23,14 @@ public class MyGraphics {
 	// Lighting
 	private int[] lightMap;
 	private int[] lightBlock;
-	private int ambientColor = 0xff6b6b6b;
+	private int ambientColor = 0xff232323;
 	
 	public MyGraphics(Handler handler) {
 		screenWidth 	= Game.WIDTH;
 		screenHeight 	= Game.HEIGHT;
 		pixels 			= ((DataBufferInt) handler.getGame().getImage().getRaster().getDataBuffer()).getData();
 		zAxis 			= new int[pixels.length];
-		lightMap			= new int[pixels.length];
+		lightMap		= new int[pixels.length];
 		lightBlock		= new int[pixels.length];
 	}
 	
@@ -41,7 +41,7 @@ public class MyGraphics {
 		for(int i = 0; i < pixels.length; i++) {
 			pixels[i] 		= 0;
 			zAxis[i] 		= 0;
-			lightMap[i] 		= ambientColor;
+			lightMap[i] 	= ambientColor;
 			lightBlock[i] 	= 0;
 		}
 	}
@@ -123,19 +123,9 @@ public class MyGraphics {
 		for(int j = yStart; j < imageHeight; j++) {
 			for(int i = xStart; i < imageWidth; i++) {
 				setPixel(i + x, j + y, image.getPixels()[i + j * image.getWidth()]);
+				setLightBlock(i + x, j + y, image.getLightBlock());
 			}
 		}
-		
-		/*for(int i = 0; i < pixels.length; i++) {
-			float r = ((lightMap[i] >> 16) & 0xff) / 255f;
-			float g = ((lightMap[i] >> 8) & 0xff) / 255f;
-			float b = (lightMap[i] & 0xff) / 255f;
-			
-			// Merge pixels and lightMap
-			pixels[i] = ((int)(((pixels[i] >> 16) & 0xff) * r) << 16 |
-					(int)(((pixels[i] >> 8) & 0xff) * g) << 8 |
-					(int)((pixels[i] & 0xff) * b));
-		}*/
 	}
 	
 	/**
@@ -162,7 +152,7 @@ public class MyGraphics {
 			pixels[index] = value;
 		} else {
 			int pixelColor 	= pixels[index];
-			int red 	= ((pixelColor >> 16) & 0xff) - 
+			int red = ((pixelColor >> 16) & 0xff) - 
 					(int) ((((pixelColor >> 16) & 0xff) - ((value >> 16) & 0xff)) * (alpha/255f));
 			int green = ((pixelColor >> 8) & 0xff) - 
 					(int) ((((pixelColor >> 8) & 0xff) - ((value >> 8) & 0xff)) * (alpha/255f));
@@ -187,12 +177,78 @@ public class MyGraphics {
 		int baseColor 	= lightMap[x + y * screenWidth];
 		
 		int maxRed		= Math.max((baseColor >> 16) & 0xff, (value >> 16) & 0xff);
-		int maxGreen		= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
+		int maxGreen	= Math.max((baseColor >> 8) & 0xff, (value >> 8) & 0xff);
 		int maxBlue		= Math.max(baseColor & 0xff, value & 0xff);
 		
 		lightMap[x + y * screenWidth] = (maxRed << 16 | maxGreen << 8 | maxBlue);
 	}
 	
+	public void setLightBlock(int x, int y, int value) {
+		if(x < 0 || x >= screenWidth || y < 0 || y >= screenHeight) {
+			return;
+		}
+		
+		if(zAxis[x + y * screenWidth] > zDepth) {
+			return;
+		}
+		
+		lightBlock[x + y * screenWidth] = value;
+	}
+	
+	public void drawLight(Light light, int x, int y) {
+		for(int i = 0; i <= light.getDiameter(); i++) {
+			drawLightLine(light, light.getRadius(), light.getRadius(), i, 0, x , y);
+			drawLightLine(light, light.getRadius(), light.getRadius(), i, light.getDiameter(), x, y);
+			drawLightLine(light, light.getRadius(), light.getRadius(), 0 , i, x, y);
+			drawLightLine(light, light.getRadius(), light.getRadius(), light.getDiameter(), i, x, y);
+		}
+	}
+	
+	public void drawLightLine(Light light, int x0, int y0, int x1, int y1, int x, int y) {
+		// Using Bresenham algorithm
+		int dx = Math.abs(x1-x0);
+		int dy = Math.abs(y1-x0);
+		
+		int sx = x0 < x1 ? 1 : -1;
+		int sy = y0 < y1 ? 1 : -1;
+		
+		int err = dx- dy;
+		int e2;
+		
+		while(true) {
+			int screenX = x0 - light.getRadius() + x;
+			int screenY = y0 - light.getRadius() + y;
+			if(screenX < 0 || screenX >= screenWidth || screenY < 0 || screenY >= screenHeight) {
+				return;
+			}
+			
+			int lightColor = light.getLight(x0, y0);
+			if(lightColor == 0) {
+				return;
+			}
+			
+			if(lightBlock[screenX + screenY * screenWidth] == Light.FULL) {
+				return;
+			}
+			
+			setLightMap(screenX, screenY, lightColor);
+			
+			if(x0 == x1 && y0 == y1) {
+				break;
+			}
+			
+			e2 = 2 * err;
+			if(e2 > -1 * dy) {
+				err -= dy;
+				x0 += sx;
+			}
+			
+			if(e2 < dx) {
+				err += dx;
+				y0 += sy;
+			}
+		}
+	}
 	/**
 	 * Draws a rectangle.
 	 * @param x			x-coordinate of top left corner
@@ -235,6 +291,8 @@ public class MyGraphics {
 	public void setzDepth(int zDepth) {
 		this.zDepth = zDepth;
 	}
-	
-	
+
+	public int[] getLightMap() {
+		return lightMap;
+	}
 }
