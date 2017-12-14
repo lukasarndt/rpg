@@ -2,7 +2,6 @@ package dev.larndt.rpg;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-
 import dev.larndt.rpg.display.Display;
 import dev.larndt.rpg.gfx.Assets;
 import dev.larndt.rpg.gfx.GameCamera;
@@ -10,7 +9,6 @@ import dev.larndt.rpg.input.KeyManager;
 import dev.larndt.rpg.input.MouseManager;
 import dev.larndt.rpg.states.GameState;
 import dev.larndt.rpg.states.MenuState;
-//import dev.larndt.rpg.states.MenuState;
 import dev.larndt.rpg.states.State;
 import dev.larndt.rpg.states.StateManager;
 
@@ -35,9 +33,7 @@ public class Game implements Runnable{
 	
 	private Handler handler;
 	
-	public Game(String title, int width, int height) {
-		//this.WIDTH = width;
-		//this.height = height;
+	public Game(String title) {
 		this.title = title;
 		
 		keyManager = new KeyManager();
@@ -83,7 +79,6 @@ public class Game implements Runnable{
 				delta -= timePerTick;
 			}
 			if(timer >= 1000000000) {
-				//System.out.println("ticks: " + ticks);
 				display.getFrame().setTitle(title + " | fps: " + ticks);
 				
 				ticks = 0;
@@ -112,6 +107,7 @@ public class Game implements Runnable{
 
 		// Clear Screen
 		g.clearRect(0, 0, WIDTH, HEIGHT);
+		
 		// Start Drawing
 		if(StateManager.getState() != null) {
 			StateManager.getState().render(g);
@@ -130,7 +126,9 @@ public class Game implements Runnable{
 		running = true;
 		
 		thread = new Thread(this);
-		thread.start(); // Calls the run method.
+		
+		// This calls the run method.
+		thread.start();
 	}
 	
 	public synchronized void stop() {
@@ -147,7 +145,10 @@ public class Game implements Runnable{
 		}
 	}
 	
-	//GETTERS & SETTER
+	
+	  /////////////////////
+	 // GETTER & SETTER //
+	/////////////////////
 	
 	public KeyManager getKeyManager() {
 		return keyManager;
@@ -165,17 +166,9 @@ public class Game implements Runnable{
 		return WIDTH;
 	}
 
-	/*public void setWidth(int width) {
-		this.WIDTH = width;
-	}*/
-
 	public int getHeight() {
 		return HEIGHT;
 	}
-
-	/*public void setHeight(int height) {
-		this.height = height;
-	}*/
 
 	public State getGameState() {
 		return gameState;
@@ -184,7 +177,4 @@ public class Game implements Runnable{
 	public State getMenuState() {
 		return menuState;
 	}
-	
-	
-	
 }
