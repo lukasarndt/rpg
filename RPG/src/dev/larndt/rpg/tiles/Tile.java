@@ -6,8 +6,9 @@ import java.awt.image.BufferedImage;
 public class Tile {
 	public static Tile[] tiles 		= new Tile[256];
 	public static Tile grassTile 	= new GrassTile(0);
-	public static Tile dirtTile 	= new DirtTile(1);
+	public static Tile dirtTile 		= new DirtTile(1);
 	public static Tile stoneTile 	= new StoneTile(2);
+	public static Tile waterTile		= new WaterTile(3);
 	
 	public static final int TILE_WIDTH = 64,
 							TILE_HEIGHT = 64;
@@ -31,12 +32,11 @@ public class Tile {
 	}
 	
 	public void render(Graphics g, int x, int y) {
+		render(texture, g, x, y);
+	}
+	
+	public void render(BufferedImage texture, Graphics g, int x, int y) {
 		g.drawImage(texture, x, y, TILE_WIDTH, TILE_HEIGHT, null);
-		
-		/*Color oldColor = g.getColor();
-		g.setColor(Color.RED);
-		g.drawRect(x, y, TILE_WIDTH, TILE_HEIGHT);
-		g.setColor(oldColor);*/
 	}
 	
 	// GETTERS & SETTERS

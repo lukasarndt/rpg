@@ -20,7 +20,9 @@ public abstract class Creature extends Entity{
 	protected static final float DEFAULT_SPEED = 3.0f;
 	
 	protected float speed, xMove, yMove;
-	protected int healthBarThickness = 1, healthBarWidth = DEFAULT_CREATURE_WIDTH, healthBarHeight = 10;
+	protected int healthBarThickness = 1;
+	protected int healthBarWidth = DEFAULT_CREATURE_WIDTH;
+	protected int healthBarHeight = 10;
 	
 	protected Color healthBarColor = Color.BLACK;
 	
@@ -65,7 +67,8 @@ public abstract class Creature extends Entity{
 	
 	public void moveX() {
 		if(xMove > 0) { // Moving right
-			int tx = (int) (x + xMove + entityBounds.x + entityBounds.width)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
+			// x Coordinate of the tiles we are about to move into.
+			int tx = (int) (x + xMove + entityBounds.x + entityBounds.width)/Tile.TILE_WIDTH;
 			if(!collisionWithTile(tx, (int) (y + entityBounds.y)/Tile.TILE_HEIGHT) && 
 					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT) &&
 					!checkEntityCollisions(xMove, 0)) {
@@ -74,7 +77,8 @@ public abstract class Creature extends Entity{
 				x = tx * Tile.TILE_WIDTH - entityBounds.x - entityBounds.width - 1;
 			}
 		} else if(xMove < 0) { // Moving left
-			int tx = (int) (x + xMove + entityBounds.x)/Tile.TILE_WIDTH; // x Coordinate of the tiles we are about to move into.
+			// x Coordinate of the tiles we are about to move into.
+			int tx = (int) (x + xMove + entityBounds.x)/Tile.TILE_WIDTH;
 			if(!collisionWithTile(tx, (int) ((y + entityBounds.y)/Tile.TILE_HEIGHT)) && 
 					!collisionWithTile(tx, (int) (y + entityBounds.y + entityBounds.height)/Tile.TILE_HEIGHT)) {
 				x += xMove;
@@ -86,7 +90,8 @@ public abstract class Creature extends Entity{
 	
 	public void moveY() {
 		if(yMove < 0) { // Moving up
-			int ty = (int) (y + yMove + entityBounds.y)/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
+			// y Coordinate of the tiles we are about to move into.
+			int ty = (int) (y + yMove + entityBounds.y)/Tile.TILE_HEIGHT;
 			if(!collisionWithTile((int)((x + entityBounds.x) / Tile.TILE_WIDTH) , ty) &&
 					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width) / Tile.TILE_WIDTH) , ty) ) {
 				y += yMove;
@@ -94,7 +99,8 @@ public abstract class Creature extends Entity{
 				y = ty * Tile.TILE_HEIGHT + Tile.TILE_HEIGHT - entityBounds.y;
 			}
 		}else if(yMove > 0) { // Moving down
-			int ty = (int) (y + yMove + entityBounds.y + entityBounds.height )/Tile.TILE_HEIGHT; // x Coordinate of the tiles we are about to move into.
+			// y Coordinate of the tiles we are about to move into.
+			int ty = (int) (y + yMove + entityBounds.y + entityBounds.height )/Tile.TILE_HEIGHT;
 			if(!collisionWithTile((int)((x + entityBounds.x) / Tile.TILE_WIDTH) , ty) &&
 					!collisionWithTile((int)((x + entityBounds.x + entityBounds.width) / Tile.TILE_WIDTH) , ty) ) {
 				y += yMove;
@@ -113,9 +119,15 @@ public abstract class Creature extends Entity{
 		
 		g2.setStroke(new BasicStroke(healthBarThickness));
 		g2.setColor(Color.RED);
-		g2.fillRect((int) (x - handler.getGameCamera().getxOffset()), (int) (y - 20 - handler.getGameCamera().getyOffset()), (int) (healthBarWidth*healthFraction), (int)healthBarHeight);
+		g2.fillRect((int) (x - handler.getGameCamera().getxOffset()),
+				(int) (y - 20 - handler.getGameCamera().getyOffset()),
+				(int) (healthBarWidth*healthFraction),
+				(int)healthBarHeight);
 		g2.setColor(healthBarColor);
-		g2.drawRect((int) (x - handler.getGameCamera().getxOffset()), (int) (y - 20 - handler.getGameCamera().getyOffset()), (int) healthBarWidth, (int) healthBarHeight);	
+		g2.drawRect((int) (x - handler.getGameCamera().getxOffset()),
+				(int) (y - 20 - handler.getGameCamera().getyOffset()),
+				(int) healthBarWidth,
+				(int) healthBarHeight);	
 		g2.setColor(oldColor);
 		g2.setStroke(oldStroke);
 	}
@@ -126,13 +138,18 @@ public abstract class Creature extends Entity{
 	
 	public void printPosition(int i) {
 		if(i == 0) {
-			System.out.println("Position in pixels: (" + (int)this.x + "," + (int)this.y + ")");
+			System.out.println("Position in pixels: (" + (int)this.x
+					+ "," + (int)this.y + ")");
 		} else {
-			System.out.println("Position in tiles: (" + (int)this.x / Tile.TILE_WIDTH + "," + (int)this.y/ Tile.TILE_HEIGHT + ")");
+			System.out.println("Position in tiles: (" + (int)this.x / Tile.TILE_WIDTH
+					+ "," + (int)this.y/ Tile.TILE_HEIGHT + ")");
 		}
 	}
+
+	 ///////////////////////
+	// GETTERS & SETTERS //
+   ///////////////////////
 	
-	// GETTERS & SETTERS
 	public int getHealth() {
 		return health;
 	}

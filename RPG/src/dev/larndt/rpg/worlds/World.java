@@ -23,9 +23,17 @@ import dev.larndt.rpg.utilities.Utilities;
 
 public class World {
 	private Handler handler;
-	private int width, height; // In tiles!
+	
+	// Width and height are in terms of tiles!
+	private int width, height;
+	
 	private int spawnX, spawnY; 
-	private int[][] tiles; // Holds the IDs of the tile at every position in the world.
+	
+	// Holds the IDs of the tile at every position in the world.
+	private int[][] tiles; 
+	
+	private int xStart, xEnd, yStart, yEnd;
+	
 	private EntityManager entityManager;
 	private ItemManager itemManager;
 	private AStar pathfinder;
@@ -56,14 +64,21 @@ public class World {
 		entityManager.tick();
 		itemManager.tick();
 		textbox.tick();
+		
+		// Ticks the tile at position (x,y) in the world.
+		xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILE_WIDTH);
+		xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset()+ handler.getWidth()) / Tile.TILE_WIDTH + 1);
+		yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILE_HEIGHT);
+		yEnd = (int) Math.min(width, (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILE_HEIGHT + 1);
+				
+		for(int y = yStart; y < yEnd; y++) {
+			for(int x = xStart; x < xEnd; x++) {
+				getTile(x,y).tick();
+			}
+		}
 	}
 	
 	public void render(Graphics g) {
-		int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILE_WIDTH);
-		int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset()+ handler.getWidth()) / Tile.TILE_WIDTH + 1);
-		int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILE_HEIGHT);
-		int yEnd = (int) Math.min(width, (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILE_HEIGHT + 1);
-		
 		// Renders the Tile at position (x,y) in the world.
 		for(int y = yStart; y < yEnd; y++) {
 			for(int x = xStart; x < xEnd; x++) {
