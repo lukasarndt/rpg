@@ -67,6 +67,7 @@ public class Player extends Creature{
 		
 		tickAnimation();
 		getInput();
+		checkGround();
 		
 		if(!this.inventory.isActive() && canMove) {
 			move();

@@ -11,6 +11,7 @@ import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.entities.Entity;
 import dev.larndt.rpg.pathfinding.Node;
 import dev.larndt.rpg.tiles.Tile;
+import dev.larndt.rpg.tiles.WaterTile;
 
 public abstract class Creature extends Entity{
 	 
@@ -19,7 +20,10 @@ public abstract class Creature extends Entity{
 	
 	protected static final float DEFAULT_SPEED = 3.0f;
 	
-	protected float speed, xMove, yMove;
+	protected float speed;
+	protected float waterSpeed;
+	protected float xMove;
+	protected float yMove;
 	protected int healthBarThickness = 1;
 	protected int healthBarWidth = DEFAULT_CREATURE_WIDTH;
 	protected int healthBarHeight = 10;
@@ -31,6 +35,7 @@ public abstract class Creature extends Entity{
 	public Creature(Handler handler, float x, float y, int width, int height) {
 		super(handler, x, y, width, height);
 		speed = DEFAULT_SPEED;
+		waterSpeed = speed - 1;
 		xMove = 0f;
 		yMove = 0f;
 	}
@@ -132,8 +137,24 @@ public abstract class Creature extends Entity{
 		g2.setStroke(oldStroke);
 	}
 	
+	public void checkGround() {
+		if(this.getCurrentTile() instanceof WaterTile) {
+			speed = .5f;
+			xMove = 2;
+		} else {
+			speed = DEFAULT_SPEED;
+		}
+	}
+	
 	protected boolean collisionWithTile(int x, int y) {
 		return handler.getWorld().getTile(x, y).isSolid();
+	}
+	
+	public Tile getCurrentTile() {
+		int xInTiles = (int)((x + width/2) / Tile.TILE_WIDTH);
+		int yInTiles = (int)((y + height/2) / Tile.TILE_HEIGHT);
+		Tile tile = handler.getWorld().getTile(xInTiles, yInTiles);
+		return tile;
 	}
 	
 	public void printPosition(int i) {

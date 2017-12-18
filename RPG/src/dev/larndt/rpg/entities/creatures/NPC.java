@@ -6,34 +6,45 @@ import java.awt.image.BufferedImage;
 
 import dev.larndt.rpg.Handler;
 import dev.larndt.rpg.display.Textbox;
+import dev.larndt.rpg.utilities.Timer;
 
 public class NPC extends Creature{
 	
 	private String text, bubbleText;
 	private boolean drawBubble = false;
+	private Timer bubbleTimer;
 	
 	public NPC(Handler handler, float x, float y, BufferedImage image) {
-		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+		super(handler, x, y, 
+				Creature.DEFAULT_CREATURE_WIDTH, 
+				Creature.DEFAULT_CREATURE_HEIGHT);
 		this.image= image;
 		this.attackStrength = 0;
-		this.text = "Hallo, ich bin ein NPC.";
-		this.bubbleText = "";
+		text = "Hallo, ich bin ein NPC.";
+		bubbleText = "";
+		bubbleTimer = new Timer(1500);
 	}
 
 	@Override
 	public void tick() {
 		if(handler.getKeyManager().actionKey 
-				&& this.getCollisionBounds(0, 4).intersects(handler.getPlayer().getCollisionBounds(0, 0))) {
+				&& this.getCollisionBounds(0, 4).intersects(
+						handler.getPlayer().getCollisionBounds(0, 0))) {
 			interact();
 		}
 		
-		if(handler.getPlayer().drawAttack() && this.distanceFromPlayer() < 400) {
+		if(handler.getPlayer().drawAttack() 
+				&& this.distanceFromPlayer() < 400 
+				&& !drawBubble) {
 			drawBubble = true;
 			bubbleText = "Weg mit der Waffe!";
-		} else {
+			bubbleTimer.reset();
+		}
+		
+		if(bubbleTimer.check()) {
 			drawBubble = false;
 			bubbleText = "";
-		}
+		}	
 	}
 	
 	public void interact() {
@@ -54,9 +65,13 @@ public class NPC extends Creature{
 	
 	public void drawBubble(Graphics g, String bubbleText) {	
 		g.setColor(Color.WHITE);
-		g.fillRect((int) (x - 50 - handler.getGameCamera().getxOffset()), (int) (y - 100 - handler.getGameCamera().getyOffset()), Creature.DEFAULT_CREATURE_HEIGHT + 100, 70);
+		g.fillRect((int) (x - 50 - handler.getGameCamera().getxOffset()), 
+				(int) (y - 100 - handler.getGameCamera().getyOffset()), 
+				Creature.DEFAULT_CREATURE_HEIGHT + 100, 70);
 		g.setColor(Color.BLACK);
-		g.drawString(bubbleText, (int) (x- 30 - handler.getGameCamera().getxOffset()), (int) (y - 80 - handler.getGameCamera().getyOffset()));
+		g.drawString(bubbleText, 
+				(int) (x- 30 - handler.getGameCamera().getxOffset()), 
+				(int) (y - 80 - handler.getGameCamera().getyOffset()));
 	}
 
 	@Override
@@ -66,7 +81,7 @@ public class NPC extends Creature{
 	}
 
 
-	// ======================= GETTERS & SETTERS ==============================================
+	// ======================= GETTERS & SETTERS ==============================
 	public boolean isDrawBubble() {
 		return drawBubble;
 	}

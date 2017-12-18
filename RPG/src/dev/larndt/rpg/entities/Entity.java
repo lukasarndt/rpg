@@ -17,7 +17,7 @@ import dev.larndt.rpg.tiles.Tile;
 public abstract class Entity {
 	public static final int DEFAULT_HEALTH = 3;
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 			
 	protected Handler		handler;
 	protected int 			width, height, health;

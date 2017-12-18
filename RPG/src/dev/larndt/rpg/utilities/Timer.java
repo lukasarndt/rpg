@@ -20,5 +20,9 @@ public class Timer {
 			return false;
 		}
 	}
+	
+	public void reset() {
+		lastTime = now;
+	}
 
 }
